@@ -19,6 +19,7 @@ their outputs, are published as a website at **https://cml-fau.github.io/**.
 
 - [About the course](#about-the-course)
 - [Learning objectives](#learning-objectives)
+- [Evaluation (Presentations)](#evaluation-presentations)
 - [Prerequisites](#prerequisites)
 - [Course material](#course-material)
 - [Installation and running the notebooks](#installation-and-running-the-notebooks)
@@ -42,6 +43,23 @@ dynamical foundations underlying control and learning systems. They will be able
 - analyse the optimization and stability properties of deep learning algorithms,
 - explain how control-theoretic principles extend to large-scale models such as LLMs,
 - deliver clear and rigorous scientific presentations of technical concepts and research results.
+
+## Evaluation (Presentations)
+
+Assessment takes into account attendance and active participation and a group presentation in the final sessions of the course.
+
+- **Groups** of at least three students choose any topic related to the course, provided it has
+  substantial mathematical content.
+- **Registration:** before 1 November 2026, email [cml.fau@gmail.com](mailto:cml.fau@gmail.com) the
+  names of all group members, the topic and your preferred presentation dates.
+- **Slides** (PowerPoint or similar) are sent to the same address before the day of the presentation.
+- **Format:** 15 minutes of presentation and 15 minutes of questions; every member takes part in both.
+- **Attendance** at all presentation sessions is required, also after your own group has presented.
+
+| | |
+|---|---|
+| **Lectures** | 12 Oct – 7 Dec 2026 |
+| **Presentations** | 14 & 21 Dec 2026 · 11, 18, 25 Jan & 1 Feb 2027 |
 
 ## Prerequisites
 
@@ -68,9 +86,8 @@ Slides and presentations go in [`presentations/`](presentations/).
 
 ## Installation and Running the notebooks
 
-The project is managed with [uv](https://docs.astral.sh/uv/). Dependencies are pinned in
-`uv.lock`, and PyTorch is installed from the CPU-only index — everything in the course runs on a
-laptop without a GPU.
+The python environment is managed with [uv](https://docs.astral.sh/uv/). Everything in the course runs on a
+laptop.
 
 ```bash
 git clone https://github.com/cml-fau/cml-fau.github.io.git mfcml
@@ -79,6 +96,8 @@ uv sync
 ```
 
 This creates a `.venv/` with Python ≥ 3.11, PyTorch, NumPy, Matplotlib and Jupyter.
+
+To run the notebooks, open one in VS Code and select `.venv/bin/python` as the kernel.
 
 <details>
 <summary>Without uv</summary>
@@ -91,18 +110,16 @@ python3 -m venv .venv
 </details>
 
 
+
+<details>
+<summary>In JupyterLab</summary>
+
 ```bash
 uv run jupyter lab notebooks/
 ```
+</details>
 
-In VS Code, open a notebook and select `.venv/bin/python` as the kernel instead.
-
-To execute a notebook end to end from the command line:
-
-```bash
-uv run jupyter nbconvert --execute --inplace notebooks/01_intro_to_ml.ipynb
-```
-
+<!-- 
 ## Website
 
 The website is built with [Quarto](https://quarto.org) from `_quarto.yml`, `index.qmd` and the
@@ -117,7 +134,7 @@ To preview locally (requires the [Quarto CLI](https://quarto.org/docs/get-starte
 
 ```bash
 quarto preview
-```
+``` -->
 
 ## Bibliography
 

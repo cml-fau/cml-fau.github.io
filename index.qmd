@@ -31,6 +31,23 @@ dynamical foundations underlying control and learning systems. They will be able
 - explain how control-theoretic principles extend to large-scale models such as LLMs,
 - deliver clear and rigorous scientific presentations of technical concepts and research results.
 
+## Evaluation (Presentations)
+
+Assessment takes into account attendance and active participation and a group presentation in the final sessions of the course.
+
+- **Groups** of at least three students choose any topic related to the course, provided it has
+  substantial mathematical content.
+- **Registration:** before 1 November 2026, email [cml.fau@gmail.com](mailto:cml.fau@gmail.com) the
+  names of all group members, the topic and your preferred presentation dates.
+- **Slides** (PowerPoint or similar) are sent to the same address before the day of the presentation.
+- **Format:** 15 minutes of presentation and 15 minutes of questions; every member takes part in both.
+- **Attendance** at all presentation sessions is required, also after your own group has presented.
+
+| | |
+|---|---|
+| **Lectures** | 12 Oct – 7 Dec 2026 |
+| **Presentations** | 14 & 21 Dec 2026 · 11, 18, 25 Jan & 1 Feb 2027 |
+
 ## Prerequisites
 
 Strongly recommended: basic knowledge of calculus, linear algebra, ODEs and PDEs. The code is
@@ -92,17 +109,38 @@ smallest runnable confirmation of it. Code cells are folded; click **Code** to e
 | 18 | [Reinforcement Learning](notebooks/18_reinforcement_learning.ipynb) | Bellman equation and value iteration, Q-learning, exploration vs. exploitation, Pontryagin's maximum principle, Hamilton–Jacobi–Bellman (appendix) |
 | 19 | [Control and Learning: A Synthesis](notebooks/19_synthesis_control_and_learning.ipynb) | The three threads of the course, the dictionary with its scope, one oscillator hosting four different problems, capacity vs. optimization vs. generalization |
 
-## Running the notebooks
+## Installation and running the notebooks
 
-The source is on [GitHub](https://github.com/cml-fau/cml-fau.github.io). The project is managed with
-[uv](https://docs.astral.sh/uv/); everything runs on a laptop without a GPU.
+The source is on [GitHub](https://github.com/cml-fau/cml-fau.github.io). The python environment is
+managed with [uv](https://docs.astral.sh/uv/). Everything in the course runs on a laptop.
 
 ```bash
 git clone https://github.com/cml-fau/cml-fau.github.io.git mfcml
 cd mfcml
 uv sync
+```
+
+This creates a `.venv/` with Python ≥ 3.11, PyTorch, NumPy, Matplotlib and Jupyter.
+
+To run the notebooks, open one in VS Code and select `.venv/bin/python` as the kernel.
+
+<details>
+<summary>Without uv</summary>
+
+```bash
+python3 -m venv .venv
+.venv/bin/pip install --index-url https://download.pytorch.org/whl/cpu torch
+.venv/bin/pip install numpy matplotlib jupyter ipykernel
+```
+</details>
+
+<details>
+<summary>In JupyterLab</summary>
+
+```bash
 uv run jupyter lab notebooks/
 ```
+</details>
 
 ## Bibliography
 
