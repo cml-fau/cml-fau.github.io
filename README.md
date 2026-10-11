@@ -19,7 +19,7 @@ their outputs, are published as a website at **https://cml-fau.github.io/**.
 
 - [About the course](#about-the-course)
 - [Learning objectives](#learning-objectives)
-- [Evaluation (Presentations)](#evaluation-presentations)
+- [Evaluation](#evaluation)
 - [Prerequisites](#prerequisites)
 - [Course material](#course-material)
 - [Installation and running the notebooks](#installation-and-running-the-notebooks)
@@ -44,7 +44,7 @@ dynamical foundations underlying control and learning systems. They will be able
 - explain how control-theoretic principles extend to large-scale models such as LLMs,
 - deliver clear and rigorous scientific presentations of technical concepts and research results.
 
-## Evaluation (Presentations)
+## Evaluation
 
 Assessment takes into account attendance and active participation and a group presentation in the final sessions of the course.
 
@@ -52,7 +52,7 @@ Assessment takes into account attendance and active participation and a group pr
   substantial mathematical content.
 - **Registration:** before 1 November 2026, email [cml.fau@gmail.com](mailto:cml.fau@gmail.com) the
   names of all group members, the topic and your preferred presentation dates.
-- **Slides** (PowerPoint or similar) are sent to the same address before the day of the presentation.
+- **Slides** (PDF) are sent to the same address before the day of the presentation.
 - **Format:** 15 minutes of presentation and 15 minutes of questions; every member takes part in both.
 - **Attendance** at all presentation sessions is required, also after your own group has presented.
 
@@ -86,16 +86,15 @@ Slides and presentations go in [`presentations/`](presentations/).
 
 ## Installation and Running the notebooks
 
-The python environment is managed with [uv](https://docs.astral.sh/uv/). Everything in the course runs on a
-laptop.
+The python environment is managed with [uv](https://docs.astral.sh/uv/). 
 
 ```bash
 git clone https://github.com/cml-fau/cml-fau.github.io.git mfcml
 cd mfcml
-uv sync
+uv sync # This creates a `.venv/` with all python dependencies installed
 ```
 
-This creates a `.venv/` with Python ≥ 3.11, PyTorch, NumPy, Matplotlib and Jupyter.
+
 
 To run the notebooks, open one in VS Code and select `.venv/bin/python` as the kernel.
 
