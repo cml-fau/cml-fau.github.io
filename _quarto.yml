@@ -7,6 +7,8 @@ project:
     - index.qmd
     - 404.qmd
     - notebooks/*.ipynb
+  resources:
+    - presentations/old/*.pdf
 
 # Notebooks are rendered with the outputs saved in them; nothing is re-executed.
 execute:
