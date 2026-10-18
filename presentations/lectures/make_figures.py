@@ -585,10 +585,8 @@ save(fig, "example_uncontrollable")
 fig, ax = P.panels(figsize=(3.4, 2.6))
 ax.plot(ts, x_free[:, 0], color=P.GREY, lw=1.2, label="free motion")
 ax.plot(ts, x_curve[:, 0], color=P.BLUE, label="$x_1(t)$ (the cubic)")
-ax.plot(ts, [u_curve(s)[0] for s in ts], color=P.ORANGE, ls="--", label="$u=x_1''+x_1$")
 ax.plot(T, 0, "*", color=P.ORANGE, ms=11, zorder=5)
-P.label(ax, "$t$", None, title="stopping the oscillator at $T=5$", zero="h",
-        legend=dict(loc="upper right", fontsize=7.5))
+P.label(ax, "$t$", None, zero="h", legend=dict(loc="upper right", fontsize=7.5))
 save(fig, "example_curve")
 
 

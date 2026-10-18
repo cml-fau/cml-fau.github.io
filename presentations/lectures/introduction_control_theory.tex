@@ -221,16 +221,16 @@
 \alert{\textbf{Part I.}} Dynamical systems, control and the three questions
 \begin{enumerate}
 \item A short history
-\item Dynamical systems: discrete, continuous, infinite-dimensional
+\item Dynamical systems
 \item Acting on a system: the ingredients of a control problem
 \item The linear setting and the harmonic oscillator
-\item Optimal control, controllability, feedback; the overdamping paradox
+\item Optimal control, controllability, feedback;
 \end{enumerate}
 \end{column}
 \begin{column}{0.5\textwidth}
 \alert{\textbf{Part II.}} Controllability of linear systems
 \begin{enumerate}\setcounter{enumi}{5}
-\item Two examples; the reachable set
+\item The reachable set
 \item The Kalman rank condition
 \item Combining motions: parking
 \item The Gramian and an explicit control; the cost of control
@@ -267,7 +267,7 @@ Part I
 
 \medskip
 \centering
-\includegraphics[height=4.0cm]{water_clock_ctesibius.jpg}
+\includegraphics[height=4.5cm]{water_clock_ctesibius.jpg}
 
 \smallskip
 {\scriptsize Ktesibios' water clock.\par}
@@ -276,12 +276,12 @@ Part I
 \footnotesize
 \begin{minipage}[t][2.9cm][t]{\linewidth}
 \raggedright
-\alert{18th century.} Windmills turn into the wind by themselves: Lee's fantail (1745). In 1788 James Watt fits a \emph{centrifugal governor} to the steam engine. As the engine speeds up, the two rotating balls move outward and close the steam valve; as it slows down, they fall and open it.
+\alert{18th century.} In 1788 James Watt fits a \emph{centrifugal governor} to the steam engine. As the engine speeds up, the two rotating balls move outward and close the steam valve; as it slows down, they fall and open it.
 \end{minipage}
 
 \medskip
 \centering
-\includegraphics[height=4.0cm]{governor_watt_diagram.jpg}
+\includegraphics[height=4.5cm]{governor_watt_diagram.jpg}
 
 \smallskip
 {\scriptsize Watt's governor and steam valve.\par}
@@ -300,7 +300,7 @@ Part I
 Maxwell studied why a governor can fail to settle at a steady speed and instead oscillate \citep{maxwell1868}.
 \begin{itemize}
 \item For small deviations, use a \alert{linear differential equation}.
-\item Its modes are $e^{\lambda t}$, where $\lambda$ solves a \alert{characteristic polynomial}.
+% \item Its modes are $e^{\lambda t}$, where $\lambda$ solves a \alert{characteristic polynomial}.
 \item Disturbances decay if \alert{every root has negative real part}. Complex roots with positive real part make oscillations grow.
 \end{itemize}
 Routh (1877) and Hurwitz (1895) later developed a general stability test.
@@ -323,19 +323,17 @@ The original equation, exponential modes and stability condition.
 \begin{center}
 \resizebox{\textwidth}{!}{%
 \begin{tikzpicture}[every node/.style={font=\scriptsize}]
-  \draw[gray, line width=0.8pt] (-0.5,0) -- (10.5,0);
+  \draw[gray, line width=0.8pt] (-0.5,0) -- (8.5,0);
   \foreach \x/\yr/\txt/\anc/\dy in {
      0/270 BCE/{Ktesibios\\water clock}/south/0.18,
      1/1788/{Watt\\governor}/north/-0.18,
      2/1868/{Maxwell\\\emph{On Governors}}/south/0.18,
-     3/1927/{Black, Nyquist\\feedback amplifiers}/north/-0.18,
-     4/1948/{Wiener\\\emph{Cybernetics}}/south/0.18,
-     5/1954/{Bellman\\dynamic programming}/north/-0.18,
-     6/1956/{Pontryagin\\maximum principle}/south/0.18,
-     7/1960/{Kalman\\controllability, LQR}/north/-0.18,
-     8/1960/{Kalman\\filtering}/south/0.18,
-     9/1969/{Apollo\\on-board navigation}/north/-0.18,
-    10/1970s--/{nonlinear, stochastic\\and PDE control}/south/0.18}
+     3/1954/{Bellman\\dynamic programming}/north/-0.18,
+     4/1956/{Pontryagin\\maximum principle}/south/0.18,
+     5/1960/{Kalman\\controllability, LQR}/north/-0.18,
+     6/1960/{Kalman\\filtering}/south/0.18,
+     7/1969/{Apollo\\on-board navigation}/north/-0.18,
+     8/1970s--/{nonlinear, stochastic\\and PDE control}/south/0.18}
   {
     \fill[boxframe] (\x,0) circle (2pt);
     \node[anchor=\anc, align=center, text width=2cm] at (\x,\dy) {\textbf{\yr}\\\txt};
@@ -375,7 +373,7 @@ F:X\to X,\qquad x_{k+1}=F(x_k),\qquad k=0,1,2,\ldots
 \]
 \small
 \begin{itemize}
-\item The \alert{state} records what we need to know now to predict what happens later. For a mass, it is position and velocity; for a heated bar, the temperature profile.
+\item The \alert{state} records what we need to know now to predict what happens later. %For a mass, it is position and velocity; for a heated bar, the temperature profile.
 % \item Starting from $x_0$, repeat the rule: $x_0,x_1,x_2,\ldots$ is a \alert{trajectory}.
 \item In \alert{continuous time}, the rule is usually a differential equation, $x'=f(x)$.
 \item A map $F$ gives a \alert{deterministic} update. A \alert{stochastic} system uses transition probabilities instead.
@@ -1008,39 +1006,6 @@ The concept of feedback comes from the capacity of biological systems to regulat
 
 
 % =========================================================================
-\begin{frame}{The overdamping paradox}
-\begin{columns}[T]
-\begin{column}{0.53\textwidth}
-\footnotesize
-\alert{The model.} Without friction, the linearized pendulum $x_1''+x_1=0$ conserves its energy
-\[
-e(t)=\tfrac12\big(x_1(t)^2+x_1'(t)^2\big).
-\]
-With friction proportional to the velocity,
-\[
-x_1''+x_1=-k\,x_1',\qquad k>0 .
-\]
-The control is $u=-kx_2$: a feedback law where the control opposes the measured velocity. It is the simplest instance of Maxwell's governor analysis.
-
-\medskip
-\alert{Energy decreases.} Along solutions,
-\[
-e'(t)=x_1'\,(x_1+x_1'')=-k\,(x_1')^2\;\le\;0 .
-\]
-So more damping removes energy faster \emph{at each instant}, for the same velocity.
-
-\medskip
-\alert{Does it follow that a larger $k$ always brings the system to rest faster?}
-\end{column}
-\begin{column}{0.45\textwidth}
-\includegraphics[width=\textwidth]{overdamping.pdf}
-\end{column}
-\end{columns}
-\nbref{01 \S4}
-\end{frame}
-
-
-% =========================================================================
 \begin{frame}{Part I: key takeaways}
 \begin{enumerate}
 \item A dynamical system is a state space and an evolution rule: $x_{k+1}=F(x_k)$ in discrete time, or a differential equation in continuous time.
@@ -1112,18 +1077,18 @@ This picture turns out to be general.
 \begin{columns}[T]
 \begin{column}{0.54\textwidth}
 \footnotesize
-In $x_1''+x_1=u$ the control enters the highest derivative, so \emph{every} smooth curve $x_1(t)$ is a trajectory of the system: the equation itself forces the control
+With $A=\begin{pmatrix}0&1\\-1&0\end{pmatrix}$ and $B=\begin{pmatrix}0\\1\end{pmatrix}$ the system reads
 \[
-u(t)=x_1''(t)+x_1(t).
+\begin{cases}
+x_1'=x_2,\\
+x_2'=-x_1+u
+\end{cases}
+\ \ \Longleftrightarrow\ \ x_1''+x_1=u .
 \]
-Pick $x_1$ with the prescribed position and velocity at $t=0$ and $t=T$; this $u$ then steers between the two states. \alert{Draw a curve, read off the control.}
+
 
 \medskip
-To stop the oscillator, from $x^0=(1,0)$ to $x^1=(0,0)$, the cubic
-\[
-x_1(t)=1-3\Big(\frac tT\Big)^2+2\Big(\frac tT\Big)^3
-\]
-has the right boundary values and gives
+To stop the oscillator, from $x^0=(1,0)$ to $x^1=(0,0)$, we can use a cubic polynomial
 \[
 u(t)=1-\frac{6}{T^2}+\frac{12\,t}{T^3}-3\Big(\frac tT\Big)^2+2\Big(\frac tT\Big)^3,
 \]
@@ -1133,7 +1098,7 @@ with $\|u\|_{L^2(0,T)}=1.21$ for $T=5$.
 \begin{column}{0.46\textwidth}
 \includegraphics[width=\textwidth]{example_curve.pdf}
 
-\scriptsize The cubic, the control it defines, and the free motion.
+% \scriptsize The cubic and the free motion.
 \end{column}
 \end{columns}
 
@@ -1163,24 +1128,27 @@ Which directions can the control add? Expand $e^{A(T-s)}B=\sum_{k\ge0}\frac{(T-s
 
 
 % =========================================================================
-\begin{frame}{The Kalman matrix and the reachable set}
+\begin{frame}{The Kalman rank condition}
 \begin{mathbox}{Definition (Kalman matrix)}
 \[
 \Kal(A,B)=[\,B,\;AB,\;A^2B,\;\dots,\;A^{n-1}B\,]\in\R^{n\times nm}.
 \]
 \end{mathbox}
-\begin{mathbox}{Theorem 1 (the reachable set)}
-$\Range L_T=\Range\Kal(A,B)$. Hence
+\begin{mathbox}{Theorem 1 (Kalman, 1960)}
+The system $x'=Ax+Bu$ is controllable if and only if
 \[
-\Reach(T,x^0)=e^{AT}x^0+\Range\Kal(A,B)\qquad\text{for every }x^0\text{ and every }T>0 .
+\rank\Kal(A,B)=n .
 \]
 \end{mathbox}
 \footnotesize
-\alert{Interpretation.} The reachable set is an affine subspace whose \emph{direction} does not depend on $T$ or $x^0$; only its \emph{offset} $e^{AT}x^0$ does. Waiting longer opens no new directions; it only moves the starting point along the free motion.
+\begin{itemize}
+\item A \alert{finite computation}: $n-1$ matrix products and one rank. No differential equation needs to be solved.
+\item \alert{Time plays no role}: controllable in a second if controllable in an hour, at the price of a larger control.
+\end{itemize}
 
 \smallskip
-\alert{Example 1.} $B=e_1$, $AB=e_1$: $\Kal=\big(\begin{smallmatrix}1&1\\0&0\end{smallmatrix}\big)$, $\Range\Kal=\operatorname{span}\{e_1\}$, as found by hand.
-\alert{Example 2.} $B=e_2$, $AB=e_1$: $\Kal=\big(\begin{smallmatrix}0&1\\1&0\end{smallmatrix}\big)$, $\Range\Kal=\R^2$: every state is reachable, in every time.
+\alert{Example 1.} $B=e_1$, $AB=e_1$: $\Kal=\big(\begin{smallmatrix}1&1\\0&0\end{smallmatrix}\big)$ has rank $1$: not controllable, as found by hand.\\
+\alert{Example 2.} $B=e_2$, $AB=e_1$: $\Kal=\big(\begin{smallmatrix}0&1\\1&0\end{smallmatrix}\big)$ has rank $2$: controllable, in every time.
 \end{frame}
 
 
@@ -1200,68 +1168,26 @@ $\Range L_T=\Range\Kal(A,B)$. Hence
 
 
 % =========================================================================
-\begin{frame}{Proof of Theorem 1, first half: $\Range L_T\subseteq\Range\Kal$}
+\begin{frame}{Proof of Theorem 1}
 \footnotesize
-\alert{Cayley--Hamilton.} $A$ satisfies its own characteristic polynomial $p(\lambda)=\det(\lambda I-A)=\lambda^n+c_{n-1}\lambda^{n-1}+\dots+c_0$:
-\[
-A^n=-c_{n-1}A^{n-1}-\dots-c_1A-c_0I .
-\]
-So $A^n$, and inductively every $A^j$ with $j\ge n$, is a linear combination of $I,A,\dots,A^{n-1}$. Hence every column of every $A^jB$, $j\ge0$, lies in $\Range\Kal$.
+\alert{Necessity.} Since $\Reach(T,x^0)=e^{AT}x^0+\Range L_T$, controllability in time $T$ means $\Range L_T=\R^n$. The Cayley--Hamilton expansion of $e^{A(T-s)}B$ on the reachable-set slide shows that every $L_Tu$ is a combination of columns of $B,AB,\dots,A^{n-1}B$, so $\Range L_T\subseteq\Range\Kal$. Hence controllability forces $\rank\Kal=n$.
 
-\medskip
-\alert{The exponential.} The power series
-\[
-e^{A(T-s)}B=\sum_{j\ge0}\frac{(T-s)^j}{j!}\,A^jB
-\]
-converges, and $\Range\Kal$ is a closed subspace, so each column of $e^{A(T-s)}B$ lies in $\Range\Kal$ for every $s$.
-
-\medskip
-\alert{Integration.} $L_Tu=\int_0^Te^{A(T-s)}Bu(s)\,ds$ is a limit of Riemann sums of vectors in $\Range\Kal$; integrating against $u$ keeps us there. Thus $L_Tu\in\Range\Kal$ for every $u$. \hfill$\square$
-
-\medskip
-\emph{Remark.} This half says that the control can \emph{only} add directions from $\Range\Kal$, however cleverly it is chosen: the obstruction to controllability is algebraic.
-\end{frame}
-
-
-% =========================================================================
-\begin{frame}{Proof of Theorem 1, second half: $\Range L_T\supseteq\Range\Kal$}
-\small
-Both ranges are subspaces of $\R^n$, so it suffices to show that every $v$ orthogonal to $\Range L_T$ is orthogonal to $\Range\Kal$. Let $v\perp\Range L_T$. For every control,
+\smallskip
+\alert{Sufficiency.} Assume $\rank\Kal=n$. Both ranges are subspaces of $\R^n$, so it suffices to show that every $v$ orthogonal to $\Range L_T$ is orthogonal to $\Range\Kal$. Let $v\perp\Range L_T$. For every control,
 \[
 0=\langle v,L_Tu\rangle=\int_0^T\big\langle B^*e^{A^*(T-s)}v,\,u(s)\big\rangle\,ds .
 \]
-\alert{Choose the control well.} Take $u(s)=B^*e^{A^*(T-s)}v$. Then $\int_0^T|B^*e^{A^*(T-s)}v|^2\,ds=0$. The integrand is continuous, so
-\[
-g(s):=B^*e^{A^*(T-s)}v=0\qquad\text{for all }s\in[0,T].
-\]
+\alert{Choose the control well.} Take $u(s)=B^*e^{A^*(T-s)}v$. Then $\int_0^T|B^*e^{A^*(T-s)}v|^2\,ds=0$. The integrand is continuous, so $g(s):=B^*e^{A^*(T-s)}v$ vanishes for all $s\in[0,T]$.
+
 \alert{All derivatives vanish.} The function $g$ is smooth and vanishes identically, so all its derivatives vanish. At $s=T$,
 \[
 g^{(j)}(T)=(-1)^jB^*(A^*)^jv=0\qquad\text{for all }j\ge0 .
 \]
-In other words, $v$ is orthogonal to every column of $A^jB$, hence to $\Range\Kal$. \hfill$\square$
+In other words, $v$ is orthogonal to every column of $A^jB$, hence to $\Range\Kal=\R^n$. So $v=0$, and $\Range L_T=\R^n$: the system is controllable. \hfill$\square$
 
-\medskip
-\emph{Remark.} The control $u(s)=B^*e^{A^*(T-s)}v$ will reappear twice: in the Gramian below, and in the next lecture as the observation of an \emph{adjoint} system running backward from $t=T$.
-\end{frame}
-
-
-% =========================================================================
-\begin{frame}{The Kalman rank condition}
-\footnotesize
-% Theorem 1 reduces controllability to linear algebra: whatever the horizon, the directions the control can add form $\Range\Kal(A,B)$. The classical result of R.~E.~Kalman follows at once.
-\begin{mathbox}{Theorem 2 (Kalman, 1960)}
-The system $x'=Ax+Bu$ is controllable if and only if
-\[
-\rank\,[\,B,\,AB,\,\dots,\,A^{n-1}B\,]=n .
-\]
-\end{mathbox}
-\emph{Proof.} By Theorem 1, $\Reach(T,x^0)=e^{AT}x^0+\Range\Kal$. This affine subspace is all of $\R^n$ if and only if $\Range\Kal=\R^n$, that is, if and only if $\rank\Kal=n$. \hfill$\square$
-
-\medskip
-\begin{itemize}
-\item A \alert{finite computation}: $n-1$ matrix products and one rank. No differential equation needs to be solved.
-\item \alert{Time plays no role}: controllable in a second if controllable in an hour, at the price of a larger control.
-\end{itemize}
+% \medskip
+% \emph{Remark.} The control $u(s)=B^*e^{A^*(T-s)}v$ will reappear twice: in the Gramian below, and in the next lecture as the observation of an \emph{adjoint} system running backward from $t=T$.
+\nbref{02 \S3}
 \end{frame}
 
 
@@ -1341,14 +1267,16 @@ State $(x,y,\theta,\varphi)$: position of the rear axle, heading, wheel angle. C
 = v\underbrace{\begin{pmatrix}\cos\theta\\ \sin\theta\\ \tfrac1L\tan\varphi\\ 0\end{pmatrix}}_{g_1:\ \text{drive}}
 +\omega\underbrace{\begin{pmatrix}0\\0\\0\\1\end{pmatrix}}_{g_2:\ \text{steer}} .
 \]
-At every state only the two directions $g_1,g_2$ are available, in a four-dimensional space. Going along $g_2$, then $g_1$, then back along $g_2$, then back along $g_1$ does \emph{not} return to the start: the net displacement is the \alert{Lie bracket}
+%At every state only the two directions $g_1,g_2$ are available, in a four-dimensional space. 
+Going along $g_2$, then $g_1$, then back along $g_2$, then back along $g_1$ does \emph{not} return to the start: the net displacement is the \alert{Lie bracket}
 \[
 [g_2,g_1]=Dg_1\,g_2-Dg_2\,g_1=\Big(0,\,0,\,\tfrac{1}{L\cos^2\varphi},\,0\Big):\ \text{\emph{wriggle}},
 \]
 and $[[g_2,g_1],g_1]$ at $\varphi=0$ is $\tfrac1L(-\sin\theta,\cos\theta,0,0)$: \emph{slide}, sideways. Drive, steer, wriggle and slide span $\R^4$: the car is controllable \citep{sontag1998,coron2007}.
 
-\medskip
-\alert{The linear case.} For $x'=Ax+bu$ the drift is $f(x)=Ax$ and the control field is the constant $b$: $[f,b]=Db\,f-Df\,b=-Ab$. Brackets with the drift produce $Ab,A^2b,\dots$: the Kalman matrix is the linear instance of a rank condition on Lie brackets.
+\begin{mathbox}{The linear case}
+For $x'=Ax+bu$ the drift is $f(x)=Ax$ and the control field is the constant $b$: $[f,b]=Db\,f-Df\,b=-Ab$. Brackets with the drift produce $Ab,A^2b,\dots$: the Kalman matrix is the linear instance of a rank condition on Lie brackets.
+\end{mathbox}
 \nbref{02 \S8}
 \end{frame}
 
@@ -1415,7 +1343,7 @@ The proof of Theorem 1 used the control $u(s)=B^*e^{A^*(T-s)}v$. Applying $L_T$ 
 \Gram_T=\int_0^Te^{A(T-s)}BB^*e^{A^*(T-s)}\,ds\in\R^{n\times n}.
 \]
 \end{mathbox}
-\begin{mathbox}{Proposition 3 (properties of the Gramian)}
+\begin{mathbox}{Proposition 2 (properties of the Gramian)}
 \begin{enumerate}
 \item $\Gram_T$ is symmetric and positive semidefinite: $v^*\Gram_Tv=\int_0^T|B^*e^{A^*(T-s)}v|^2ds\ge0$.
 \item $\ker\Gram_T=(\Range\Kal)^\perp$.
@@ -1428,17 +1356,17 @@ One $n\times n$ matrix records how strongly the control acts in each direction o
 
 
 % =========================================================================
-\begin{frame}{Proof of Proposition 3}
+\begin{frame}{Proof of Proposition 2}
 \small
 \alert{(1)} Symmetry is clear from the formula, since $\big(e^{A\tau}BB^*e^{A^*\tau}\big)^*$ is the same matrix. The identity follows from $v^*e^{A(T-s)}BB^*e^{A^*(T-s)}v=|B^*e^{A^*(T-s)}v|^2$, integrated over $s$.
 
 \medskip
 \alert{(2)} If $\Gram_Tv=0$ then $v^*\Gram_Tv=0$, hence $g(s)=B^*e^{A^*(T-s)}v\equiv0$ by (1), and the derivative argument in the proof of Theorem 1 gives $v\perp\Range\Kal$.
 
-Conversely, if $v\perp\Range\Kal$, then $v$ is orthogonal to every column of $e^{A(T-s)}B$ by the Cayley--Hamilton step of Theorem 1. So $g\equiv0$, and $\Gram_Tv=\int_0^Te^{A(T-s)}B\,g(s)\,ds=0$.
+Conversely, if $v\perp\Range\Kal$, then $v$ is orthogonal to every column of $e^{A(T-s)}B$ by the Cayley--Hamilton step in the proof of Theorem 1. So $g\equiv0$, and $\Gram_Tv=\int_0^Te^{A(T-s)}B\,g(s)\,ds=0$.
 
 \medskip
-\alert{(3)} By (2), $\Gram_T$ is invertible iff $(\Range\Kal)^\perp=\{0\}$ iff $\Range\Kal=\R^n$ iff $\rank\Kal=n$, which is controllability by Theorem 2.
+\alert{(3)} By (2), $\Gram_T$ is invertible iff $(\Range\Kal)^\perp=\{0\}$ iff $\Range\Kal=\R^n$ iff $\rank\Kal=n$, which is controllability by Theorem 1.
 
 \medskip
 \alert{(4)} By the definition of $L_T$ applied to $u(s)=B^*e^{A^*(T-s)}c$,
@@ -1450,7 +1378,7 @@ L_Tu=\int_0^Te^{A(T-s)}B\,B^*e^{A^*(T-s)}c\,ds=\Gram_Tc . \qquad\square
 
 % =========================================================================
 \begin{frame}{An explicit steering control}
-\footnotesize
+\small
 If the system is controllable, property (4) tells us how to reach any target. We want $L_Tu=x^1-e^{AT}x^0$; try $u=B^*e^{A^*(T-\cdot)}c$ and solve $\Gram_Tc=x^1-e^{AT}x^0$:
 \begin{mathbox}{The Gramian control}
 \[
@@ -1464,7 +1392,7 @@ x(T)&=e^{AT}x^0+\int_0^Te^{A(T-s)}BB^*e^{A^*(T-s)}\,ds\;\Gram_T^{-1}\big(x^1-e^{
 &=e^{AT}x^0+\Gram_T\,\Gram_T^{-1}\big(x^1-e^{AT}x^0\big)=x^1 .
 \end{aligned}\qquad\square
 \]
-\alert{What we have.} A formula that steers \emph{any} $x^0$ to \emph{any} $x^1$ in \emph{any} time $T$, for \emph{every} controllable pair $(A,B)$: one integral and one $n\times n$ linear solve. Compare with Example 2, where a curve had to be guessed for one particular equation.
+% \alert{What we have.} A formula that steers \emph{any} $x^0$ to \emph{any} $x^1$ in \emph{any} time $T$, for \emph{every} controllable pair $(A,B)$: one integral and one $n\times n$ linear solve. Compare with Example 2, where a curve had to be guessed for one particular equation.
 
 \medskip
 \alert{What we do not have yet.} Why this particular form $u=B^*e^{A^*(T-\cdot)}c$? Is it the cheapest control? The next lecture answers both: it is the control of \emph{minimal $L^2$ norm}, and it comes from a dual, \emph{adjoint} problem.
@@ -1488,15 +1416,15 @@ For $A=\begin{pmatrix}0&1\\-1&0\end{pmatrix}$, $B=e_2$ and $T=5$: $\Kal=[B,AB]=\
 
 % =========================================================================
 \begin{frame}{The cost of control}
-\footnotesize
 \alert{The effort of (G).} With $d=x^1-e^{AT}x^0$ and $c=\Gram_T^{-1}d$,
 \[
 \int_0^T|u(t)|^2dt=\int_0^Tc^*e^{A(T-t)}BB^*e^{A^*(T-t)}c\,dt=c^*\Gram_Tc=d^*\Gram_T^{-1}d .
 \]
-Hence $\|u\|_{L^2(0,T)}=\big(d^*\Gram_T^{-1}d\big)^{1/2}$, and the constant in the cost estimate is $C=\lambda_{\min}(\Gram_T)^{-1/2}$: \alert{the smallest eigenvalue of the Gramian measures the hardest direction.}
+And the constant in the cost estimate is $\lambda_{\min}(\Gram_T)^{-1/2}$: the smallest eigenvalue of the Gramian measures the hardest direction.
 
 \medskip
-\alert{Longer horizons are cheaper.} With $\tau=T-s$, $\Gram_T=\int_0^Te^{A\tau}BB^*e^{A^*\tau}\,d\tau$, so for $T'>T$
+\alert{Longer horizons are cheaper.} %With $\tau=T-s$, $\Gram_T=\int_0^Te^{A\tau}BB^*e^{A^*\tau}\,d\tau$,
+For $T'>T$
 \[
 \Gram_{T'}-\Gram_T=\int_T^{T'}e^{A\tau}BB^*e^{A^*\tau}\,d\tau\succeq0 .
 \]
@@ -1549,6 +1477,39 @@ at $\varepsilon=10^{-3}$ it is $10^6$ times its value at $\varepsilon=1$.
 % \item \alert{One system $\leftrightarrow$ many trajectories.} Classical controllability asks whether \emph{one} system can be steered by \emph{its} control. Supervised learning with a neural ODE, $x'=w(t)\,\sigma\big(a(t)\cdot x+b(t)\big)$, is \emph{simultaneous} control: \emph{many} trajectories, one per data point, steered by \emph{one shared} control, the parameters. The rank argument does not apply there; geometric constructions will.
 % \item \alert{Discrete time.} A residual layer $x_{k+1}=x_k+h\,w_k\,\sigma(a_k\cdot x_k+b_k)$ is one Euler step of that system, and training is an optimal control problem over the layers.
 \end{itemize}
+\end{frame}
+
+
+% =========================================================================
+\begin{frame}{The overdamping paradox}
+\begin{columns}[T]
+\begin{column}{0.53\textwidth}
+\footnotesize
+\alert{The model.} Without friction, the linearized pendulum $x_1''+x_1=0$ conserves its energy
+\[
+e(t)=\tfrac12\big(x_1(t)^2+x_1'(t)^2\big).
+\]
+With friction proportional to the velocity,
+\[
+x_1''+x_1=-k\,x_1',\qquad k>0 .
+\]
+The control is $u=-kx_2$: a feedback law where the control opposes the measured velocity. It is the simplest instance of Maxwell's governor analysis.
+
+\medskip
+\alert{Energy decreases.} Along solutions,
+\[
+e'(t)=x_1'\,(x_1+x_1'')=-k\,(x_1')^2\;\le\;0 .
+\]
+So more damping removes energy faster \emph{at each instant}, for the same velocity.
+
+\medskip
+\alert{Does it follow that a larger $k$ always brings the system to rest faster?}
+\end{column}
+\begin{column}{0.45\textwidth}
+\includegraphics[width=\textwidth]{overdamping.pdf}
+\end{column}
+\end{columns}
+\nbref{01 \S4}
 \end{frame}
 
 
@@ -1672,7 +1633,7 @@ reinforcement learning & the state of the environment & a camera image of it \\
 \footnotesize
 \begin{enumerate}
 % \item Variation of constants: $x(T)=e^{AT}x^0+L_Tu$ with $L_Tu=\int_0^Te^{A(T-s)}Bu(s)\,ds$.
-\item Reachable set: $\Reach(T,x^0)=e^{AT}x^0+\Range\Kal(A,B)$.
+% \item Reachable set: $\Reach(T,x^0)=e^{AT}x^0+\Range\Kal(A,B)$.
 \item Kalman: controllable $\iff$ $\rank[B,AB,\dots,A^{n-1}B]=n$.
 % \item The proof uses Cayley--Hamilton ($\subseteq$) and the vanishing of all derivatives of $B^*e^{A^*(T-s)}v$ at $s=T$ ($\supseteq$). The rank of $[B,AB,\dots,A^kB]$ grows until it stalls and then stays; the chain of integrators $x^{(n)}=u$ needs all $n$ blocks.
 \item New directions come from combining motions: $AB$ for linear systems, Lie brackets for the car.
