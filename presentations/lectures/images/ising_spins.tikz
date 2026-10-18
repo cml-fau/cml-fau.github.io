@@ -1,0 +1,23 @@
+% Four classical Ising spins before and after one accepted spin flip.
+\begin{tikzpicture}[>=Stealth, x=6mm, y=6mm, font=\sffamily\small]
+  \path[use as bounding box] (-0.6,-0.8) rectangle (7.2,3.0);
+  \foreach \offset in {0,4.8} {
+    \draw[black!20] (\offset,0) rectangle ++(1.8,1.8);
+  }
+  \foreach \x/\y/\spin in {0/0/-1,0/1.8/1,1.8/0/1,1.8/1.8/1} {
+    \fill[blue!65!black] (\x,\y) circle (2pt);
+    \draw[->,blue!65!black,line width=1.5pt]
+      (\x,{\y-0.5*\spin}) -- (\x,{\y+0.5*\spin});
+  }
+  \foreach \x/\y/\spin in {4.8/0/-1,4.8/1.8/1,6.6/0/1} {
+    \fill[blue!65!black] (\x,\y) circle (2pt);
+    \draw[->,blue!65!black,line width=1.5pt]
+      (\x,{\y-0.5*\spin}) -- (\x,{\y+0.5*\spin});
+  }
+  \draw[orange!85!black,dashed] (6.6,1.8) circle (0.72);
+  \fill[orange!85!black] (6.6,1.8) circle (2pt);
+  \draw[->,orange!85!black,line width=1.5pt] (6.6,2.3) -- (6.6,1.3);
+  \draw[->,thick] (2.65,0.9) -- node[above] {flip} (3.95,0.9);
+  \node at (0.9,-0.75) {$x_k$};
+  \node at (5.7,-0.75) {$x_{k+1}$};
+\end{tikzpicture}

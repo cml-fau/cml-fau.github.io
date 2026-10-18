@@ -9,6 +9,7 @@ project:
     - notebooks/*.ipynb
   resources:
     - presentations/old/*.pdf
+    - presentations/lectures/*.pdf
 
 # Notebooks are rendered with the outputs saved in them; nothing is re-executed.
 execute:
@@ -32,6 +33,10 @@ website:
     contents:
       - text: Home
         href: index.qmd
+      - section: Lectures
+        contents:
+          - text: Introduction to Control Theory
+            href: presentations/lectures/introduction_control_theory.pdf
       - section: Notebooks
         contents: notebooks/*.ipynb
   page-footer:

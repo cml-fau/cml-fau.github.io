@@ -23,3 +23,23 @@ _site/
 
 /.quarto/
 **/*.quarto_ipynb
+
+# LaTeX build artifacts
+*.aux
+*.bbl
+*.bcf
+*.blg
+*.fdb_latexmk
+*.fls
+*.log
+*.nav
+*.out
+*.run.xml
+*.snm
+*.synctex.gz
+*.synctex(busy)
+*.toc
+*.vrb
+*.xdv
+# written by the filecontents block of the slides at each compilation
+presentations/lectures/introduction_control_theory.bib

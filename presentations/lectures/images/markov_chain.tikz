@@ -1,0 +1,10 @@
+% Illustrative two-state weather chain; outgoing probabilities sum to one.
+\begin{tikzpicture}[>=Stealth, font=\sffamily\small,
+  state/.style={circle,draw,minimum size=13mm,inner sep=1pt}]
+  \node[state,fill=yellow!20] (sun) at (0,0) {sun};
+  \node[state,fill=blue!12] (rain) at (3.2,0) {rain};
+  \draw[->,thick] (sun) to[bend left=24] node[above] {$0.2$} (rain);
+  \draw[->,thick] (rain) to[bend left=24] node[below] {$0.4$} (sun);
+  \draw[->,thick] (sun) to[loop above,looseness=6] node[above] {$0.8$} (sun);
+  \draw[->,thick] (rain) to[loop above,looseness=6] node[above] {$0.6$} (rain);
+\end{tikzpicture}

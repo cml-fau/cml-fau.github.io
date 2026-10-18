@@ -1,0 +1,17 @@
+% One residual layer: the identity branch adds a learned increment h g_k(x_k).
+\begin{tikzpicture}[>=Stealth, font=\sffamily\small,
+  transform/.style={draw=blue!65!black,fill=blue!7,rounded corners=2pt,
+    minimum width=15mm,minimum height=9mm}]
+  \path[use as bounding box] (-0.6,-1.6) rectangle (4.6,1.0);
+  \node (input) at (0,0) {$x_k$};
+  \node[circle,draw=blue!65!black,minimum size=6mm,inner sep=0pt] (sum) at (3,0) {$+$};
+  \node (output) at (4.3,0) {$x_{k+1}$};
+  \node[transform] (increment) at (1.5,-1.15) {$h\,g_k$};
+  \coordinate (branch) at (0.6,0);
+  \draw[->,thick] (input) -- (sum);
+  \fill[blue!65!black] (branch) circle (1.5pt);
+  \draw[->,thick,blue!65!black] (branch) |- (increment);
+  \draw[->,thick,blue!65!black] (increment) -| (sum);
+  \draw[->,thick] (sum) -- (output);
+  \node[above,text=black!60] at (1.65,0.12) {identity};
+\end{tikzpicture}
