@@ -2,10 +2,10 @@
 
 Run from the repository root:
 
-    .venv/bin/python presentations/lectures/make_figures.py [preview_dir]
+    .venv/bin/python lectures/01_introduction_control_theory/make_figures.py [preview_dir]
 
 The figures reuse the house style of the notebooks (notebooks/plotting.py), so the slides
-and the notebooks look alike.  PDFs go to presentations/lectures/images/; if a preview
+and the notebooks look alike.  PDFs go to images/ next to this script; if a preview
 directory is given, PNG copies are written there as well.  The last section writes the
 Brownian-motion animation: a GIF that plays on its own, the matching multipage PDF that
 Beamer's animate package embeds at FPS frames per second, and a PNG poster of the final
@@ -29,7 +29,7 @@ from matplotlib.patches import Arc, Circle, FancyArrowPatch, Rectangle
 from matplotlib.transforms import Affine2D
 from PIL import Image
 
-OUT = ROOT / "presentations" / "lectures" / "images"
+OUT = pathlib.Path(__file__).resolve().parent / "images"
 OUT.mkdir(exist_ok=True)
 PREVIEW = pathlib.Path(sys.argv[1]) if len(sys.argv) > 1 else None
 rng = np.random.default_rng(0)

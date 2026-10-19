@@ -1,0 +1,44 @@
+---
+title: "Presentation Topics from Previous Years"
+---
+
+Topics covered in the student group presentations of previous years. Linked titles have their
+slides available.
+
+- A Comparative Study of Nature-Inspired Optimization Algorithms
+- A Systematic Review of Machine Learning Techniques in Skin Cancer Diagnosis
+- Adaptive Traffic Signal Control Using Reinforcement Learning
+- [Analysis of Common Activation Functions in Deep Learning](old/2025_activation_functions.pdf)
+- Anomaly Detection and Threat Prediction in Cybersecurity using ML
+- Autonomous Agent Control Using Double Deep Q-Network
+- Brain tumor classification using vision transformers
+- Comparative Analysis of Data-Driven GNN-Based Path Planning
+- Decentralized Machine Learning with Federated Learning
+- Deep reinforcement learning for legged robots
+- Eigen-Portfolios: From Single-Component Models to Ensemble Approaches
+- Evolution of Reinforcement Learning Strategies in Turn-Based Decision Systems
+- From Random to Smart Sampling: The Prediction-Enhanced Monte Carlo Framework
+- Hybrid Adaptive Search for Efficient Feature Binning in Gradient Boosting
+- Integrating Gaussian Processes with Model Predictive Control
+- Intelligent Control Through Wavelets
+- Interpretability and the LIME Algorithm for Image Classification
+- Introducing Context to Learning with LSTM Networks
+- Introduction to Generatively Pretrained Transformer
+- Machine Learning-Based Heuristics for Efficient Vehicle Dispatching
+- News-Driven Stock Market Prediction Using Sentiment and Time-Series Data
+- Operator theory in machine learning
+- Optimization Algorithms in Deep Learning
+- [Optimization Techniques in Machine Learning](old/2025_optimization_methods_in_ml.pdf)
+- Physics-Informed Neural Networks for Solving Differential Equations
+- Recurrent Neural Networks and Backpropagation through Time
+- Reinforcement learning for autonomous vehicle control
+- Reinforcement Learning–Based Model Predictive Control for Greenhouse Climate Control
+- Review Study of Physics-Based Character Animation through Reinforcement Learning
+- RevNet: Efficient Backpropagation with Reversible Residual Networks
+- Semantic Search-based Best Job Matcher app using Sentence Transformer
+- Simple Transformers for Time-Series Control
+- Stock price prediction using advanced deep learning architectures
+- The principles behind large language models
+- TransUnet: Combining Transformers and UNet for medical Image segmentation
+- Urban Pathfinding with Heuristic and Neural Techniques
+- Word Embeddings to Contextual Representations

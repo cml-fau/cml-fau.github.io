@@ -40,7 +40,8 @@ Assessment takes into account attendance and active participation and a group pr
   Examples of presentations from previous years:
   [1](presentations/old/2025_principal_component_analysis.pdf),
   [2](presentations/old/2025_optimization_methods_in_ml.pdf) and
-  [3](presentations/old/2025_activation_functions.pdf).
+  [3](presentations/old/2025_activation_functions.pdf); see also the
+  [full list of topics presented in previous years](presentations/topics.qmd).
 - **Registration:** before 1 November 2026, email [cml.fau@gmail.com](mailto:cml.fau@gmail.com) the
   names of all group members, the topic and your preferred presentation dates.
 - **Slides** (PDF) are sent to the same address before the day of the presentation.

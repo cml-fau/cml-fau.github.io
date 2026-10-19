@@ -82,7 +82,9 @@ text and the code is the smallest runnable confirmation of it.
 | 06 | [Transformers](notebooks/06_transformers.ipynb) | Self-attention, multi-head attention, positional encoding, the transformer block, masked language modelling |
 | 07 | [Reinforcement Learning](notebooks/07_reinforcement_learning.ipynb) | Bellman equation and value iteration, Q-learning, exploration vs. exploitation, Pontryagin's maximum principle, Hamilton–Jacobi–Bellman (appendix) |
 
-Slides and presentations go in [`presentations/`](presentations/).
+Lecture slides go in [`lectures/`](lectures/), one folder per lecture (`01_introduction_control_theory/`
+holds the `.tex`, the compiled `.pdf` and its `images/`). Presentations from previous years are in
+[`presentations/`](presentations/).
 
 ## Installation and Running the notebooks
 

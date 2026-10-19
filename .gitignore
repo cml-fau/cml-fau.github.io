@@ -42,4 +42,4 @@ _site/
 *.vrb
 *.xdv
 # written by the filecontents block of the slides at each compilation
-presentations/lectures/introduction_control_theory.bib
+lectures/01_introduction_control_theory/introduction_control_theory.bib
