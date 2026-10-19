@@ -1,0 +1,61 @@
+---
+title: "Presentation Schedule"
+---
+
+Four groups present per session, each with 15 minutes of presentation and 15 minutes of questions.
+Open slots are assigned in order of registration; email [cml.fau@gmail.com](mailto:cml.fau@gmail.com)
+to register.
+
+## 14 December 2026
+
+| | Group | Topic |
+|---|---|---|
+| 1 | Berlo Ugin Eugin, Danush Sathish Kumar, Shakthivel Kumarasamy | [09 – Machine Learning Foundations: Fitting Is Not Learning](../notebooks/09_machine_learning_foundations_generalization.ipynb) |
+| 2 | *open* | |
+| 3 | *open* | |
+| 4 | *open* | |
+
+## 21 December 2026
+
+| | Group | Topic |
+|---|---|---|
+| 1 | *open* | |
+| 2 | *open* | |
+| 3 | *open* | |
+| 4 | *open* | |
+
+## 11 January 2027
+
+| | Group | Topic |
+|---|---|---|
+| 1 | *open* | |
+| 2 | *open* | |
+| 3 | *open* | |
+| 4 | *open* | |
+
+## 18 January 2027
+
+| | Group | Topic |
+|---|---|---|
+| 1 | *open* | |
+| 2 | *open* | |
+| 3 | *open* | |
+| 4 | *open* | |
+
+## 25 January 2027
+
+| | Group | Topic |
+|---|---|---|
+| 1 | *open* | |
+| 2 | *open* | |
+| 3 | *open* | |
+| 4 | *open* | |
+
+## 1 February 2027
+
+| | Group | Topic |
+|---|---|---|
+| 1 | *open* | |
+| 2 | *open* | |
+| 3 | *open* | |
+| 4 | *open* | |

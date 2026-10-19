@@ -7,6 +7,7 @@ project:
     - index.qmd
     - 404.qmd
     - presentations/topics.qmd
+    - presentations/schedule.qmd
     - notebooks/*.ipynb
   resources:
     - presentations/old/*.pdf
