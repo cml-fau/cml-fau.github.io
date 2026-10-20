@@ -65,6 +65,13 @@ code to the shortest fragment that illustrates the mathematics.
 Each notebook is self-contained: the mathematics is developed in the text and the code is the
 smallest runnable confirmation of it. Code cells are folded; click **Code** to expand them.
 
+**Lecture slides**
+
+| # | Slides | Topics |
+|---|---|---|
+| 00 | [Introduction to Control and Machine Learning](lectures/00_introduction_control_and_machine_learning/introduction_control_and_machine_learning.pdf) | The context today: AI everywhere, representation, the risk of hallucinations; origins: Aristotle, Watt and Maxwell, Wiener and Kalman, Markov and PageRank, herding and parking; the objectives of machine learning, universal approximation, shallow and deep networks, supervised learning, least squares; the 3Blue1Brown videos |
+| 01 | [Introduction to Control Theory](lectures/01_introduction_control_theory/introduction_control_theory.pdf) | A short history; dynamical systems; the ingredients of a control problem; optimal control, controllability and feedback; reachable sets, the Kalman rank condition, the Gramian and the cost of control; control and learning |
+
 **Part 0 — The map**
 
 | # | Notebook | Topics |

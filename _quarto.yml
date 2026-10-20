@@ -12,6 +12,7 @@ project:
   resources:
     - presentations/old/*.pdf
     - lectures/*/*.pdf
+    - lectures/*/videos/*.mp4
 
 # Notebooks are rendered with the outputs saved in them; nothing is re-executed.
 execute:
@@ -37,6 +38,8 @@ website:
         href: index.qmd
       - section: Lectures
         contents:
+          - text: Introduction to Control and Machine Learning
+            href: lectures/00_introduction_control_and_machine_learning/introduction_control_and_machine_learning.pdf
           - text: Introduction to Control Theory
             href: lectures/01_introduction_control_theory/introduction_control_theory.pdf
       - section: Notebooks
