@@ -38,9 +38,13 @@ website:
         href: index.qmd
       - section: Lectures
         contents:
-          - text: Introduction to Control and Machine Learning
-            href: lectures/00_introduction_control_and_machine_learning/introduction_control_and_machine_learning.pdf
-          - text: Introduction to Control Theory
+          - section: "00 · Introduction to Control and Machine Learning"
+            contents:
+              - text: PDF
+                href: lectures/00_introduction_control_and_machine_learning/introduction_control_and_machine_learning.pdf
+              - text: PowerPoint
+                href: https://drive.google.com/file/d/1iTSIfdrd_4o3Lwf-c-V_9y__BtAXT8Vc/view
+          - text: "01 · Introduction to Control Theory"
             href: lectures/01_introduction_control_theory/introduction_control_theory.pdf
       - section: Notebooks
         contents: notebooks/*.ipynb
