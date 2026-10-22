@@ -11,7 +11,7 @@ to register.
 | | Group | Topic |
 |---|---|---|
 | 1 | Berlo Ugin Eugin, Danush Sathish Kumar, Shakthivel Kumarasamy | [09 – Machine Learning Foundations: Fitting Is Not Learning](../notebooks/09_machine_learning_foundations_generalization.ipynb) |
-| 2 | *open* | |
+| 2 | Gowtham Elano (23609265), Muni Rajesh Anku (23707805), Nivethitha Ravuthampalayam Balasubiramaniyam (23693212) | Learning Temporal Patterns with Recurrent Neural Architectures |
 | 3 | *open* | |
 | 4 | *open* | |
 
