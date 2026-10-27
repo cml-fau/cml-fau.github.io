@@ -28,7 +28,7 @@ to register.
 
 | | Group | Topic |
 |---|---|---|
-| 1 | *open* | |
+| 1 | Vibhu Gupta, Harsh Kumar | Who Gets the Credit? Explaining Model Predictions with Shapley Values (SHAP) |
 | 2 | *open* | |
 | 3 | *open* | |
 | 4 | *open* | |
@@ -37,7 +37,7 @@ to register.
 
 | | Group | Topic |
 |---|---|---|
-| 1 | *open* | |
+| 1 | Biyun Shen, Elene Kvitsiani, Eduardo Patrón Anchondo | PINNs for Control |
 | 2 | *open* | |
 | 3 | *open* | |
 | 4 | *open* | |
