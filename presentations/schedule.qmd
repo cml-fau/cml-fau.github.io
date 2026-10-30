@@ -19,7 +19,7 @@ to register.
 
 | | Group | Topic |
 |---|---|---|
-| 1 | *open* | |
+| 1 | Roshni Semthilkumar, Melissa Yuliana Guerra Martinez | Reservoir Computing |
 | 2 | *open* | |
 | 3 | *open* | |
 | 4 | *open* | |
@@ -39,7 +39,7 @@ to register.
 |---|---|---|
 | 1 | Biyun Shen, Elene Kvitsiani, Eduardo Patrón Anchondo | PINNs for Control |
 | 2 | Siddharth Vishnu Muraleedharan Sandya, Kartik Gupta, Subashchandar Subramani | Chemotherapy Scheduling via Optimal Control and Reinforcement Learning |
-| 3 | *open* | |
+| 3 | Yulong Wang, Junyi Tang | Reinforcement Learning Fundamentals and Application in LLM |
 | 4 | *open* | |
 
 ## 25 January 2027
