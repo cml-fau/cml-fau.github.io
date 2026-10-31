@@ -22,7 +22,7 @@ to register.
 | 1 | Roshni Semthilkumar, Melissa Yuliana Guerra Martinez | Reservoir Computing |
 | 2 | *open* | |
 | 3 | *open* | |
-| 4 | *open* | |
+| 4 | Sharon Mathew P Reji, Jerome Shijo, Alans Kurian | *to be announced* |
 
 ## 11 January 2027
 
@@ -30,8 +30,8 @@ to register.
 |---|---|---|
 | 1 | Vibhu Gupta, Harsh Kumar | Who Gets the Credit? Explaining Model Predictions with Shapley Values (SHAP) |
 | 2 | *open* | |
-| 3 | *open* | |
-| 4 | *open* | |
+| 3 | Upasana Trivedi, Dhairya Katkoriya, Manaswini Reddy | The Mathematics of Quantum Gates |
+| 4 | Prakriti Shree, Revanth Gadhamsetty, Vangala Vishruth Reddy | Stability Analysis of Deep Residual Neural Networks: A Dynamical Systems and Lyapunov Theory Perspective |
 
 ## 18 January 2027
 
@@ -49,7 +49,7 @@ to register.
 | 1 | *open* | |
 | 2 | *open* | |
 | 3 | *open* | |
-| 4 | *open* | |
+| 4 | Ritik Ritik, Harsh Singh, Abhay Kumar Patel, Heenakauser Shaikh | *to be announced* |
 
 ## 1 February 2027
 
