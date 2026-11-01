@@ -10,7 +10,7 @@ to register.
 
 | | Group | Topic |
 |---|---|---|
-| 1 | Berlo Ugin Eugin, Danush Sathish Kumar, Shakthivel Kumarasamy | [09 – Machine Learning Foundations: Fitting Is Not Learning](../notebooks/09_machine_learning_foundations_generalization.ipynb) |
+| 1 | Berlo Ugin Eugin, Danush Sathish Kumar, Shakthivel Kumarasamy | Machine Learning Foundations: Fitting Is Not Learning |
 | 2 | *open* | |
 | 3 | *open* | |
 | 4 | *open* | |
@@ -48,8 +48,8 @@ to register.
 |---|---|---|
 | 1 | Ritik Ritik, Harsh Singh | *to be announced* |
 | 2 | Abhay Kumar Patel, Heenakauser Shaikh | *to be announced* |
-| 3 | Aarushi Sharma | *to be announced* |
-| 4 | *open* | |
+| 3 | Aarushi Sharma, Maya Klarmann | Physics-Informed Neural Networks |
+| 4 | Sainath Chinta | Training from Data: Gradient Descent, SGD and Mini-Batches |
 
 ## 1 February 2027
 
@@ -57,5 +57,5 @@ to register.
 |---|---|---|
 | 1 | Biyun Shen, Elene Kvitsiani, Eduardo Patrón Anchondo | PINNs for Control |
 | 2 | Harshil Patel | *to be announced* |
-| 3 | *open* | |
+| 3 | Umm Ul Baneen | *to be announced* |
 | 4 | *open* | |
