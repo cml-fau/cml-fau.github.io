@@ -11,51 +11,51 @@ to register.
 | | Group | Topic |
 |---|---|---|
 | 1 | Berlo Ugin Eugin, Danush Sathish Kumar, Shakthivel Kumarasamy | [09 – Machine Learning Foundations: Fitting Is Not Learning](../notebooks/09_machine_learning_foundations_generalization.ipynb) |
-| 2 | Gowtham Elano, Muni Rajesh Anku, Nivethitha Ravuthampalayam Balasubiramaniyam | Learning Temporal Patterns with Recurrent Neural Architectures |
-| 3 | Aarushi | *to be announced* |
+| 2 | *open* | |
+| 3 | *open* | |
 | 4 | *open* | |
 
 ## 21 December 2026
 
 | | Group | Topic |
 |---|---|---|
-| 1 | Roshni Semthilkumar, Melissa Yuliana Guerra Martinez | Reservoir Computing |
-| 2 | *open* | |
-| 3 | *open* | |
-| 4 | Sharon Mathew P Reji, Jerome Shijo, Alans Kurian | *to be announced* |
+| 1 | Gowtham Elano, Muni Rajesh Anku, Nivethitha Ravuthampalayam Balasubiramaniyam | Learning Temporal Patterns with Recurrent Neural Architectures |
+| 2 | Roshni Semthilkumar, Melissa Yuliana Guerra Martinez | Reservoir Computing |
+| 3 | Sharon Mathew P Reji, Jerome Shijo, Alans Kurian | *to be announced* |
+| 4 | *open* | |
 
 ## 11 January 2027
 
 | | Group | Topic |
 |---|---|---|
 | 1 | Vibhu Gupta, Harsh Kumar | Who Gets the Credit? Explaining Model Predictions with Shapley Values (SHAP) |
-| 2 | *open* | |
+| 2 | Prakriti Shree, Revanth Gadhamsetty, Vangala Vishruth Reddy | Stability Analysis of Deep Residual Neural Networks: A Dynamical Systems and Lyapunov Theory Perspective |
 | 3 | Upasana Trivedi, Dhairya Katkoriya, Manaswini Reddy | The Mathematics of Quantum Gates |
-| 4 | Prakriti Shree, Revanth Gadhamsetty, Vangala Vishruth Reddy | Stability Analysis of Deep Residual Neural Networks: A Dynamical Systems and Lyapunov Theory Perspective |
+| 4 | *open* | |
 
 ## 18 January 2027
 
 | | Group | Topic |
 |---|---|---|
-| 1 | Biyun Shen, Elene Kvitsiani, Eduardo Patrón Anchondo | PINNs for Control |
-| 2 | Siddharth Vishnu Muraleedharan Sandya, Kartik Gupta, Subashchandar Subramani | Chemotherapy Scheduling via Optimal Control and Reinforcement Learning |
-| 3 | Yulong Wang, Junyi Tang | Reinforcement Learning Fundamentals and Application in LLM |
+| 1 | Siddharth Vishnu Muraleedharan Sandya, Kartik Gupta, Subashchandar Subramani | Chemotherapy Scheduling via Optimal Control and Reinforcement Learning |
+| 2 | Yulong Wang, Junyi Tang | Reinforcement Learning Fundamentals and Application in LLM |
+| 3 | *open* | |
 | 4 | *open* | |
 
 ## 25 January 2027
 
 | | Group | Topic |
 |---|---|---|
-| 1 | *open* | |
-| 2 | *open* | |
-| 3 | Ritik Ritik, Harsh Singh | *to be announced* |
-| 4 | Abhay Kumar Patel, Heenakauser Shaikh | *to be announced* |
+| 1 | Ritik Ritik, Harsh Singh | *to be announced* |
+| 2 | Abhay Kumar Patel, Heenakauser Shaikh | *to be announced* |
+| 3 | Aarushi Sharma | *to be announced* |
+| 4 | *open* | |
 
 ## 1 February 2027
 
 | | Group | Topic |
 |---|---|---|
-| 1 | *open* | |
+| 1 | Biyun Shen, Elene Kvitsiani, Eduardo Patrón Anchondo | PINNs for Control |
 | 2 | *open* | |
 | 3 | *open* | |
 | 4 | *open* | |
