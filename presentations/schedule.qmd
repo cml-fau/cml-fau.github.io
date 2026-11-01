@@ -12,7 +12,7 @@ to register.
 |---|---|---|
 | 1 | Berlo Ugin Eugin, Danush Sathish Kumar, Shakthivel Kumarasamy | [09 – Machine Learning Foundations: Fitting Is Not Learning](../notebooks/09_machine_learning_foundations_generalization.ipynb) |
 | 2 | Gowtham Elano, Muni Rajesh Anku, Nivethitha Ravuthampalayam Balasubiramaniyam | Learning Temporal Patterns with Recurrent Neural Architectures |
-| 3 | *open* | |
+| 3 | Aarushi | *to be announced* |
 | 4 | *open* | |
 
 ## 21 December 2026
@@ -48,8 +48,8 @@ to register.
 |---|---|---|
 | 1 | *open* | |
 | 2 | *open* | |
-| 3 | *open* | |
-| 4 | Ritik Ritik, Harsh Singh, Abhay Kumar Patel, Heenakauser Shaikh | *to be announced* |
+| 3 | Ritik Ritik, Harsh Singh | *to be announced* |
+| 4 | Abhay Kumar Patel, Heenakauser Shaikh | *to be announced* |
 
 ## 1 February 2027
 
