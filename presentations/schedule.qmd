@@ -56,6 +56,6 @@ to register.
 | | Group | Topic |
 |---|---|---|
 | 1 | Biyun Shen, Elene Kvitsiani, Eduardo Patrón Anchondo | PINNs for Control |
-| 2 | *open* | |
+| 2 | Harshil Patel | *to be announced* |
 | 3 | *open* | |
 | 4 | *open* | |
