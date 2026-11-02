@@ -31,7 +31,7 @@ to register.
 | 1 | Siddharth Vishnu Muraleedharan Sandya, Kartik Gupta, Subashchandar Subramani | Chemotherapy Scheduling via Optimal Control and Reinforcement Learning |
 | 2 | Yulong Wang, Junyi Tang | Reinforcement Learning Fundamentals and Application in LLM |
 | 3 | Zeel Nakrani | *to be announced* |
-| 4 | *open* | |
+| 4 | Biyun Shen, Elene Kvitsiani, Eduardo Patrón Anchondo | PINNs for Control |
 
 ## 25 January 2027
 
@@ -46,7 +46,7 @@ to register.
 
 | | Group | Topic |
 |---|---|---|
-| 1 | Biyun Shen, Elene Kvitsiani, Eduardo Patrón Anchondo | PINNs for Control |
-| 2 | Harshil Patel | *to be announced* |
-| 3 | Haseeb Tariq, Umm Ul Baneen | Machine Learning Foundations: Fitting Is Not Learning |
-| 4 | Justins Pulpakunnel Varkey | Quantum Machine Learning |
+| 1 | Harshil Patel | *to be announced* |
+| 2 | Haseeb Tariq, Umm Ul Baneen | Machine Learning Foundations: Fitting Is Not Learning |
+| 3 | Justins Pulpakunnel Varkey | Quantum Machine Learning |
+| 4 | *open* | |
