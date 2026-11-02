@@ -22,7 +22,7 @@ to register.
 | 1 | Gowtham Elano, Muni Rajesh Anku, Nivethitha Ravuthampalayam Balasubiramaniyam | Learning Temporal Patterns with Recurrent Neural Architectures |
 | 2 | Roshni Semthilkumar, Melissa Yuliana Guerra Martinez | Reservoir Computing |
 | 3 | Sharon Mathew P Reji, Jerome Shijo, Alans Kurian | *to be announced* |
-| 4 | *open* | |
+| 4 | Aarushi Sharma, Maya Klarmann | Physics-Informed Neural Networks |
 
 ## 11 January 2027
 
@@ -39,7 +39,7 @@ to register.
 |---|---|---|
 | 1 | Siddharth Vishnu Muraleedharan Sandya, Kartik Gupta, Subashchandar Subramani | Chemotherapy Scheduling via Optimal Control and Reinforcement Learning |
 | 2 | Yulong Wang, Junyi Tang | Reinforcement Learning Fundamentals and Application in LLM |
-| 3 | *open* | |
+| 3 | Zeel Nakrani | *to be announced* |
 | 4 | *open* | |
 
 ## 25 January 2027
@@ -48,8 +48,8 @@ to register.
 |---|---|---|
 | 1 | Ritik Ritik, Harsh Singh | *to be announced* |
 | 2 | Abhay Kumar Patel, Heenakauser Shaikh | *to be announced* |
-| 3 | Aarushi Sharma, Maya Klarmann | Physics-Informed Neural Networks |
-| 4 | Sainath Chinta | Training from Data: Gradient Descent, SGD and Mini-Batches |
+| 3 | Sainath Chinta | Training from Data: Gradient Descent, SGD and Mini-Batches |
+| 4 | *open* | |
 
 ## 1 February 2027
 
