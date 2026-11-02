@@ -59,7 +59,7 @@ Assessment takes into account attendance and active participation and a group pr
 | | |
 |---|---|
 | **Lectures** | 12 Oct – 7 Dec 2026 |
-| **Presentations** | 14 & 21 Dec 2026 · 11, 18, 25 Jan & 1 Feb 2027 |
+| **Presentations** | 21 Dec 2026 · 11, 18, 25 Jan & 1 Feb 2027 |
 
 ## Prerequisites
 

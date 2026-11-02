@@ -52,7 +52,7 @@ Attendance of at least 80% of the lectures is required to take part in the final
 | | |
 |---|---|
 | **Lectures** | 12 Oct – 7 Dec 2026 |
-| **Presentations** | 14 & 21 Dec 2026 · 11, 18, 25 Jan & 1 Feb 2027 ([schedule](presentations/schedule.qmd)) |
+| **Presentations** | 21 Dec 2026 · 11, 18, 25 Jan & 1 Feb 2027 ([schedule](presentations/schedule.qmd)) |
 
 ## Prerequisites
 

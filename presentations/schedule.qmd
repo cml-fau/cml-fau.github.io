@@ -6,15 +6,6 @@ Four groups present per session, each with 15 minutes of presentation and 15 min
 Open slots are assigned in order of registration; email [cml.fau@gmail.com](mailto:cml.fau@gmail.com)
 to register.
 
-## 14 December 2026
-
-| | Group | Topic |
-|---|---|---|
-| 1 | Berlo Ugin Eugin, Danush Sathish Kumar, Shakthivel Kumarasamy | Machine Learning Foundations: Fitting Is Not Learning |
-| 2 | *open* | |
-| 3 | *open* | |
-| 4 | *open* | |
-
 ## 21 December 2026
 
 | | Group | Topic |
@@ -31,7 +22,7 @@ to register.
 | 1 | Vibhu Gupta, Harsh Kumar | Who Gets the Credit? Explaining Model Predictions with Shapley Values (SHAP) |
 | 2 | Prakriti Shree, Revanth Gadhamsetty, Vangala Vishruth Reddy | Stability Analysis of Deep Residual Neural Networks: A Dynamical Systems and Lyapunov Theory Perspective |
 | 3 | Upasana Trivedi, Dhairya Katkoriya, Manaswini Reddy | The Mathematics of Quantum Gates |
-| 4 | *open* | |
+| 4 | Berlo Ugin Eugin, Danush Sathish Kumar, Shakthivel Kumarasamy | Machine Learning Foundations: Fitting Is Not Learning |
 
 ## 18 January 2027
 
