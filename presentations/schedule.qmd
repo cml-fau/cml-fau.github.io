@@ -47,6 +47,6 @@ to register.
 | | Group | Topic |
 |---|---|---|
 | 1 | Harshil Patel | *to be announced* |
-| 2 | Haseeb Tariq, Umm Ul Baneen, Azrof Hossain Rafid | Machine Learning Foundations: Fitting Is Not Learning |
+| 2 | Haseeb Tariq, Umm Ul Baneen, Muhammad Azrof Hossain Fafid | Machine Learning Foundations: Fitting Is Not Learning |
 | 3 | Justins Pulpakunnel Varkey | Quantum Machine Learning |
 | 4 | *open* | |
