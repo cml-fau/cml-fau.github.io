@@ -101,8 +101,8 @@ smallest runnable confirmation of it. Code cells are folded; click **Code** to e
 | # | Notebook | Topics |
 |---|---|---|
 | 09 | [Machine Learning Foundations: Fitting Is Not Learning](notebooks/09_machine_learning_foundations_generalization.ipynb) | Risks and representations, models and training, backpropagation, overfitting and selection bias, the train/validation/test protocol, federated learning, a zoo of architectures |
-| 10 | [Universal Approximation and Optimization](notebooks/10_universal_approximation_and_optimization.ipynb) | Polynomials, Gaussian translates, hat functions and sigmoid neurons as approximation families, gradient descent and the descent lemma, momentum, noisy gradients and the Gibbs measure, mini-batch training |
-| 11 | [Optimization Algorithms: Momentum and Adaptive Methods](notebooks/11_optimization.ipynb) | Heavy ball and Nesterov momentum as damped dynamics, RMSProp and Adam, fair comparisons of optimizers |
+| 10 | [Universal Approximation and Optimization](notebooks/10_universal_approximation_and_optimization.ipynb) | Polynomials, Gaussian translates, hat functions and sigmoid neurons as approximation families, gradient descent and the descent lemma, momentum, noisy gradients, mini-batch training |
+| 11 | [Optimization Algorithms: Momentum and Adaptive Methods](notebooks/11_optimization.ipynb) | Heavy ball and Nesterov momentum as damped dynamics, RMSProp and Adam, fair comparisons of optimizers, the Gibbs measure of noisy gradient descent (appendix) |
 
 **Part IV — Neural networks as dynamical systems**
 
