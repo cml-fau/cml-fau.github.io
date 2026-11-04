@@ -54,7 +54,7 @@ Assessment takes into account attendance and active participation and a group pr
   names of all group members, the topic and your preferred presentation dates.
 - **Slides** (PDF) are sent to the same address before the day of the presentation.
 - **Format:** 15 minutes of presentation and 15 minutes of questions; every member takes part in both.
-- **Attendance** at all presentation sessions is required, also after your own group has presented.
+- **Attendance** at all presentation sessions is strongly recommended, also after your own group has presented.
 
 | | |
 |---|---|
