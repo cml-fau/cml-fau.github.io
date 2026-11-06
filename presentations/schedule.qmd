@@ -1,52 +1,169 @@
 ---
 title: "Presentation Schedule"
+toc: false
+page-layout: full
 ---
 
 Four groups present per session, each with 15 minutes of presentation and 15 minutes of questions.
 Open slots are assigned in order of registration; email [cml.fau@gmail.com](mailto:cml.fau@gmail.com)
 to register.
 
-## 21 December 2026
+<!--
+  Each day is a `.schedule-day` block; each group inside it is a `.slot` (topic, then one name per
+  list item), listed in presentation order and numbered automatically. Layout lives in styles.css.
+-->
 
-| | Group | Topic |
-|---|---|---|
-| 1 | Gowtham Elano, Muni Rajesh Anku, Nivethitha Ravuthampalayam Balasubiramaniyam | Learning Temporal Patterns with Recurrent Neural Architectures |
-| 2 | Roshni Semthilkumar, Melissa Yuliana Guerra Martinez | Reservoir Computing |
-| 3 | Sharon Mathew P Reji, Jerome Shijo, Alans Kurian | *to be announced* |
-| 4 | Aarushi Sharma, Maya Klarmann | Physics-Informed Neural Networks |
+:::::: {.schedule-week}
 
-## 11 January 2027
+::::: {.schedule-day}
+[Monday]{.weekday} [21]{.day} [December 2026]{.month}
 
-| | Group | Topic |
-|---|---|---|
-| 1 | Vibhu Gupta, Harsh Kumar | Who Gets the Credit? Explaining Model Predictions with Shapley Values (SHAP) |
-| 2 | Prakriti Shree, Revanth Gadhamsetty, Vangala Vishruth Reddy | Stability Analysis of Deep Residual Neural Networks: A Dynamical Systems and Lyapunov Theory Perspective |
-| 3 | Upasana Trivedi, Dhairya Katkoriya, Manaswini Reddy | The Mathematics of Quantum Gates |
-| 4 | Berlo Ugin Eugin, Danush Sathish Kumar, Shakthivel Kumarasamy | Machine Learning Foundations: Fitting Is Not Learning |
+::: {.slot}
+Learning Temporal Patterns with Recurrent Neural Architectures
 
-## 18 January 2027
+- Gowtham Elano
+- Muni Rajesh Anku
+- Nivethitha Ravuthampalayam Balasubiramaniyam
+:::
 
-| | Group | Topic |
-|---|---|---|
-| 1 | Siddharth Vishnu Muraleedharan Sandya, Kartik Gupta, Subashchandar Subramani | Chemotherapy Scheduling via Optimal Control and Reinforcement Learning |
-| 2 | Yulong Wang, Junyi Tang | Reinforcement Learning Fundamentals and Application in LLM |
-| 3 | Zeel Nakrani | *to be announced* |
-| 4 | Biyun Shen, Elene Kvitsiani, Eduardo Patrón Anchondo | PINNs for Control |
+::: {.slot}
+Reservoir Computing
 
-## 25 January 2027
+- Roshni Semthilkumar
+- Melissa Yuliana Guerra Martinez
+:::
 
-| | Group | Topic |
-|---|---|---|
-| 1 | Ritik Ritik, Harsh Singh | *to be announced* |
-| 2 | Abhay Kumar Patel, Heenakauser Shaikh | *to be announced* |
-| 3 | Sainath Chinta | Training from Data: Gradient Descent, SGD and Mini-Batches |
-| 4 | *open* | |
+::: {.slot}
+Physics-Informed Neural Networks
 
-## 1 February 2027
+- Aarushi Sharma
+- Maya Klarmann
+:::
 
-| | Group | Topic |
-|---|---|---|
-| 1 | Harshil Patel, Heiko Schweinzer | *to be announced* |
-| 2 | Haseeb Tariq, Umm Ul Baneen, Muhammad Azrof Hossain Fafid | Machine Learning Foundations: Fitting Is Not Learning |
-| 3 | Justins Pulpakunnel Varkey | Quantum Machine Learning |
-| 4 | *open* | |
+::: {.slot}
+*Topic to be announced*
+
+- Sharon Mathew P Reji
+- Jerome Shijo
+- Alans Kurian
+:::
+:::::
+
+::::: {.schedule-day}
+[Monday]{.weekday} [11]{.day} [January 2027]{.month}
+
+::: {.slot}
+Who Gets the Credit? Explaining Model Predictions with Shapley Values (SHAP)
+
+- Vibhu Gupta
+- Harsh Kumar
+:::
+
+::: {.slot}
+Stability Analysis of Deep Residual Neural Networks: A Dynamical Systems and Lyapunov Theory Perspective
+
+- Prakriti Shree
+- Revanth Gadhamsetty
+- Vangala Vishruth Reddy
+:::
+
+::: {.slot}
+The Mathematics of Quantum Gates
+
+- Upasana Trivedi
+- Dhairya Katkoriya
+- Manaswini Reddy
+:::
+
+::: {.slot}
+Machine Learning Foundations: Fitting Is Not Learning
+
+- Berlo Ugin Eugin
+- Danush Sathish Kumar
+- Shakthivel Kumarasamy
+:::
+:::::
+
+::::: {.schedule-day}
+[Monday]{.weekday} [18]{.day} [January 2027]{.month}
+
+::: {.slot}
+Chemotherapy Scheduling via Optimal Control and Reinforcement Learning
+
+- Siddharth Vishnu Muraleedharan Sandya
+- Kartik Gupta
+- Subashchandar Subramani
+:::
+
+::: {.slot}
+Reinforcement Learning Fundamentals and Application in LLM
+
+- Yulong Wang
+- Junyi Tang
+:::
+
+::: {.slot}
+PINNs for Control
+
+- Biyun Shen
+- Elene Kvitsiani
+- Eduardo Patrón Anchondo
+:::
+
+::: {.slot}
+*Topic to be announced*
+
+- Zeel Nakrani
+:::
+:::::
+
+::::: {.schedule-day}
+[Monday]{.weekday} [25]{.day} [January 2027]{.month}
+
+::: {.slot}
+Training from Data: Gradient Descent, SGD and Mini-Batches
+
+- Sainath Chinta
+:::
+
+::: {.slot}
+*Topic to be announced*
+
+- Ritik Ritik
+- Harsh Singh
+:::
+
+::: {.slot}
+*Topic to be announced*
+
+- Abhay Kumar Patel
+- Heenakauser Shaikh
+:::
+:::::
+
+::::: {.schedule-day}
+[Monday]{.weekday} [1]{.day} [February 2027]{.month}
+
+::: {.slot}
+Machine Learning Foundations: Fitting Is Not Learning
+
+- Haseeb Tariq
+- Umm Ul Baneen
+- Muhammad Azrof Hossain Fafid
+:::
+
+::: {.slot}
+Quantum Machine Learning
+
+- Justins Pulpakunnel Varkey
+:::
+
+::: {.slot}
+*Topic to be announced*
+
+- Harshil Patel
+- Heiko Schweinzer
+:::
+:::::
+
+::::::

@@ -20,3 +20,108 @@ div.sourceCode,
 .cell-output pre {
   overflow-x: auto;
 }
+
+/* Presentation schedule (presentations/schedule.qmd): one calendar block per day, five side by
+   side on wide screens, wrapping on narrower ones. */
+.schedule-week {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(15rem, 100%), 1fr));
+  gap: 0.8rem;
+  margin-block: 1.5rem;
+}
+@media (min-width: 1200px) {
+  .schedule-week {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+}
+.schedule-day {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--bs-border-color);
+  border-radius: 0.5rem;
+  overflow: hidden;
+  background: var(--bs-body-bg);
+}
+.schedule-day > p:first-child {
+  margin: 0;
+  padding: 0.5rem 0.75rem 0.6rem;
+  background: var(--bs-primary);
+  color: #fff;
+  text-align: center;
+  line-height: 1.15;
+}
+.schedule-day .weekday,
+.schedule-day .day,
+.schedule-day .month {
+  display: block;
+}
+.schedule-day .weekday {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  opacity: 0.85;
+}
+.schedule-day .day {
+  font-size: 1.9rem;
+  font-weight: 700;
+}
+.schedule-day .month {
+  font-size: 0.8rem;
+}
+.slot {
+  position: relative;
+  padding: 0.6rem 0.75rem 0.6rem 2.2rem;
+  font-size: 0.85rem;
+  line-height: 1.3;
+  overflow-wrap: anywhere;
+}
+.slot + .slot {
+  border-top: 1px solid var(--bs-border-color);
+}
+/* Presentation number within the day. */
+.schedule-day {
+  counter-reset: slot;
+}
+.slot::before {
+  counter-increment: slot;
+  content: counter(slot);
+  position: absolute;
+  left: 0.7rem;
+  top: 0.62rem;
+  width: 1.1rem;
+  height: 1.1rem;
+  border-radius: 50%;
+  background: var(--bs-primary);
+  color: #fff;
+  font-size: 0.7rem;
+  font-weight: 600;
+  line-height: 1.1rem;
+  text-align: center;
+}
+.slot > p {
+  margin: 0 0 0.3rem;
+  font-weight: 600;
+}
+.slot em {
+  font-weight: 400;
+  color: var(--bs-secondary-color);
+}
+.slot ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  color: var(--bs-secondary-color);
+}
+/* A dash marks the start of each name; a long name wraps under itself, not under the dash. */
+.slot li {
+  position: relative;
+  padding-left: 0.8rem;
+}
+.slot li::before {
+  content: "–";
+  position: absolute;
+  left: 0;
+}
+.slot li + li {
+  margin-top: 0.1rem;
+}
