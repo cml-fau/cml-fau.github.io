@@ -19,7 +19,7 @@ execute:
   enabled: false
 
 website:
-  title: "Math. Foundations of Control & ML"
+  title: "Mathematical Foundations of Control and Machine Learning"
   site-url: https://cml-fau.github.io/
   repo-url: https://github.com/cml-fau/cml-fau.github.io
   repo-actions: [source, issue]

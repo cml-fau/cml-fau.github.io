@@ -1,3 +1,17 @@
+/* Same header height in both themes: Darkly pads the navbar with 1rem, Cosmo with 0.5rem, so the
+   header jumped when toggling light/dark. */
+.navbar {
+  --bs-navbar-padding-y: 0.5rem;
+}
+/* On phones the full course name would be cut off ("Mathematical Foun…"); let it wrap instead. */
+@media (max-width: 575.98px) {
+  .navbar-brand {
+    white-space: normal;
+    font-size: 1rem;
+    line-height: 1.2;
+  }
+}
+
 /* Wide equations, tables and code scroll inside their own box instead of widening the page. */
 span.math.display {
   display: block;
@@ -37,7 +51,7 @@ div.sourceCode,
 .schedule-day {
   display: flex;
   flex-direction: column;
-  border: 1px solid var(--bs-border-color);
+  border: 2px solid var(--bs-primary);
   border-radius: 0.5rem;
   overflow: hidden;
   background: var(--bs-body-bg);
