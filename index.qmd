@@ -1,6 +1,6 @@
 ---
 title: "Mathematical Foundations of Control and Machine Learning"
-subtitle: "Friedrich-Alexander-Universität Erlangen-Nürnberg — Department of Mathematics · Master's course, Winter 2026"
+subtitle: "Friedrich-Alexander-Universität Erlangen-Nürnberg — Department of Mathematics · Master's course, Winter 2026/27"
 description: "Master's course at FAU Erlangen-Nürnberg by Prof. Enrique Zuazua on the mathematics shared by control theory and machine learning: controllability, observability, optimal control, neural ODEs, transformers, diffusion models and reinforcement learning. Lecture slides and Python/PyTorch notebooks."
 toc: true
 ---

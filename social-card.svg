@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <title>Link preview card (Open Graph / Twitter). Rebuild the PNG with: uvx cairosvg social-card.svg -o social-card.png</title>
+  <rect width="1200" height="630" fill="#ffffff"/>
+  <!-- the favicon tile (favicon.svg), scaled 4.5x -->
+  <g transform="translate(76 76) scale(4.5)">
+    <rect x="1" y="1" width="30" height="30" rx="7" fill="#2780e3"/>
+    <path d="M6.5 23.5C15 23.5 17 8.5 25.5 8.5" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round"/>
+  </g>
+  <g font-family="Inter, Lato, 'DejaVu Sans', sans-serif">
+    <text x="250" y="137" font-size="34" font-weight="600" fill="#2780e3">FAU Erlangen-Nürnberg</text>
+    <text x="250" y="183" font-size="28" fill="#5a6270">Department of Mathematics · Master's course · Winter 2026/27</text>
+    <text x="80" y="335" font-size="66" font-weight="700" fill="#16202e">Mathematical Foundations of</text>
+    <text x="80" y="415" font-size="66" font-weight="700" fill="#16202e">Control and Machine Learning</text>
+    <text x="80" y="492" font-size="30" fill="#5a6270">Prof. Dr. Enrique Zuazua · Lecture slides and Python/PyTorch notebooks</text>
+    <text x="80" y="572" font-size="30" font-weight="600" fill="#2780e3">cml-fau.github.io</text>
+  </g>
+  <rect y="614" width="1200" height="16" fill="#2780e3"/>
+</svg>
