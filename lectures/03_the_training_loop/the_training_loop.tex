@@ -19,6 +19,7 @@
 \usepackage[numbers,square]{natbib}
 \usepackage[most]{tcolorbox}
 \usepackage{tabularx}
+\usepackage{colortbl}   % \rowcolor, for the highlighted rows of the architecture table
 \definecolor{codebg}{RGB}{245,245,245}
 \definecolor{codeframe}{RGB}{180,180,180}
 \definecolor{boxbg}{RGB}{235,245,255}
@@ -42,6 +43,10 @@
   xrightmargin=4pt,
 }
 \lstset{style=pytorch}
+% printed output of the code above it: plain text, its own colours
+\definecolor{outbg}{RGB}{238,247,238}
+\definecolor{outframe}{RGB}{140,180,140}
+\lstdefinestyle{output}{style=pytorch, language={}, backgroundcolor=\color{outbg}, rulecolor=\color{outframe}, aboveskip=0pt}
 
 \title{The Training Loop}
 \subtitle{Mathematical Foundations of Control and Machine Learning}
@@ -57,6 +62,11 @@
 \newcommand{\Risk}{\mathcal{R}}    % the population risk; the empirical risk is F
 \newcommand{\Gram}{\mathcal{G}}
 \newcommand{\ctrl}[1]{\textcolor{ctrl}{#1}}
+% \sliderow{k} at the start of a table row shades the row on overlay k only.
+% Expandable on purpose: \rowcolor must come before anything that starts the cell.
+\makeatletter
+\newcommand{\sliderow}[1]{\ifnum\beamer@slideinframe=#1 \rowcolor{ctrl!12}\fi}
+\makeatother
 \DeclareMathOperator{\Range}{Range}
 \DeclareMathOperator{\Var}{Var}
 \DeclareMathOperator{\Cov}{Cov}
@@ -72,16 +82,10 @@
   title=\textbf{#2}, fonttitle=\small, coltitle=white, colbacktitle=boxframe,
   halign=left, #1}
 
-% --- Notebook references for worked examples and exercises only ------------
-\newcommand{\nbref}[1]{%
-  \begin{tikzpicture}[remember picture, overlay]
-    \node[anchor=south west, font=\scriptsize, text=black!55]
-      at ([xshift=5mm, yshift=1.1mm] current page.south west) {Notebook #1};
-  \end{tikzpicture}}
-
 % --- The four steps of the lecture ------------------------------------------
 % \loopdiagram{k} draws the loop with step k highlighted: 1 data, 2 architecture, 3 loss,
-% 4 optimizer; 0 highlights nothing and 5 the whole loop.  It opens each part of the lecture.
+% 4 optimizer; 0 highlights nothing, 5 the whole loop and 6 only the feedback arrow.
+% It is drawn on each section page and opens each part of the lecture.
 \newcommand{\loopdiagram}[1]{%
 \begin{tikzpicture}[x=1cm, y=1cm, font=\scriptsize, >=Stealth,
     loopstep/.style={draw=boxframe, fill=boxbg, rounded corners=2pt, align=center,
@@ -96,17 +100,27 @@
   \or \tikzset{loopD/.style={loopon}}%
   \or \tikzset{loopA/.style={loopon}, loopB/.style={loopon}, loopC/.style={loopon},
                loopD/.style={loopon}, loopE/.style={ctrl}}%
+  \or \tikzset{loopE/.style={ctrl, line width=1.2pt}}%
   \fi
   \node[loopstep, loopA] (loopdata) at (0,0)    {\textbf{1. Data}\\ representation $\varphi$};
   \node[loopstep, loopB] (looparch) at (2.62,0) {\textbf{2. Architecture}\\ model $f(\,\cdot\,;w)$};
   \node[loopstep, loopC] (looploss) at (5.24,0) {\textbf{3. Loss}\\ $\ell(f(x;w),y)$};
-  \node[loopstep, loopD] (loopopt)  at (7.86,0) {\textbf{4. Optimizer}\\ $w_{k+1}=w_k-\eta\,g_k$};
+  \node[loopstep, loopD] (loopopt)  at (7.86,0) {\textbf{4. Optimizer}\\ $w_{k+1}=w_k-\eta\,\nabla_w\ell$};
   \draw[looparrow] (loopdata) -- (looparch);
   \draw[looparrow] (looparch) -- (looploss);
   \draw[looparrow] (looploss) -- (loopopt);
   \draw[looparrow, loopE] (loopopt.north) -- ++(0,0.32) -|
     node[pos=0.25, above, text=black!70, inner sep=1.5pt] {update the parameters $w$} (looparch.north);
 \end{tikzpicture}}
+
+% --- Section pages: number and title, then the loop with the section's step highlighted ---
+\setbeamertemplate{section in toc}[sections numbered]
+\setbeamertemplate{section page}{%
+  \centering
+  {\usebeamercolor[fg]{section title}\usebeamerfont{section title}\LARGE
+   \insertsectionnumber.\ \insertsectionhead\par}
+  \vspace{1.4cm}
+  \resizebox{\linewidth}{!}{\loopdiagram{\insertsectionnumber}}\par}
 
 \setbeamerfont{standout}{size=\Large, series=\mdseries}
 \setbeamertemplate{bibliography item}[text]
@@ -212,6 +226,39 @@
   doi     = {10.1109/5.726791}
 }
 
+@article{hubel1959,
+  author  = {Hubel, David H. and Wiesel, Torsten N.},
+  title   = {Receptive Fields of Single Neurones in the Cat's Striate Cortex},
+  journal = {The Journal of Physiology},
+  volume  = {148},
+  number  = {3},
+  pages   = {574--591},
+  year    = {1959},
+  doi     = {10.1113/jphysiol.1959.sp006308}
+}
+
+@article{hubel1962,
+  author  = {Hubel, David H. and Wiesel, Torsten N.},
+  title   = {Receptive Fields, Binocular Interaction and Functional Architecture in the Cat's Visual Cortex},
+  journal = {The Journal of Physiology},
+  volume  = {160},
+  number  = {1},
+  pages   = {106--154},
+  year    = {1962},
+  doi     = {10.1113/jphysiol.1962.sp006837}
+}
+
+@article{lecun1989,
+  author  = {LeCun, Yann and Boser, Bernhard and Denker, John S. and Henderson, Donnie and Howard, Richard E. and Hubbard, Wayne and Jackel, Lawrence D.},
+  title   = {Backpropagation Applied to Handwritten Zip Code Recognition},
+  journal = {Neural Computation},
+  volume  = {1},
+  number  = {4},
+  pages   = {541--551},
+  year    = {1989},
+  doi     = {10.1162/neco.1989.1.4.541}
+}
+
 @inproceedings{he2016,
   author    = {He, Kaiming and Zhang, Xiangyu and Ren, Shaoqing and Sun, Jian},
   title     = {Deep Residual Learning for Image Recognition},
@@ -232,12 +279,32 @@
   doi     = {10.1207/s15516709cog1402_1}
 }
 
+@inproceedings{gilmer2017,
+  author    = {Gilmer, Justin and Schoenholz, Samuel S. and Riley, Patrick F. and Vinyals, Oriol and Dahl, George E.},
+  title     = {Neural Message Passing for Quantum Chemistry},
+  booktitle = {Proceedings of the 34th International Conference on Machine Learning},
+  series    = {Proceedings of Machine Learning Research},
+  volume    = {70},
+  pages     = {1263--1272},
+  year      = {2017}
+}
+
 @book{minsky1969,
   author    = {Minsky, Marvin and Papert, Seymour},
   title     = {Perceptrons: An Introduction to Computational Geometry},
   publisher = {MIT Press},
   address   = {Cambridge, MA},
   year      = {1969}
+}
+
+@article{cybenko1989,
+  author  = {Cybenko, George},
+  title   = {Approximation by Superpositions of a Sigmoidal Function},
+  journal = {Mathematics of Control, Signals, and Systems},
+  volume  = {2},
+  pages   = {303--314},
+  year    = {1989},
+  doi     = {10.1007/BF02551274}
 }
 
 @inproceedings{hastad1986,
@@ -622,28 +689,28 @@
 % #########################################################################
 
 % =========================================================================
-\begin{frame}{What lecture 02 leaves open}
-\footnotesize
-Lecture 02 fitted one curve and, in its last ten minutes, read handwritten digits. Every choice behind that classifier was made without discussion.
+% \begin{frame}{What lecture 02 leaves open}
+% \footnotesize
+% Lecture 02 fitted one curve and, in its last ten minutes, read handwritten digits. Every choice behind that classifier was made without discussion.
 
-\medskip
-\renewcommand{\arraystretch}{1.3}
-\begin{tabularx}{\textwidth}{@{}>{\raggedright\arraybackslash}p{0.40\textwidth} >{\raggedright\arraybackslash}X r@{}}
-\toprule
-\textbf{In lecture 02} & \textbf{In practice} & \\
-\midrule
-the input is a number $x\in[-1,1]$, or 784 pixels & text, sound, molecules, images: which numbers does the model see? & \alert{1} \\
-density: \emph{some} network approximates $g$ & which architecture, how wide, how deep? & \alert{2} \\
-the mean squared error; for the digits, the cross-entropy & which loss, and what does it make the model learn? & \alert{3} \\
-the full gradient, with $\eta\le1/L$ & mini-batches; $\eta$ as large as possible, and changed during training & \alert{4} \\
-one curve, 49 parameters, 160 samples & up to $10^{11}$ parameters, more parameters than data & \alert{5} \\
-\bottomrule
-\end{tabularx}
+% \medskip
+% \renewcommand{\arraystretch}{1.3}
+% \begin{tabularx}{\textwidth}{@{}>{\raggedright\arraybackslash}p{0.40\textwidth} >{\raggedright\arraybackslash}X r@{}}
+% \toprule
+% \textbf{In lecture 02} & \textbf{In practice} & \\
+% \midrule
+% the input is a number $x\in[-1,1]$, or 784 pixels & text, sound, molecules, images: which numbers does the model see? & \alert{1} \\
+% density: \emph{some} network approximates $g$ & which architecture, how wide, how deep? & \alert{2} \\
+% the mean squared error; for the digits, the cross-entropy & which loss, and what does it make the model learn? & \alert{3} \\
+% the full gradient, with $\eta\le1/L$ & mini-batches; $\eta$ as large as possible, and changed during training & \alert{4} \\
+% one curve, 49 parameters, 160 samples & up to $10^{11}$ parameters, more parameters than data & \alert{5} \\
+% \bottomrule
+% \end{tabularx}
 
-\medskip
-\small
-Today these choices are taken one at a time. The numbers on the right are the parts of the lecture.
-\end{frame}
+% \medskip
+% \small
+% Today these choices are taken one at a time. The numbers on the right are the parts of the lecture.
+% \end{frame}
 
 
 % =========================================================================
@@ -662,16 +729,16 @@ Training a model means computing, approximately,
 \setlength{\tabcolsep}{1mm}
 \renewcommand{\arraystretch}{1.3}
 \begin{tabular}{@{}*{4}{>{\centering\arraybackslash}p{2.42cm}}@{}}
-what the model sees & what it assumes & what an error is & how $w$ is found \\
-\alert{pixels in $[0,1]^{784}$} & \alert{$784{\to}16{\to}16{\to}10$} & \alert{cross-entropy} & \alert{Adam, batches of 64}
+what the model sees & what it assumes & what an error is & how $w$ is found
 \end{tabular}
 \end{center}
 
-\footnotesize
-The second row is the digit classifier of lecture 02: ReLU layers, $13\,002$ parameters, $\eta=10^{-3}$, 5 epochs, \alert{$94.0\%$} test accuracy. It is the baseline of today: \alert{each part changes one box and keeps the other three.}
+\end{frame}
 
-\smallskip
-Part 5 then runs the whole loop at scale, where three experiments do what the theory of lecture 02 does not predict. We close with training as a control problem.
+
+% =========================================================================
+\begin{frame}{Outline}
+\tableofcontents
 \end{frame}
 
 
@@ -680,170 +747,176 @@ Part 5 then runs the whole loop at scale, where three experiments do what the th
 % #########################################################################
 
 % Part 1: data and representation.
-% Figures and numbers: figures/part1_representations.py and figures/part1_mnist.py.
+% Figures and numbers: figures/part1_objects.py, figures/part1_representations.py and figures/part1_mnist.py.
 
 % =========================================================================
 \section{Data and representation}
 
-\begin{frame}{The model sees a representation, not the object}
-\centering
-\loopdiagram{1}
 
-\medskip
-\begin{columns}[c]
-\begin{column}{0.48\textwidth}
-\includegraphics[width=\textwidth]{representation_examples.png}
-\end{column}
-\begin{column}{0.52\textwidth}
-\footnotesize
-Words, molecules, sounds and images are not vectors, and every model of this course takes its input in $\R^d$. A map $\varphi:\{\text{objects}\}\to\R^d$ comes first: the \alert{representation}.
-\begin{itemize}
-\item It is a \alert{modelling choice}: it decides which information the model receives, and in which geometry.
-\item Lecture 02 made it without saying so: a digit was its $784$ grey levels.
-\item $\varphi$ can be \alert{designed} from what is known about the objects, or \alert{learned} with the model.
-\end{itemize}
-\end{column}
-\end{columns}
-\nbref{09 \S3}
+
+\begin{frame}{The model sees a representation, not the object}
+
+
+\centerline{\includegraphics{representation_examples.pdf}}   % drawn at its size on the slide, 120 mm
 \end{frame}
 
 
 % =========================================================================
-\begin{frame}{Text for a language model: tokens, embeddings, positions}
+
+
+
+% =========================================================================
+\begin{frame}{Example: Text for a language model}
+% The values of p_t (d = 8, t = 0..5) are computed below with the formula on the right;
+% figures/part1_representations.py prints them.  The entries of e_{i_t} are learned: drawn
+% here as random numbers in [-1, 1], from a fixed seed.  Both use one colour scale.
+\definecolor{posneg}{HTML}{2A78D6}
 \begin{columns}[c]
-\begin{column}{0.51\textwidth}
+\begin{column}{0.57\textwidth}
 \centering
-\begin{tikzpicture}[x=1.03cm, y=1cm, >=Stealth, font=\scriptsize,
-    tokbox/.style={draw=boxframe, fill=boxbg, rounded corners=1pt, minimum height=4.4mm, minimum width=9.9mm,
-                   inner sep=1.2pt, font=\ttfamily\scriptsize},
-    embvec/.style={draw=boxframe, fill=boxbg, minimum width=2.1mm, minimum height=7mm, inner sep=0pt},
-    posvec/.style={draw=ctrl, fill=ctrl!18, minimum width=2.1mm, minimum height=7mm, inner sep=0pt}]
-  \node[font=\ttfamily\footnotesize] (text) at (2,0) {The pendulum swings.};
-  \draw[->] (text) -- (2,-0.52);
-  \node[anchor=west] at (2.08,-0.36) {\alert{tokenizer}};
-  \foreach \i/\t/\id in {0/The/464, 1/\textvisiblespace pend/44017, 2/ulum/14452, 3/\textvisiblespace swings/26728, 4/./13} {
-    \node[tokbox] (t\i) at (\i,-0.78) {\strut\t};
-    \node[text=black!65, inner sep=1pt] (i\i) at (\i,-1.2) {\id};
-    \draw[->, black!55] (i\i) -- (\i,-1.62);
-    \node[embvec] at (\i-0.16,-2.02) {};
-    \node[posvec] at (\i+0.16,-2.02) {};
-    \node at (\i,-2.02) {$+$};
+\begin{tikzpicture}[x=0.95cm, y=1cm, >=Stealth, font=\footnotesize,
+    tok/.style={draw=boxframe, fill=boxbg, rounded corners=1pt, minimum height=4.6mm, minimum width=8.2mm,
+                inner sep=1pt, font=\ttfamily\footnotesize},
+    cell/.style={minimum width=3.4mm, minimum height=2.4mm, inner sep=0pt, line width=0.3pt},
+    lab/.style={anchor=east, inner sep=1pt}]
+  \node[font=\ttfamily\small] (text) at (2.5,0) {The dog bites the man.};
+  \pgfmathsetseed{2026}
+  \foreach \t/\w in {0/The, 1/dog, 2/bites, 3/the, 4/man, 5/.} {
+    \node[tok] (t\t) at (\t,-0.85) {\strut\w};
+    \draw[->, black!45] (text.south) -- (t\t.north);
+    \draw[->, black!45] (t\t.south) -- (\t,-1.32);
+    \foreach \k in {0,...,7} {
+      % e_{i_t}: a random entry in [-1, 1]
+      \pgfmathsetmacro\v{rand}
+      \pgfmathtruncatemacro\pct{round(100*abs(\v))}
+      \pgfmathtruncatemacro\isneg{\v<0}
+      \ifnum\isneg=1 \def\pc{posneg}\else\def\pc{ctrl}\fi
+      \node[cell, draw=black!30, fill=\pc!\pct!white] at (\t,-1.5-0.24*\k) {};
+      % p_t: sin and cos of omega_j t, omega_j = 10000^(-2j/d), in neighbouring coordinates
+      \pgfmathsetmacro\angle{10000^(-2*floor(\k/2)/8)*\t}
+      \pgfmathsetmacro\v{mod(\k,2)==0 ? sin(\angle r) : cos(\angle r)}
+      \pgfmathtruncatemacro\pct{round(100*abs(\v))}
+      \pgfmathtruncatemacro\isneg{\v<0}
+      \ifnum\isneg=1 \def\pc{posneg}\else\def\pc{ctrl}\fi
+      \node[cell, draw=black!30, fill=\pc!\pct!white] at (\t,-3.82-0.24*\k) {};
+    }
+    \node at (\t,-3.47) {$+$};
   }
-  \node[anchor=west, text=black!65, inner sep=1pt] at (4.48,-1.2) {$i_t$};
-  \draw[decorate, decoration={brace, mirror, amplitude=3pt}] (-0.3,-2.45) -- (4.3,-2.45);
-  \node[align=center] at (2,-3.02) {$x_t=E_{i_t}+\ctrl{p_t}\in\R^d$\\ row $i_t$ of a learned $E\in\R^{V\times d}$, plus a \ctrl{position}};
+  \node[lab] at (-0.55,-0.85) {$i_t$};
+  \node[lab] at (-0.55,-2.34) {$e_{i_t}$};
+  \node[lab] at (-0.55,-4.66) {$\ctrl{p_t}$};
 \end{tikzpicture}
 \end{column}
-\begin{column}{0.485\textwidth}
+\begin{column}{0.41\textwidth}
+\small
+\begin{align*}
+x_t&=e_{i_t}+\ctrl{p_t}\\
+\ctrl{p_t}&=\big(\sin\omega_jt,\ \cos\omega_jt\big)_{j<d/2}\\
+\omega_j&=10000^{-2j/d}
+\end{align*}
+
+\scriptsize
+Drawn: $d=8$. One learned vector $e_i\in\R^d$ per token of the vocabulary. 
+
+\medskip
+GPT-3: $V=50\,257$ tokens, $d=12\,288$ \citep{brown2020}.
+
+% \medskip
+% Without \ctrl{$p_t$}, \texttt{The man bites the dog.} gives the same vectors: the model would not see the \alert{order} \citep{vaswani2017}.
+\end{column}
+\end{columns}
+\end{frame}
+
+
+% =========================================================================
+\begin{frame}{Three things to do with a vector}
+% The next three slides, in order: one example of each.
+Given $x\in\R^n$, a representation is a map $\varphi:\R^n\to\R^m$. Three choices:
+
+\bigskip
 \centering
-\scriptsize
-\renewcommand{\arraystretch}{1.15}
-\setlength{\tabcolsep}{2.5pt}
-\begin{tabular}{@{}l r r r@{}}
-\toprule
- & $V$ & $d$ & context \\
-\midrule
-Transformer & $\approx37\,000$ & $512$ & \\
-GPT-2 & $50\,257$ & $768$--$1600$ & $1024$ \\
-GPT-3 & $50\,257$ & $12\,288$ & $2048$ \\
-Llama 3 & $128\,000$ & $4096$--$16\,384$ & $128$K \\
-\bottomrule
-\end{tabular}
+\begin{tikzpicture}[x=1mm, y=1mm, >=Stealth,
+    cell/.style={draw=black!35, line width=0.3pt, minimum width=3mm, minimum height=3mm, inner sep=0pt},
+    what/.style={anchor=west, align=left, inner sep=0pt, font=\small}]
+  % x: n = 4 coordinates
+  \foreach \k in {0,...,3} \node[cell, fill=boxbg] at (1.5+3*\k,0) {};
+  \node[below=1.2mm, font=\small] at (6,-1.5) {$x\in\R^n$};
+  % phi(x): m = 4, 8 and 2 coordinates
+  \foreach \y/\m in {14/4, 0/8, -14/2} {
+    \foreach \k in {1,...,\m} \node[cell, fill=ctrl!22] at (29.5+3*\k,\y) {};
+    \draw[->, black!50] (13,0) -- (29.5,\y);
+  }
+  \node[above, font=\footnotesize, black!60] at (21,8) {$\varphi$};
+  \node[what] at (61,14)  {\textbf{change the coordinates}: $m=n$\\[0.3mm] {\footnotesize\color{black!60}polar coordinates, standardization}};
+  \node[what] at (61,0)   {\textbf{increase the dimension}: $m>n$\\[0.3mm] {\footnotesize\color{black!60}Fourier features}};
+  \node[what] at (61,-14) {\textbf{reduce the dimension}: $m<n$\\[0.3mm] {\footnotesize\color{black!60}principal components}};
+\end{tikzpicture}
+\end{frame}
+
+
+% =========================================================================
+\begin{frame}{Example: change of coordinates}
+% Top: figures/part1_representations.py, two rings, one linear classifier in Cartesian and in polar coordinates.
+% Bottom: figures/part1_normalization.py, 1000 samples of a skewed Gaussian in R^2, drawn to scale;
+% the dashed box is the mean +- one standard deviation per coordinate.
+\small
+\begin{columns}[c, onlytextwidth]
+\begin{column}{0.75\textwidth}
+\includegraphics{rings_coordinates.pdf}
+\end{column}
+\begin{column}{0.25\textwidth}
+\alert{Polar:} $\varphi(x)=(r,\theta)$.
 
 \smallskip
-\raggedright
-$V$ tokens in the vocabulary, vectors of dimension $d$, longest input in tokens \citep{vaswani2017,radford2019,brown2020,grattafiori2024}.
+Same points, same linear classifier.
 \end{column}
 \end{columns}
 
-\smallskip
-\footnotesize
-\begin{itemize}
-\item A \alert{token} is a piece of a word, not a word: \texttt{pendulum} is two tokens. The tokenizer is fixed before training \citep{sennrich2016}; this one is the tokenizer of GPT-2.
-\item $E$ is \alert{learned}: a linear layer on one-hot vectors. In GPT-3 it has $Vd=6.2\cdot10^{8}$ entries, and a full context is $2048\times12\,288=2.5\cdot10^{7}$ numbers.
-\item \ctrl{Positions} \citep{vaswani2017}: $p_t=\big(\sin(\omega_jt),\cos(\omega_jt)\big)_{j<d/2}$ with $\omega_j=10000^{-2j/d}$, sines and cosines of $t$ at $d/2$ frequencies. A learned table of positions gives nearly identical results. Without $p_t$ the model would not see the \alert{order} of the words: part 2.
-\end{itemize}
-\nbref{15 \S4}
-\end{frame}
-
-
-% =========================================================================
-\begin{frame}{A change of coordinates changes the problem}
-\begin{columns}[T]
-\begin{column}{0.45\textwidth}
-\footnotesize
-\alert{Two rings.} One linear classifier, in two coordinate systems.
-
-\smallskip
-\includegraphics[width=\textwidth]{rings_coordinates.pdf}
-
-\smallskip
-In $(x_1,x_2)$ no line separates the rings: $54\%$ of the points are classified correctly. In $\varphi(x)=(r,\theta)$ one does: $100\%$.
+\medskip
+\begin{columns}[c, onlytextwidth]
+\begin{column}{0.75\textwidth}
+\includegraphics{normalization.pdf}
 \end{column}
-\begin{column}{0.5\textwidth}
-\footnotesize
-\alert{The digits.} An affine change is enough. The baseline of lecture 02, on the same $784$ numbers:
+\begin{column}{0.25\textwidth}
+\alert{Standardized:} $z_j=(x_j-\bar x_j)/s_j$.
 
-\medskip
-{\centering
-\renewcommand{\arraystretch}{1.2}
-\begin{tabular}{@{}l r r@{}}
-\toprule
-\textbf{Input} & \textbf{1 epoch} & \textbf{5 epochs} \\
-\midrule
-bytes in $[0,255]$ & $89.5\%$ & $92.7\%$ \\
-grey levels in $[0,1]$ & $91.2\%$ & $94.3\%$ \\
-centred, $x-\bar x$ & $93.0\%$ & $95.2\%$ \\
-\bottomrule
-\end{tabular}
-\par}
-
-\medskip
-{\scriptsize Test accuracy, mean of three initializations; $\bar x$ is the mean image. The run of lecture 02, with $94.0\%$, is one of the second row.\par}
+\smallskip
+Each coordinate has mean $0$ and standard deviation $1$.
 \end{column}
 \end{columns}
+\end{frame}
 
-\smallskip
-\footnotesize
-\alert{A reason.} For a linear model $w\cdot x$ and the squared loss, $\nabla^2F=\frac1N\sum_ix_ix_i^\top=C+\bar x\,\bar x^\top$, with $C$ the covariance of the inputs. The mean image adds an eigenvalue of size $|\bar x|^2=35$ to those of $C$, which are at most $5.1$: $L=38$. Centring divides $L$ by $7.4$, and bytes multiply it by $255^2$. In lecture 02, $L$ limited the step size. A network trained with Adam is not this model: the effect is smaller, and still there.
+
+
+% =========================================================================
+\begin{frame}{Example: Fourier features}
+\small
+A 1D wave equation, fitted from $4000$ samples: %Same network, same $3000$ steps;
+\[
+\begin{cases}
+u_{tt}=u_{xx}, & 0<x<1,\ t>0,\\
+u(0,t)=u(1,t)=0, & \text{fixed ends},\\
+u(x,0)=e^{-((x-0.3)/0.04)^2},\quad u_t(x,0)=0, & \text{released from rest}.
+\end{cases}
+\]
+The input is $(x,t)$ or
+\[
+\varphi(x,t)=\big(\cos j\pi x,\ \sin j\pi x,\ \cos\tfrac{j\pi t}{2},\ \sin\tfrac{j\pi t}{2}\big)_{j\le16}.\mbox{\footnotemark}
+\]
+\footnotetext{$\varphi$ is the positional encoding of transformers \citep{tancik2020}.}
+\centerline{\includegraphics{fourier_features.pdf}}
+%\alert{Faster, not better:} $(x,t)$ needs $12\,000$ steps for $14\%$, then overtakes.
 \end{frame}
 
 
 % =========================================================================
-\begin{frame}{Fourier features: only the input changes}
-\footnotesize
-Target $g(x)+0.3\sin(20x)$; $\tanh$ network, two hidden layers of 64 neurons; squared error; Adam, $\eta=10^{-3}$. Input: $x$, or its first $m$ harmonics $\varphi_m(x)=\big(\cos(j\pi x/2),\,\sin(j\pi x/2)\big)_{j\le m}\in\R^{2m}$.
+\begin{frame}{Example: principal components}
+% figures/part1_mnist.py: the baseline of lecture 02 trained on the first k principal components.
+\centerline{\includegraphics{mnist_pca.pdf}}   % drawn at its size on the slide
 
-\smallskip
-\centerline{\includegraphics[width=0.86\textwidth]{fourier_features.pdf}}
-
-\begin{itemize}
-\item \alert{The ripple is fitted}, with less than $10\%$ missing, from step $2350$ with $x$ and from step $44$ with $\varphi_{16}(x)$. Five initializations: $30$ to $44$, against $1955$ to over $3000$.
-\item \alert{The price:} 32 inputs for one, and a scale to choose: $m=1$ gains nothing, and $m=256$ fits the 160 samples but is wrong between them (error $0.13$). And $\varphi$ must stay injective: with period 2, $\varphi(-1)=\varphi(1)$ and the error stays at $6.4\cdot10^{-3}$.
-\item This map is the positional encoding of the previous frame \citep{tancik2020}. Why the plain network is slow: part 5.
-\end{itemize}
-\end{frame}
-
-
-% =========================================================================
-\begin{frame}{How large is what the model sees?}
-\scriptsize
-\renewcommand{\arraystretch}{1.2}
-\begin{tabularx}{\textwidth}{@{}>{\raggedright\arraybackslash}p{0.17\textwidth} >{\raggedright\arraybackslash}X >{\raggedleft\arraybackslash}p{0.245\textwidth}@{}}
-\toprule
-\textbf{Input of} & \textbf{What it receives} & \textbf{Numbers} \\
-\midrule
-vision transformer \citep{dosovitskiy2021} & $224\times224\times3$ pixels, cut into $196$ patches of $16\times16$; each patch is mapped linearly to $\R^{768}$: a token & $150\,528\to196\times768$ \\
-latent diffusion \citep{rombach2022} & $256\times256\times3$ pixels, which an autoencoder turns into a latent of shape $32\times32\times4$ & $196\,608\to4\,096$ \\
-the baseline & a digit as its $784$ grey levels, or as its first $k$ \alert{principal components} & $784\to k$ \\
-\bottomrule
-\end{tabularx}
-
-\smallskip
-\centerline{\includegraphics[width=0.7\textwidth]{mnist_pca.pdf}}
-
-\footnotesize
-\alert{Principal components:} the coordinates of an image along the $k$ orthogonal directions of largest variance. With only its input changed, the baseline reaches $94.05\%$ on $64$ components ($86\%$ of the variance), against $94.00\%$ on the $784$ pixels: $1\,482$ parameters instead of $13\,002$.
+% \medskip
+% \small
+% \alert{Principal components:} the coordinates of an image along the $k$ orthogonal directions of largest variance. On $64$ of them the baseline reaches $94.05\%$, against $94.00\%$ on the $784$ pixels.
 \end{frame}
 
 
@@ -878,295 +951,412 @@ knowledge enters before training; little or nothing to fit; the same for every t
 % PART 2: ARCHITECTURE
 % #########################################################################
 
-% Part 2: architecture.  Figures and numbers: figures/part2_depth.py and figures/part2_mnist.py.
+% Part 2: architecture.  Figures and numbers: figures/part2_depth.py, figures/part2_symmetry.py and figures/part2_mnist.py.
 
 % =========================================================================
 \section{Architecture}
 
 \begin{frame}{An architecture is a structure built into the family}
-\centering
-\loopdiagram{2}
 
 \smallskip
 \footnotesize
 \renewcommand{\arraystretch}{1.12}
 \begin{tabularx}{\textwidth}{@{}l l >{\raggedright\arraybackslash}X@{}}
 \toprule
- & \textbf{One layer} & \textbf{Symmetry; dynamical reading} \\
+ & \textbf{One layer} & \textbf{Symmetry} \\
 \midrule
-\alert{MLP} & $x_{k+1}=\sigma(W_kx_k+b_k)$ & none; layers are time steps \\
-\alert{CNN} & $x_{k+1}=\sigma(K_k\star x_k+b_k)$ & translations of a grid; a finite-difference stencil \\
-\alert{RNN} & $h_{t}=\sigma(W_hh_{t-1}+W_x\ctrl{x_t}+b)$ & translations in time; a system driven by the input $\ctrl{x_t}$ \\
-\alert{ResNet} & $x_{k+1}=x_k+h\,\sigma(\ctrl{W_k}x_k+\ctrl{b_k})$ & none; an Euler scheme whose control is the weights \\
-\alert{Transformer} & $x_i\leftarrow x_i+\sum_ja_{ij}(x)\,Vx_j$ & permutations of the tokens; interacting particles \\
+\alert{MLP} & $x\leftarrow\sigma(Wx+b)$ & — \\
+\alert{CNN} & $x\leftarrow\sigma(K\star x+b)$ & translations of a grid \\
+\alert{RNN} & $h_{t}=\sigma(W_hh_{t-1}+\ctrl{W_x}x_t+\ctrl{b})$ & translations in time \\
+\alert{ResNet} & $x_{t+1}=x_t+h\,\sigma(\ctrl{W_t}x_t+\ctrl{b_t})$ & — \\
+\alert{GNN} & $x_i\leftarrow\sigma\big(Ux_i+\sum_{j\sim i}Vx_j\big)$ & permutations of the nodes \\
+\alert{Transformer} & $x_i\leftarrow x_i+\sum_ja_{ij}(x)\,Vx_j$ & permutations of the tokens \\
+ & $a_{ij}(x)=\softmax_j\big(\langle Qx_i,Kx_j\rangle/\sqrt d\big)$ & \\
+\bottomrule
+\end{tabularx}
+
+% \smallskip
+% \raggedright
+% Data, loss and optimizer stay the same; the family $\{f(\,\cdot\,;w)\}$ changes. \alert{Choosing an architecture is choosing what to assume} \citep{bronstein2021}.
+\end{frame}
+
+
+% =========================================================================
+\begin{frame}[fragile,t]{Six layers, and what they assume}
+\footnotesize
+\renewcommand{\arraystretch}{1.0}
+\lstset{aboveskip=3pt, belowskip=3pt}  % three listings per step
+\begin{tabularx}{\textwidth}{@{}l l >{\raggedright\arraybackslash}X@{}}
+\toprule
+ & \textbf{One layer} & \textbf{Symmetry} \\
+\midrule
+\sliderow{1}\alert{MLP} & $x\leftarrow\sigma(Wx+b)$ & — \\
+\sliderow{2}\alert{CNN} & $x\leftarrow\sigma(K\star x+b)$ & translations of a grid \\
+\sliderow{3}\alert{RNN} & $h_{t}=\sigma(W_hh_{t-1}+\ctrl{W_x}x_t+\ctrl{b})$ & translations in time \\
+\sliderow{4}\alert{ResNet} & $x_{t+1}=x_t+h\,\sigma(\ctrl{W_t}x_t+\ctrl{b_t})$ & — \\
+\sliderow{5}\alert{GNN} & $x_i\leftarrow\sigma\big(Ux_i+\sum_{j\sim i}Vx_j\big)$ & permutations of the nodes \\
+\sliderow{6}\alert{Transformer} & $x_i\leftarrow x_i+\sum_ja_{ij}(x)\,Vx_j$ & permutations of the tokens \\
+\sliderow{6} & $a_{ij}(x)=\softmax_j\big(\langle Qx_i,Kx_j\rangle/\sqrt d\big)$ & \\
 \bottomrule
 \end{tabularx}
 
 \smallskip
-\raggedright
-Data, loss and optimizer stay the same; the family $\{f(\,\cdot\,;w)\}$ changes. \alert{Choosing an architecture is choosing what to assume} \citep{bronstein2021}.
-\nbref{09 \S14, 13, 15}
-\end{frame}
-
-
-% =========================================================================
-\begin{frame}[fragile]{Three layers for one input, and what they assume}
-\footnotesize
-\begin{columns}[c]
-\begin{column}{0.41\textwidth}
-\alert{MLP} \citep{rumelhart1986}. \ $x\mapsto\sigma(Wx+b)$.
-
-\smallskip
-\alert{Nothing assumed:} relabelling the inputs, $x\mapsto\Pi x$, only replaces $W$ by $W\Pi^\top$. The family does not know which pixels are neighbours.
-\end{column}
-\begin{column}{0.59\textwidth}
+% onlyenv is the environment form of \only: lstlisting cannot sit in a macro argument.
+\begin{onlyenv}<1>
 \begin{lstlisting}
-x = torch.randn(784)       # flattened image
-layer = nn.Linear(784, 16) # 12560 parameters
-y = torch.relu(layer(x))   # shape (16,)
+x = torch.randn(784)
+layer = nn.Linear(784, 16)  # 12560 parameters
+x = torch.relu(layer(x))
 \end{lstlisting}
-\end{column}
-\end{columns}
+\end{onlyenv}
 
-\medskip
-\begin{columns}[c]
-\begin{column}{0.41\textwidth}
-\alert{CNN} \citep{lecun1998}. \ $x\mapsto\sigma(K\star x+b)$.
-
-\smallskip
-\alert{Translation equivariance:} $K\star(Tx)=T(K\star x)$ for a shift $T$ of a periodic grid. Eight $5\times5$ kernels have $208$ parameters, for an image of any size.
-\end{column}
-\begin{column}{0.59\textwidth}
+\begin{onlyenv}<2>
 \begin{lstlisting}
-x = torch.randn(1, 28, 28)   # 1 channel
-conv = nn.Conv2d(1, 8, 5, padding=2,
-                 padding_mode="circular")
-T = lambda x: x.roll((3, 5), (1, 2)) # shift
-torch.allclose(conv(T(x)), T(conv(x)),
-               atol=1e-6)    # True
+x = torch.randn(1, 28, 28)  # 1 channel
+conv = nn.Conv2d(1, 8, 5, padding=2, padding_mode="circular")
 \end{lstlisting}
-\end{column}
-\end{columns}
+\alert{Translation equivariance:} $K\star(Tx)=T(K\star x)$ for a shift $T$ of a periodic grid.
+\begin{lstlisting}[belowskip=2pt]
+T = lambda x: x.roll((3, 5), (1, 2))  # shift
+torch.allclose(conv(T(x)), T(conv(x)))
+\end{lstlisting}
+\begin{lstlisting}[style=output]
+> True
+\end{lstlisting}
+\end{onlyenv}
 
-\medskip
-\begin{columns}[c]
-\begin{column}{0.41\textwidth}
-\alert{ResNet} \citep{he2016}. \ $x\mapsto x+h\,\sigma(Wx+b)$.
-
-\smallskip
-\alert{Close to the identity:} $\|f(x)-x\|\le h\sqrt d$ if $|\sigma|\le1$. An Euler step of $\dot x=\sigma(Wx+b)$, as in lecture 01.
-\end{column}
-\begin{column}{0.59\textwidth}
+\begin{onlyenv}<3>
 \begin{lstlisting}
-x, h = torch.randn(16), 0.1
-layer = nn.Linear(16, 16)
-y = x + h * torch.tanh(layer(x)) # one step
-(y - x).norm() <= h * 16 ** 0.5  # True
+x = torch.randn(20, 3)  # 20 steps in R^3
+rnn = nn.RNN(3, 8)      # 104 parameters
+h, _ = rnn(x)           # shape (20, 8)
 \end{lstlisting}
-\end{column}
-\end{columns}
-\nbref{09 \S14, 13}
-\end{frame}
-
-
-% =========================================================================
-\begin{frame}[fragile]{Two layers for sequences, and what they assume}
-\footnotesize
-\begin{columns}[c]
-\begin{column}{0.41\textwidth}
-\alert{RNN} \citep{elman1990}. \ $h_t=\sigma(W_hh_{t-1}+W_xx_t+b)$.
-
-\smallskip
 \alert{Time invariance:} the same weights at every step, for any length. Restarting from $h_s$ reproduces $h_{s+1},h_{s+2},\dots$
-\end{column}
-\begin{column}{0.59\textwidth}
-\begin{lstlisting}
-x = torch.randn(20, 3)       # 20 steps in R^3
-rnn = nn.RNN(3, 8)           # 104 parameters
-h, _ = rnn(x)                # shape (20, 8)
-tail, _ = rnn(x[5:], h[4:5]) # restart at h_5
-torch.allclose(tail, h[5:], atol=1e-6) # True
+\begin{lstlisting}[belowskip=2pt]
+tail, _ = rnn(x[5:], h[4:5])  # restart at h_5
+torch.allclose(tail, h[5:])
 \end{lstlisting}
-\end{column}
-\end{columns}
-
-\smallskip
-\alert{Transformer} \citep{vaswani2017}. Tokens: the rows of $X\in\R^{T\times d}$. One head of attention:
-\[
-\mathrm{Attn}(X)=\softmax(A)\,XW_V,\quad A=XW_Q\,(XW_K)^{\!\top}/\sqrt d,\quad\text{softmax along each row.}
-\]
-\vspace{-0.6\baselineskip}
-\begin{columns}[c]
-\begin{column}{0.41\textwidth}
-\alert{Permutation equivariance:} $\mathrm{Attn}(\Pi X)=\Pi\,\mathrm{Attn}(X)$ for every permutation matrix $\Pi$, since $\softmax(\Pi A\Pi^\top)=\Pi\softmax(A)\Pi^\top$.
-\end{column}
-\begin{column}{0.59\textwidth}
-\begin{lstlisting}
-x = torch.randn(10, 32)      # 10 tokens in R^32
-attn = nn.MultiheadAttention(32, 4) # 4 heads
-y, _ = attn(x, x, x)         # shape (10, 32)
-p = torch.randperm(10)       # a permutation
-z, _ = attn(x[p], x[p], x[p])
-torch.allclose(z, y[p], atol=1e-6)  # True
+\begin{lstlisting}[style=output]
+> True
 \end{lstlisting}
-\end{column}
-\end{columns}
+\end{onlyenv}
 
-\smallskip
-Attention ignores the order of the tokens: hence the \alert{positional encoding} of part 1.
-\nbref{09 \S14, 15}
+\begin{onlyenv}<4>
+\begin{lstlisting}
+x_t, h = torch.randn(16), 0.1
+layer = nn.Linear(16, 16)
+x_t1 = x_t + h * torch.tanh(layer(x_t))  # one step
+\end{lstlisting}
+An Euler step of $\dot x=\sigma(Wx+b)$.
+\end{onlyenv}
+
+\begin{onlyenv}<5>
+\begin{lstlisting}
+x = torch.randn(6, 4)         # 6 nodes in R^4
+A = torch.rand(6, 6).round()  # edges: A_ij = 1 if j ~ i
+U, V = torch.randn(2, 4, 8)   # 64 parameters
+f = lambda x, A: (x @ U + A @ x @ V).relu()
+\end{lstlisting}
+\alert{Permutation equivariance:} relabelling the nodes, $(x,A)\mapsto(\Pi x,\Pi A\Pi^\top)$, relabels the output.
+\begin{lstlisting}[belowskip=2pt]
+P = torch.eye(6)[torch.randperm(6)]  # relabel the nodes
+torch.allclose(f(P @ x, P @ A @ P.T), P @ f(x, A), atol=1e-6)
+\end{lstlisting}
+\begin{lstlisting}[style=output]
+> True
+\end{lstlisting}
+\end{onlyenv}
+
+\begin{onlyenv}<6>
+\begin{lstlisting}
+x = torch.randn(10, 32)              # 10 tokens in R^32
+attn = nn.MultiheadAttention(32, 4)  # 4 heads
+f = lambda x: x + attn(x, x, x)[0]
+\end{lstlisting}
+\alert{Permutation equivariance:} a GNN on the complete graph, with weights $a_{ij}(x)$. Order enters only through the \alert{positional encoding} of part 1.
+\begin{lstlisting}[belowskip=2pt]
+p = torch.randperm(10)  # a permutation
+torch.allclose(f(x[p]), f(x)[p], atol=1e-6)
+\end{lstlisting}
+\begin{lstlisting}[style=output]
+> True
+\end{lstlisting}
+\end{onlyenv}
 \end{frame}
 
 
 % =========================================================================
-\begin{frame}{Convolution: the symmetry decides the architecture}
-\small
-On a periodic grid, $x\in\R^n$: shift $(Tx)_i=x_{i-1}$, convolution $(k\star x)_i=\sum_jk_j\,x_{i-j}$.
-\begin{mathbox}{Proposition (translation equivariance)}
-A linear map $A:\R^n\to\R^n$ commutes with the shift, $AT=TA$, if and only if it is a convolution: $Ax=k\star x$ for some kernel $k\in\R^n$.
+% The four images: figures/part2_symmetry.py (the "2" of part 1 on a periodic 20 x 20 grid,
+% shifted by 5 rows and 6 columns; k is the Laplacian stencil).  The two squares have the
+% same geometry, so their rows line up.
+\tikzset{
+  cdsquare/.style={x=1mm, y=1mm, >=Stealth, font=\footnotesize},
+  cdcorner/.style={inner sep=0pt},
+  cdlabel/.style={font=\footnotesize, inner sep=1.5pt, text height=1.7ex, text depth=0.5ex},  % one height: the rows line up
+}
+\begin{frame}{Invariance and equivariance}
+\begin{columns}[t]
+\begin{column}{0.5\textwidth}
+\begin{mathbox}[halign=center, equal height group=symmetry]{Equivariance}
+$f(Tx)=T\,f(x)$ for every shift $T$
 \end{mathbox}
-\footnotesize
-\emph{Proof of ``only if''.} Let $k=A\,\delta_0$, the response to a unit impulse. Since $x=\sum_jx_j\,T^j\delta_0$,
-\[
-Ax=\sum_jx_j\,T^jA\,\delta_0=\sum_jx_j\,T^jk=k\star x. \qquad\square
-\]
-\begin{columns}[c]
-\begin{column}{0.60\textwidth}
-\begin{itemize}
-\item \alert{Weight sharing.} A dense layer on a $28\times28$ image has $784^2=614\,656$ weights, a $3\times3$ convolution $9$.
-\item \alert{A stencil.} With $k=(1,-2,1)/h^2$, $x+\tau\,k\star x$ is an explicit Euler step of the heat equation $y_t=y_{xx}$.
-\end{itemize}
-\end{column}
-\begin{column}{0.40\textwidth}
 \centering
-\begin{tikzpicture}[x=3.7mm, y=3.7mm, >=Stealth, font=\scriptsize]
-  \foreach \i in {0,...,8} \draw[black!45] (\i,2.4) rectangle ++(1,1);
-  \foreach \i in {0,...,8} \draw[black!45] (\i,0) rectangle ++(1,1);
-  \draw[ctrl, very thick] (3,2.4) rectangle (6,3.4);
-  \fill[ctrl!35] (4,0) rectangle (5,1);
-  \draw[black!45] (4,0) rectangle (5,1);
-  \draw[->, ctrl] (3.5,2.4) -- (4.3,1.05);
-  \draw[->, ctrl] (4.5,2.4) -- (4.5,1.05);
-  \draw[->, ctrl] (5.5,2.4) -- (4.7,1.05);
-  \node[left] at (0,2.9) {$x$};
-  \node[left] at (0,0.5) {$k\star x$};
-  \node[above, ctrl] at (4.5,3.4) {the same $k$ everywhere};
+\begin{tikzpicture}[cdsquare]
+  \node[cdcorner] (x)   at (0,0)    {\includegraphics{symmetry_x.pdf}};
+  \node[cdcorner] (kx)  at (30,0)   {\includegraphics{symmetry_kx.pdf}};
+  \node[cdcorner] (Tx)  at (0,-23)  {\includegraphics{symmetry_Tx.pdf}};
+  \node[cdcorner] (kTx) at (30,-23) {\includegraphics{symmetry_kTx.pdf}};
+  \draw[->] ([xshift=1mm]x.east)  -- node[above] {$k\star$} ([xshift=-1mm]kx.west);
+  \draw[->] ([xshift=1mm]Tx.east) -- node[below] {$k\star$} ([xshift=-1mm]kTx.west);
+  \draw[->] ([yshift=-1mm]x.south)  -- node[left]  {$T$} ([yshift=1mm]Tx.north);
+  \draw[->] ([yshift=-1mm]kx.south) -- node[right] {$T$} ([yshift=1mm]kTx.north);
+  \node[cdlabel, above] at (x.north)   {$x$};
+  \node[cdlabel, above] at (kx.north)  {$k\star x$};
+  \node[cdlabel, below] at (Tx.south)  {$Tx$};
+  \node[cdlabel, below] at (kTx.south) {$k\star Tx=T(k\star x)$};
+\end{tikzpicture}
+\end{column}
+\begin{column}{0.5\textwidth}
+\begin{mathbox}[halign=center, equal height group=symmetry]{Invariance}
+$f(Tx)=f(x)$ for every shift $T$
+\end{mathbox}
+\centering
+\begin{tikzpicture}[cdsquare]
+  \node[cdcorner] (x)   at (0,0)    {\includegraphics{symmetry_x.pdf}};
+  \node[cdcorner] (Tx)  at (0,-23)  {\includegraphics{symmetry_Tx.pdf}};
+  \path (30,0) node[cdcorner, minimum size=14mm] (fx) {}  (30,-23) node[cdcorner, minimum size=14mm] (fTx) {};
+  \node[draw=boxframe, fill=boxbg, rounded corners=1pt, minimum size=8mm, font=\Large] (two)  at (fx)  {$2$};
+  \node[draw=boxframe, fill=boxbg, rounded corners=1pt, minimum size=8mm, font=\Large] (two') at (fTx) {$2$};
+  \draw[->] ([xshift=1mm]x.east)  -- node[above] {$f$} ([xshift=-1mm]two.west);
+  \draw[->] ([xshift=1mm]Tx.east) -- node[below] {$f$} ([xshift=-1mm]two'.west);
+  \draw[->] ([yshift=-1mm]x.south)  -- node[left]  {$T$} ([yshift=1mm]Tx.north);
+  \draw[->] ([yshift=-1mm]fx.south) -- node[right] {id} ([yshift=1mm]fTx.north);
+  \node[cdlabel, above] at (x.north)   {$x$};
+  \node[cdlabel, above] at (fx.north)  {$f(x)$};
+  \node[cdlabel, below] at (Tx.south)  {$Tx$};
+  \node[cdlabel, below] at (fTx.south) {$f(Tx)=f(x)$};
 \end{tikzpicture}
 \end{column}
 \end{columns}
-\nbref{09 \S14.2}
+\end{frame}
+
+
+
+
+% =========================================================================
+\begin{frame}{What depth buys: 1 layer limited expressivity}
+\small
+We want to learn $(x_1,x_2)\xmapsto{f}x_1\oplus x_2$ (XOR).
+
+\medskip
+\centering
+\begin{tikzpicture}[x=1.2cm, y=1.2cm, font=\scriptsize,
+    one/.style={circle, fill=ctrl, inner sep=0pt, minimum size=2.2mm},
+    zero/.style={circle, draw=boxframe, fill=white, line width=0.7pt, inner sep=0pt, minimum size=2.2mm}]
+  % the half-plane where a neuron outputs 1, for one choice of w and b
+  \fill[ctrl!10] (0.65,-0.15) -- (1.3,-0.15) -- (1.3,1.3) -- (-0.15,1.3) -- (-0.15,0.65) -- cycle;
+  \draw[ctrl, densely dashed, line width=0.5pt] (0.65,-0.15) -- (-0.15,0.65);
+  \node[text=ctrl] at (1.12,0.55) {$f=1$};
+  \draw[->, black!50] (-0.15,0) -- (1.35,0) node[right, text=black] {$x_1$};
+  \draw[->, black!50] (0,-0.15) -- (0,1.35) node[above, text=black] {$x_2$};
+  \node[zero] at (0,0) {};  \node[below left]  at (0,0) {$0$};
+  \node[one]  at (1,0) {};  \node[below]       at (1,0) {$1$};
+  \node[one]  at (0,1) {};  \node[left]        at (0,1) {$1$};
+  \node[zero] at (1,1) {};  \node[above right] at (1,1) {$0$};
+\end{tikzpicture}
+
+\medskip
+\begin{mathbox}[halign=flush center]{M.~Minsky and S.~Papert, \emph{Perceptrons}, 1969 \citep{minsky1969}}
+No single neuron $f(x)=\mathbf 1[w_1x_1+w_2x_2\ge b]$ computes XOR.
+\end{mathbox}
+
+\smallskip
+\begin{mathbox}[halign=flush center]{G.~Cybenko, 1989 \citep{cybenko1989}}
+Two layers $\sum_j c_j\,\sigma(a_j\cdot x+b_j)$ approximate any continuous $f$.
+\end{mathbox}
+
+\medskip
+\alert{For $n$ bits, $x_1\oplus\dots\oplus x_n$: how many neurons, and how many layers?}
 \end{frame}
 
 
 % =========================================================================
-\begin{frame}{What depth buys: the parity of $n$ bits}
-\footnotesize
-\alert{Parity:} $x_1\oplus\dots\oplus x_n=1$ when the number of ones is odd; with bits $\pm1$, the product $x_1x_2\cdots x_n$. Classical: one threshold neuron cannot compute it, even for $n=2$ \citep{minsky1969}.
+\begin{frame}{What depth buys}
+\small
+We want to learn $(x_1,\dots,x_n)\xmapsto{f}x_1\oplus\dots\oplus x_n$ with gates $\wedge$, $\vee$, $\neg$.
 
+\medskip
+\begin{columns}[T]
+\begin{column}{0.5\textwidth}
 \centering
-\begin{tikzpicture}[x=1cm, y=0.76cm, font=\scriptsize,
+\textbf{Shallow}\\[4pt]
+\begin{tikzpicture}[x=1cm, y=1cm, font=\scriptsize, >=Stealth,
     bit/.style={circle, fill=black!60, inner sep=0pt, minimum size=1.2mm},
-    gate/.style={circle, draw=boxframe, fill=boxbg, inner sep=0pt, minimum size=2.9mm, font=\tiny},
+    gate/.style={circle, draw=boxframe, fill=boxbg, inner sep=0pt, minimum size=3mm, font=\tiny},
     top/.style={draw=ctrl, fill=ctrl!15},
-    wire/.style={black!28, line width=0.15pt},
-    link/.style={black!55, line width=0.3pt}]
-  % --- shallow and wide: an OR of 2^(n-1) ANDs, each reading all n bits (drawn for n = 8) ---
-  \foreach \i in {0,...,7} \node[bit] (a\i) at ({0.45+0.24*\i},0) {};
-  \foreach \j in {0,...,8} \node[gate] (and\j) at ({0.31*\j},0.85) {$\wedge$};
-  \node at (2.84,0.85) {$\cdots$};
-  \node[gate, top] (or) at (1.29,1.7) {$\vee$};
-  \foreach \i in {0,...,7} \foreach \j in {0,...,8} \draw[wire] (a\i) -- (and\j);
-  \foreach \j in {0,...,8} \draw[wire] (and\j) -- (or);
-  \draw[wire] (2.84,0.97) -- (or);
-  \node[below] at (1.29,-0.05) {$x_1,\dots,x_8$};
-  \node at (1.42,2.2) {an OR of $2^{n-1}$ ANDs};
-  % --- deep and narrow: a tournament bracket of 2-input XORs ---
-  \foreach \i in {0,...,7} \node[bit] (b\i) at ({3.75+0.26*\i},0) {};
-  \foreach \j in {0,...,3} \node[gate] (p\j) at ({3.88+0.52*\j},0.57) {$\oplus$};
-  \foreach \j in {0,1} \node[gate] (q\j) at ({4.14+1.04*\j},1.13) {$\oplus$};
-  \node[gate, top] (r) at (4.66,1.7) {$\oplus$};
+    wire/.style={black!25, line width=0.15pt},
+    link/.style={black!55, line width=0.35pt}]
+  \foreach \i in {0,...,7} \node[bit] (a\i) at (0,{2.1-0.3*\i}) {};
+  \foreach \j in {0,1,2} \node[gate] (g\j) at (1.6,{2.1-0.45*\j}) {$\wedge$};
+  \node at (1.6,0.65) {$\vdots$};
+  \node[gate] (g3) at (1.6,0) {$\wedge$};
+  \node[gate, top] (or) at (3.2,1.05) {$\vee$};
+  \foreach \i in {0,...,7} \foreach \j in {0,...,3} \draw[wire] (a\i) -- (g\j);
+  \foreach \j in {0,...,3} \draw[link] (g\j) -- (or);
+  \draw[link, ->] (or) -- (3.75,1.05);
+  \node[left] at (a0.west) {$x_1$};
+  \node[left] at (a7.west) {$x_n$};
+  \node at (1.6,-0.4) {$2^{n-1}$ ANDs};
+\end{tikzpicture}
+
+\end{column}
+\begin{column}{0.5\textwidth}
+\centering
+\textbf{Deep}\\[4pt]
+\begin{tikzpicture}[x=1cm, y=1cm, font=\scriptsize, >=Stealth,
+    bit/.style={circle, fill=black!60, inner sep=0pt, minimum size=1.2mm},
+    gate/.style={circle, draw=boxframe, fill=boxbg, inner sep=0pt, minimum size=3mm, font=\tiny},
+    top/.style={draw=ctrl, fill=ctrl!15},
+    link/.style={black!55, line width=0.35pt}]
+  \foreach \i in {0,...,7} \node[bit] (b\i) at (0,{2.1-0.3*\i}) {};
+  \foreach \j in {0,...,3} \node[gate] (p\j) at (1.07,{1.95-0.6*\j}) {$\oplus$};
+  \foreach \j in {0,1} \node[gate] (q\j) at (2.13,{1.65-1.2*\j}) {$\oplus$};
+  \node[gate, top] (r) at (3.2,1.05) {$\oplus$};
   \foreach \i/\j in {0/0,1/0,2/1,3/1,4/2,5/2,6/3,7/3} \draw[link] (b\i) -- (p\j);
   \foreach \i/\j in {0/0,1/0,2/1,3/1} \draw[link] (p\i) -- (q\j);
   \foreach \i in {0,1} \draw[link] (q\i) -- (r);
-  \node[below] at (4.66,-0.05) {$x_1,\dots,x_8$};
-  \node at (4.66,2.2) {a bracket of $n-1$ XORs};
-  % --- k layers of two ReLU neurons: the hat function composed k times ---
-  \foreach \i in {0,...,7} \node[bit] (c\i) at ({6.6+0.2*\i},0) {};
-  \foreach \l/\y in {1/0.42,2/0.85,3/1.28} {
-    \node[gate, minimum size=2.5mm] (u\l) at (7.05,\y) {};
-    \node[gate, minimum size=2.5mm] (v\l) at (7.55,\y) {};
+  \draw[link, ->] (r) -- (3.75,1.05);
+  \node[left] at (b0.west) {$x_1$};
+  \node[left] at (b7.west) {$x_n$};
+  \node at (1.6,-0.4) {$n-1$ XORs};
+\end{tikzpicture}
+
+\smallskip
+\footnotesize
+XOR $=(x\vee y)\wedge\neg(x\wedge y)$: $4(n-1)$ gates.
+\end{column}
+\end{columns}
+
+\medskip
+\raggedright\footnotesize
+In between, \citet{hastad1986}: depth $d$ needs $\exp(c\,n^{1/(d-1)})$ gates \citep{furst1984,ajtai1983,yao1985}.
+\end{frame}
+
+
+% =========================================================================
+\begin{frame}{What depth buys: neurons and Telgarsky's theorem}
+\small
+\alert{Neurons add:} parity is a function of $s=x_1+\dots+x_n$ alone, a \alert{sawtooth}.
+
+\medskip
+\centering
+\begin{tikzpicture}[x=1cm, y=1cm, font=\scriptsize, >=Stealth,
+    bit/.style={circle, fill=black!60, inner sep=0pt, minimum size=1.2mm},
+    gate/.style={circle, draw=boxframe, fill=boxbg, inner sep=0pt, minimum size=2.8mm},
+    top/.style={draw=ctrl, fill=ctrl!15},
+    wire/.style={black!25, line width=0.15pt},
+    link/.style={black!55, line width=0.35pt}]
+  % k = 3 layers of two ReLU neurons, drawn for n = 8 bits
+  \foreach \i in {0,...,7} \node[bit] (c\i) at (0,{1.05-0.15*\i}) {};
+  \foreach \l in {1,2,3} {
+    \node[gate] (u\l) at ({1.2*\l},0.8) {};
+    \node[gate] (v\l) at ({1.2*\l},0.25) {};
   }
-  \node[gate, top, minimum size=2.5mm] (o) at (7.3,1.7) {};
+  \node[gate, top] (o) at (4.8,0.525) {};
   \foreach \i in {0,...,7} { \draw[wire] (c\i) -- (u1); \draw[wire] (c\i) -- (v1); }
   \foreach \l/\m in {1/2,2/3} {
     \draw[link] (u\l) -- (u\m); \draw[link] (u\l) -- (v\m);
     \draw[link] (v\l) -- (u\m); \draw[link] (v\l) -- (v\m);
   }
   \draw[link] (u3) -- (o); \draw[link] (v3) -- (o);
-  \node[below] at (7.3,-0.05) {$x_1,\dots,x_8$};
-  % what the network has computed after each layer, as a function of the number of ones s
-  \foreach \l/\y in {1/0.42,2/0.85,3/1.28} \draw[black!35, densely dotted, line width=0.3pt] (v\l) -- (8.2,\y);
-  \begin{scope}[shift={(8.25,0.28)}, x=0.2cm, y=0.24cm]
+  \draw[link, ->] (o) -- (5.35,0.525) node[right, text=black] {parity};
+  \node[left] at (c0.west) {$x_1$};
+  \node[left] at (c7.west) {$x_8$};
+  % what the network has computed after each layer, as a function of s = 0, ..., 8
+  \foreach \l in {1,2,3} \draw[black!35, densely dotted, line width=0.3pt] (u\l.north) -- ({1.2*\l},1.27);
+  \begin{scope}[shift={(0.72,1.33)}, x=0.12cm, y=0.32cm]
     \draw[black!30, line width=0.2pt] (0,0) -- (8,0);
     \draw[boxframe, line width=0.6pt] (0,0) -- (4,1) -- (8,0);
   \end{scope}
-  \begin{scope}[shift={(8.25,0.71)}, x=0.2cm, y=0.24cm]
+  \begin{scope}[shift={(1.92,1.33)}, x=0.12cm, y=0.32cm]
     \draw[black!30, line width=0.2pt] (0,0) -- (8,0);
     \draw[boxframe, line width=0.6pt] (0,0) -- (2,1) -- (4,0) -- (6,1) -- (8,0);
   \end{scope}
-  \begin{scope}[shift={(8.25,1.14)}, x=0.2cm, y=0.24cm]
+  \begin{scope}[shift={(3.12,1.33)}, x=0.12cm, y=0.32cm]
     \draw[black!30, line width=0.2pt] (0,0) -- (8,0);
     \draw[ctrl, line width=0.6pt] (0,0) -- (1,1) -- (2,0) -- (3,1) -- (4,0) -- (5,1) -- (6,0) -- (7,1) -- (8,0);
+    \foreach \s in {0,2,4,6,8} \fill[ctrl] (\s,0) circle (0.7pt);
+    \foreach \s in {1,3,5,7} \fill[ctrl] (\s,1) circle (0.7pt);
   \end{scope}
-  \node[right] at (9.85,0.42) {$T$};
-  \node[right] at (9.85,0.85) {$T^{\circ2}$};
-  \node[right, text=ctrl] at (9.85,1.28) {$T^{\circ3}$};
-  \node[below] at (9.05,0.28) {$s=0,\dots,8$};
-  \node at (8.4,2.2) {$k$ layers of two ReLU neurons};
+  \node at (1.2,1.83) {$T$};
+  \node at (2.4,1.83) {$T^{\circ2}$};
+  \node[text=ctrl] at (3.6,1.83) {$T^{\circ3}$};
+  \node[left] at (0.6,1.5) {in $s$:};
 \end{tikzpicture}
 
 \raggedright
-\scriptsize
+\footnotesize
 \begin{columns}[T]
 \begin{column}{0.48\textwidth}
-\alert{Gates AND, OR, NOT.} In an OR of ANDs each AND contains all $n$ variables, since flipping a missing one changes the parity: it accepts one input, and $2^{n-1}$ are odd. At depth $d$: size $\ge\exp(c_d\,n^{1/(d-1)})$ \citep{hastad1986}, after \citep{furst1984,ajtai1983,yao1985}. $n=20$: $524\,288$ ANDs, $19$ XORs.
+\alert{One layer:} $n$ neurons $\mathbf 1[s\ge j]$, signs $+,-,+,\dots$ For $n=20$: $20$ neurons.
 \end{column}
 \begin{column}{0.52\textwidth}
-\alert{Neurons add.} Parity depends on $s=x_1+\dots+x_n$ only: one layer of $n$ neurons $\mathbf 1[s\ge j]$, with signs $+,-,+,\dots$ \citep{rumelhart1986pdp}. In $s$ it is a \alert{sawtooth}: for $2^k\ge n$ it is $T^{\circ k}(s/2^k)$, $T(t)=2\sigma(t)-4\sigma(t-\tfrac12)$ \citep{telgarsky2015,telgarsky2016}. $n=20$: $20$ neurons, or $10$ in $5$ layers.
+\alert{$k$ layers of two}, $2^k\ge n$: $T^{\circ k}(s/2^k)$, $T(t)=2\sigma(t)-4\sigma(t-\tfrac12)$ \citep{telgarsky2015}. For $n=20$: $10$ neurons.
 \end{column}
 \end{columns}
 
 \smallskip
-\footnotesize
-\begin{mathbox}{Theorem (Telgarsky, 2016): no shallow network comes close}
-For every $k\ge1$ there is a ReLU network $f$ with $2k^3+8$ layers and $3k^3+12$ nodes such that $\int_{[0,1]^d}|f-g|\,dx\ge\tfrac1{64}$ for every ReLU network $g$ with at most $k$ layers and at most $2^k$ nodes.
+\begin{mathbox}{Theorem of \citet{telgarsky2016}: no shallow network comes close}
+For every $k\ge1$ the sawtooth $f(x)=T^{\circ(k^3+4)}(x_1)$, a ReLU network with $2k^3+8$ layers and $3k^3+12$ nodes, satisfies $\int_{[0,1]^d}|f-g|\,dx\ge\tfrac1{64}$ for every ReLU network $g$ with at most $k$ layers and at most $2^k$ nodes.
 \end{mathbox}
+\scriptsize
+\alert{Why:} with $k$ layers and $m$ nodes, $g$ crosses $\tfrac12$ at most $2(2m/k)^k$ times; $f$ crosses it $2^{k^3+4}$ times. Layers enter the exponent, nodes only the base.
 \end{frame}
 
 
 % =========================================================================
-\begin{frame}{Digits: depth against width}
+\begin{frame}{Digits: how many layers?}
 \footnotesize
-\begin{columns}[c]
-\begin{column}{0.48\textwidth}
-\includegraphics[width=\textwidth]{mnist_depth_width.pdf}
-\end{column}
-\begin{column}{0.52\textwidth}
-\alert{Only the architecture box changes.} The data, the cross-entropy, Adam ($\eta=10^{-3}$, batches of 64, 5 epochs) and the seeds are those of the baseline $784\to16\to16\to10$, at $94.0\%$.
+$L$ hidden layers of width 64. \alert{Too few or too many: both hurt.}
 
 \medskip
-\alert{Width helps.} With two hidden layers the test error falls from $7.6\%$ at width 8 to $2.2\%$ at width 128, with $118\,282$ parameters.
+\centering
+\includegraphics[width=\textwidth]{mnist_depth_width.pdf}
+\end{frame}
+
+
+% =========================================================================
+% The two pictures are not ours: see images/SOURCES.md, part 2.  Waibel's time-delay network
+% (1987, a convolution in time) and Zhang et al. (1988) were trained by backpropagation
+% before 1989, hence no "first" on the slide.
+\begin{frame}{Convolutional networks: where they come from}
+\footnotesize
+\begin{columns}[T]
+\begin{column}{0.58\textwidth}
+\centering
+\includegraphics[height=3cm]{hubel_wiesel_cat.png}
+
+\smallskip
+\raggedright
+\alert{The visual cortex} \citep{hubel1959,hubel1962}. A neuron in the visual cortex of a cat fires for a bar of light at one place and one orientation: its \alert{receptive field}. Cells of the same kind tile the visual field. Nobel prize, 1981.
+\end{column}
+\begin{column}{0.4\textwidth}
+\centering
+\includegraphics[height=3.5cm]{lecun_1993.jpg}
+
+\smallskip
+\raggedright
+\alert{Backpropagation} \citep{lecun1989}. LeCun et~al.\ train a convolutional network handwritten zip-code digits. Nobel prize, 2018.
 \end{column}
 \end{columns}
 
-\smallskip
-\alert{Depth does not, here.} For widths from 16 on, the networks with 1, 2 and 4 hidden layers differ by at most $0.8$ points. Three initializations of the baseline give $93.6\%$, $94.0\%$ and $94.4\%$: a difference of the same size. At width 8, four layers are worse: $9.3\%$ against $7.6\%$. In the baseline the first layer, $784\times16$, holds $97\%$ of the parameters.
-
-\smallskip
-The theorems on depth say what \emph{can} be represented with few neurons. Here the number of layers is not the obstacle: these networks ignore that the input is an image.
-
-\smallskip
-\scriptsize Rates of approximation for fixed families and the curse of dimensionality: appendix.
+\medskip
+\begin{mathbox}{Convolutions are the translation-equivariant linear maps}
+Every linear, translation-equivariant map $F$ is a convolution.
+\[
+F(x)=\int K(s-t)x(t)\,dt,\qquad\text{we need to learn }K.
+\]
+\end{mathbox}
 \end{frame}
 
 
@@ -1174,7 +1364,7 @@ The theorems on depth say what \emph{can} be represented with few neurons. Here 
 \begin{frame}[fragile]{Digits: a convolutional network}
 \footnotesize
 \begin{columns}[c]
-\begin{column}{0.60\textwidth}
+\begin{column}{0.55\textwidth}
 \begin{lstlisting}
 cnn = nn.Sequential(
   nn.Unflatten(1, (1, 28, 28)),   # 1x28x28
@@ -1184,19 +1374,18 @@ cnn = nn.Sequential(
   nn.MaxPool2d(2), nn.Flatten(),  # 256
   nn.Linear(256, 10))             # 10 scores
 \end{lstlisting}
-\begin{itemize}
-\item A small LeNet \citep{lecun1998}; the same data, loss, optimizer and epochs. $5\,994$ parameters, fewer than half of the baseline's: test error \alert{$1.3\%$} instead of $6.0\%$.
-\item $906$ parameters ($c=2$): $3.6\%$. The smallest fully connected network above that does as well has $50\,890$.
-\item \alert{Shuffle the pixels} with one fixed permutation. The fully connected network does not notice: $5.8\%$, from $6.0\%$. The convolutional one falls to the same $5.8\%$.
-\end{itemize}
-\end{column}
-\begin{column}{0.40\textwidth}
-\includegraphics[width=\textwidth]{mnist_cnn.pdf}
+A small LeNet \citep{lecun1998}, trained like the baseline. Plot: $2$, $4$, $8$ channels in the first convolution (8 above).
 
-\smallskip
-\alert{An architecture is an assumption on the data.} When it fails, nothing is gained.
+\medskip
+\alert{$5\,994$ parameters: $1.3\%$} test error. Baseline: $13\,002$, $6.0\%$.
+\end{column}
+\begin{column}{0.45\textwidth}
+\includegraphics[width=\textwidth]{mnist_cnn.pdf}
 \end{column}
 \end{columns}
+
+\medskip
+\centering\alert{An architecture is an assumption on the data.}
 \end{frame}
 
 
@@ -1259,7 +1448,6 @@ The squared loss, the absolute loss and the cross-entropy are one loss, for thre
 \Risk(w)=\E_x\Big[\KL\big(\rho(\,\cdot\mid x)\,\big\|\,p(\,\cdot\mid x;w)\big)\Big]+H,\qquad H=\E\big[-\log\rho(y\mid x)\big].
 \]
 $H$ does not depend on $w$: maximum likelihood minimizes the Kullback--Leibler divergence from the data to the model.
-\nbref{09 \S4}
 \end{frame}
 
 
@@ -1403,7 +1591,6 @@ The samples $(x_i,y_i)$, $i=1,\dots,N$, are independent draws from an unknown la
 \item $F$ is the population risk of the \alert{empirical measure} $\rho_N=\frac1N\sum_i\delta_{(x_i,y_i)}$: what is proved for a law $\rho$ also holds for $\rho_N$.
 \item One gradient step on $F$ costs $N$ gradients. \alert{This part} samples the gradient: what is then minimized, what does the noise do, how does the batch size enter?
 \end{itemize}
-\nbref{09 \S2}
 \end{frame}
 
 
@@ -1585,10 +1772,9 @@ p_k=\big(\partial_xf_k(x_k,w_k)\big)^{\!\top}p_{k+1},\qquad
 \footnotesize
 \begin{itemize}
 \item One forward and one backward pass give the derivative with respect to \alert{all} the parameters, at the cost of a few evaluations of the network \citep{rumelhart1986}.
-\item $p_k$ is the \alert{adjoint state}: a linear system running backward, like $\varphi'=-A^*\varphi$ behind the control of lecture 01 (notebooks 03 and 07).
+\item $p_k$ is the \alert{adjoint state}: a linear system running backward, like $\varphi'=-A^*\varphi$ behind the control of lecture 01.
 \item $p_0=\big(\partial_xf_0\big)^{\!\top}\cdots\big(\partial_xf_{L-1}\big)^{\!\top}p_L$ is a \alert{product of $L$ Jacobians}. Whether it vanishes or explodes is a question of stability: appendix.
 \end{itemize}
-\nbref{09 \S5, 13 \S5}
 \end{frame}
 
 
@@ -1631,7 +1817,6 @@ F(\hat w)=b_m^2+s^2\Big(1-\frac mN\Big),\qquad
 F'(\hat w)=b_m^2+s^2\Big(1+\frac mN\Big),
 \]
 with $F'$ on fresh labels at the same inputs and $b_m^2$ the mean squared distance, at the samples, from $g$ to their span. The gap $2s^2m/N$ counts \alert{parameters per sample}.
-\nbref{09 \S6--8}
 \end{frame}
 
 
@@ -1778,7 +1963,7 @@ The target is now $g(x)+0.3\sin(20x)$; a $\tanh$ network $1\to64\to64\to1$ train
 \begin{itemize}
 \item After $1000$ steps the slow part is fitted and $90\%$ of the ripple is still missing. The ripple arrives by step $3000$.
 \item Networks fit low frequencies first: the \alert{spectral bias} \citep{rahaman2019}. For very wide networks the tangent kernel gives a linear explanation (appendix).
-\item Part 1 removed this obstacle by changing the representation of $x$.
+\item Part 1 went around it with Fourier features, which fit faster but not better.
 \item \alert{Stopping early} then acts as a low-pass filter: one reason why training does not immediately fit the noise.
 \end{itemize}
 \end{frame}
@@ -1794,26 +1979,26 @@ The target is now $g(x)+0.3\sin(20x)$; a $\tanh$ network $1\to64\to64\to1$ train
 \begin{frame}{Training as a control problem}
 \footnotesize
 \renewcommand{\arraystretch}{1.3}
-\begin{tabularx}{\textwidth}{@{}>{\raggedright\arraybackslash}p{0.40\textwidth} >{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}p{0.13\textwidth}@{}}
+\begin{tabularx}{\textwidth}{@{}>{\raggedright\arraybackslash}p{0.46\textwidth} >{\raggedright\arraybackslash}X@{}}
 \toprule
-\textbf{Control} & \textbf{Learning} & \textbf{Notebook} \\
+\textbf{Control} & \textbf{Learning} \\
 \midrule
-time $t$, horizon $T$ & layer $k$, depth $L$ & 13 \\
-state $x(t)$ & features $x_k$ of one data point & 13 \\
-\ctrl{control} $u(t)$ & \ctrl{weights} $(W_k,b_k)$ & 13 \\
-one control for many initial states & one network for all training points & 14 \\
-adjoint state & backpropagated gradient & 07, 13 \\
-control cost $\alpha\!\int\!|u|^2\,dt$ & weight decay & 13 \\
-minimal-norm control, Gramian $L_TL_T^*$ & minimal-norm interpolant, Gram matrix $\Phi\Phi^\top$ & 03 \\
-friction of an oscillator & momentum & 11 \\
-open loop / feedback & schedule / adaptive optimizer & \\
+time $t$, horizon $T$ & layer $k$, depth $L$ \\
+state $x(t)$ & features $x_k$ of one data point \\
+\ctrl{control} $u(t)$ & \ctrl{weights} $(W_k,b_k)$ \\
+one control for many initial states & one network for all training points \\
+adjoint state & backpropagated gradient \\
+control cost $\alpha\!\int\!|u|^2\,dt$ & weight decay \\
+minimal-norm control, Gramian $L_TL_T^*$ & minimal-norm interpolant, Gram matrix $\Phi\Phi^\top$ \\
+friction of an oscillator & momentum \\
+open loop / feedback & schedule / adaptive optimizer \\
 \bottomrule
 \end{tabularx}
 
 \medskip
 \begin{itemize}
 \item Supervised learning with a ResNet or a neural ODE is the \alert{simultaneous control} of $N$ trajectories by one control \citep{e2017,chen2018,ruizbalet2023}.
-\item Some rows are identities, others analogies: notebook 19 keeps track of which.
+\item Some rows are identities, others are analogies.
 \end{itemize}
 \end{frame}
 
@@ -1825,8 +2010,8 @@ open loop / feedback & schedule / adaptive optimizer & \\
 \item \alert{Why do the solutions found by SGD generalize?} Implicit bias is understood for linear models. For networks there are partial results on flat minima and on the role of the noise, and known counterexamples.
 \item \alert{Feature learning.} The kernel regime explains the training of very wide networks, in which the features barely move. Practical networks do learn features. What do they learn, and when?
 \item \alert{Grokking.} On small algorithmic tasks a network can reach zero training loss early and generalize only much later \citep{power2022}.
-\item \alert{Depth as time.} Very deep residual networks are long-horizon control problems. Does a turnpike property organize their layers \citep{geshkovski2022}? Notebooks 08 and 13.
-\item \alert{Constructive training.} Control theory builds explicit controls. Can such constructions replace, or initialize, gradient descent? Notebook 14.
+\item \alert{Depth as time.} Very deep residual networks are long-horizon control problems. Does a turnpike property organize their layers \citep{geshkovski2022}?
+\item \alert{Constructive training.} Control theory builds explicit controls. Can such constructions replace, or initialize, gradient descent?
 \end{itemize}
 \end{frame}
 
@@ -1835,8 +2020,8 @@ open loop / feedback & schedule / adaptive optimizer & \\
 \begin{frame}{Key takeaways}
 \footnotesize
 \begin{enumerate}
-\item \alert{Data.} The model sees a representation $\varphi$, and choosing it is modelling. With 16 Fourier harmonics as input, the same network fits the ripple from step 44 instead of step 2350.
-\item \alert{Architecture.} An architecture is an assumption on the data, most cleanly a symmetry: a convolutional network with $5\,994$ parameters reads the digits at $98.7\%$, and loses its gain when the pixels are shuffled. Depth composes.
+\item \alert{Data.} The model sees a representation $\varphi$, and choosing it is modelling. With 16 harmonics of $(x,t)$ as input, the same network fits a struck string in $3000$ steps as well as it does on $(x,t)$ in $12\,000$.
+\item \alert{Architecture.} An architecture is an assumption on the data, most cleanly a symmetry: a convolutional network with $5\,994$ parameters reads the digits at $98.7\%$. Depth composes.
 \item \alert{Loss.} The loss decides what is learned: the conditional mean for the squared loss, the conditional law for the log-loss. With a rare class, a weight in the loss is a threshold on the probability.
 \item \alert{Optimization.} On fresh samples SGD descends the population risk. It is an Euler--Maruyama scheme of temperature $\eta/B$: near a minimum it stalls at $\tfrac{\eta}{4B}\operatorname{tr}\Sigma$.
 \item \alert{At scale.} With more parameters than data the algorithm selects the solution: double descent. Errors fall like power laws in the data and in the parameters. The sharpness settles at $2/\eta$.
@@ -1858,7 +2043,61 @@ open loop / feedback & schedule / adaptive optimizer & \\
 Additional material
 
 \medskip
-\normalsize Depth, initialization, approximation rates and the tangent kernel
+\normalsize Symmetry, depth, initialization, approximation rates and the tangent kernel
+\end{frame}
+
+
+% =========================================================================
+% The definitions behind the frame "Invariance and equivariance" of part 2.
+\begin{frame}{Symmetry in detail: groups and actions}
+\footnotesize
+A \alert{group} $G$ is a set with an associative product $gh$, an identity $e$ and an inverse $g^{-1}$ of every element.
+\begin{mathbox}{Definition (action)}
+An \alert{action} of $G$ on a set $X$ is a map $G\times X\to X$, $(g,x)\mapsto g\cdot x$, such that
+\[
+e\cdot x=x\qquad\text{and}\qquad g\cdot(h\cdot x)=(gh)\cdot x\qquad\text{for all }g,h\in G,\ x\in X.
+\]
+If $X$ is a vector space and every $x\mapsto g\cdot x$ is linear, the action is a \alert{representation} $\rho:G\to GL(X)$: $g\cdot x=\rho(g)x$ and $\rho(gh)=\rho(g)\rho(h)$.
+\end{mathbox}
+\alert{Signals on a domain.} If $G$ acts on a domain $\Omega$, it acts linearly on the signals $x:\Omega\to\R^c$ by $(g\cdot x)(u)=x(g^{-1}u)$, which moves the values over $\Omega$ \citep{bronstein2021}.
+\begin{itemize}
+\item \alert{Shifts.} $G=\Omega=\mathbb Z_n^2$, a periodic image: $(g\cdot x)_u=x_{u-g}$. The shift in the figure of part 2 is $g=(5,6)$.
+\item \alert{Permutations.} $G=S_n$ on the nodes of a graph: $\pi\cdot x=P_\pi x$ on the features, $\pi\cdot A=P_\pi AP_\pi^\top$ on the edges.
+\item \alert{Rotations.} $G=SO(3)$ on the atoms of a molecule: $R\cdot(r_1,\dots,r_n)=(Rr_1,\dots,Rr_n)$, with $r_i\in\R^3$.
+\end{itemize}
+\end{frame}
+
+
+% =========================================================================
+\begin{frame}{Symmetry in detail: equivariance and invariance}
+\footnotesize
+\begin{columns}[c]
+\begin{column}{0.68\textwidth}
+\begin{mathbox}{Definition}
+Let $G$ act on $X$ and on $Y$. A map $f:X\to Y$ is \mbox{\alert{$G$-equivariant}} if $f(g\cdot x)=g\cdot f(x)$ for all $g\in G$ and $x\in X$, and \mbox{\alert{$G$-invariant}} if $f(g\cdot x)=f(x)$: equivariant for the trivial action $g\cdot y=y$.
+\end{mathbox}
+\end{column}
+\begin{column}{0.32\textwidth}
+\centering
+\begin{tikzpicture}[cdsquare]
+  \node (X)  at (0,0)    {$X$};
+  \node (Y)  at (17,0)   {$Y$};
+  \node (X') at (0,-13)  {$X$};
+  \node (Y') at (17,-13) {$Y$};
+  \draw[->] (X)  -- node[above] {$f$} (Y);
+  \draw[->] (X') -- node[below] {$f$} (Y');
+  \draw[->] (X)  -- node[left]  {$g\cdot$} (X');
+  \draw[->] (Y)  -- node[right] {$g\cdot$} (Y');
+\end{tikzpicture}
+\end{column}
+\end{columns}
+\begin{itemize}
+\item \alert{Composition.} If $f$ and $h$ are equivariant, so is $h\circ f$: $h(f(g\cdot x))=h(g\cdot f(x))=g\cdot h(f(x))$. If $h$ is invariant, so is $h\circ f$.
+\item \alert{Layers.} On signals, a pointwise $\sigma$ and a bias constant on $\Omega$ are equivariant; a sum over a finite $\Omega$ is invariant, as $u\mapsto g^{-1}u$ permutes $\Omega$. Periodic layers $\sigma(k\star x+b)$ of stride 1, then a sum over the pixels: a shift-invariant CNN.
+\item \alert{Linear maps.} For $G=\mathbb Z_n$ acting on $\R^n$ by shifts, a linear $A$ is equivariant if and only if $Ax=k\star x$, with $k=A\,\delta_0$: the convolutions.
+\item \alert{Averaging.} For a finite $G$ acting linearly on $Y$, $\bar f(x)=\frac1{|G|}\sum_{g\in G}g^{-1}\cdot f(g\cdot x)$ is equivariant, whatever $f$. Data augmentation, training on $(g\cdot x_i,y_i)$, only rewards invariance; an architecture builds it in.
+\item \alert{Which $G$} is a modelling choice: turned by $\pi$, a 6 becomes a 9.
+\end{itemize}
 \end{frame}
 
 
@@ -1889,7 +2128,7 @@ A one-hidden-layer ReLU network with $m$ neurons has at most $m+1$ linear pieces
 \[
 \E\,\|x_{k+1}\|^2=\tfrac12\,\sigma_w^2\,\|x_k\|^2 .
 \]
-A linear recursion (dotted): $0.8^{50}\approx10^{-5}$ and $1.2^{50}\approx10^{4}$. The choice $\sigma_w^2=2$ sits on the stability boundary \citep{he2015}.
+A linear recursion (dotted): $0.8^{50}\approx10^{-5}$ and $1.2^{50}\approx10^{4}$. The choice $\sigma_w^2=2$ sits on the stability boundary \citep{he2015}. PyTorch's default is $\sigma_w^2=\tfrac13$: a factor $1/\sqrt6\approx0.4$ per layer, as for the digits with $32$ layers.
 
 \smallskip
 \alert{Backward.} With PyTorch's default initialization, 32 $\tanh$ layers shrink the adjoint by a factor $10^{-8}$. A \alert{residual} layer $x_{k+1}=x_k+h\,\sigma(W_kx_k+b_k)$ has a Jacobian close to the identity, and the adjoint keeps its size \citep{he2016}: the Euler step of lecture 01.

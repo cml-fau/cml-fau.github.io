@@ -43,11 +43,22 @@ trapz = getattr(np, "trapezoid", None) or np.trapz
 
 
 def save(fig, name):
-    fig.savefig(OUT / f"{name}.pdf")
+    """Write the figure with a transparent background, so the slide's own colour shows through."""
+    fig.savefig(OUT / f"{name}.pdf", transparent=True)
     if PREVIEW:
-        fig.savefig(PREVIEW / f"{name}.png", dpi=170)
+        fig.savefig(PREVIEW / f"{name}.png", dpi=170, transparent=True)
     plt.close(fig)
     print("wrote", name)
+
+
+def coordinate_panels():
+    """The two square panels of one row of the slide "Example: change of coordinates"
+    (rings_coordinates.pdf and normalization.pdf).  Drawn at their size on the slide, as tall as two
+    rows allow, with the panels at the same millimetres in both figures so that the rows line up."""
+    W, H, side, bottom = 71.1, 36.1, 21.0, 10.0               # below the panels: ticks and labels; above: the title
+    fig = plt.figure(figsize=(W / 25.4, H / 25.4))
+    fig.set_layout_engine("none")              # a placeholder: with no engine, savefig would restore autolayout
+    return fig, [fig.add_axes((left / W, bottom / H, side / W, side / H)) for left in (12.2, 49.0)]
 
 
 def expit(t):

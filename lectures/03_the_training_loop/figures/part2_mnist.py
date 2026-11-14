@@ -9,14 +9,15 @@ loss (cross-entropy), the optimizer (Adam, learning rate 1e-3, batches of 64, 5 
 same shuffling seed) and the initialization seed are those of lecture 02, through
 common.train_mnist.
 
-- mnist_depth_width.pdf: fully connected networks with 1, 2 and 4 hidden layers of equal
-  width 8, 16, 32, 64, 128: test error against the number of parameters.
-- mnist_cnn.pdf: a small convolutional network with c and 2c channels (c = 2, 4, 8) against
-  the fully connected networks, and the same two models when one fixed permutation is
-  applied to the 784 pixels of every image.
+- mnist_depth_width.pdf: fully connected networks with 0, 1, 2, 4, 8, 16, 32 hidden layers
+  of equal width 64, three initialization seeds each: test error against the depth.
+  Also printed: the training error, and how much the outputs at initialization still depend
+  on the image.
+- mnist_cnn.pdf: a small convolutional network with c and 2c channels (c = 2, 4, 8; the slide
+  prints c = 8) against the fully connected networks with 2 hidden layers.
 
-Every number quoted on the slides is printed here.  22 training runs of 5 epochs: about
-seven minutes on one CPU thread.
+Every number quoted on the slides is printed here.  28 training runs of 5 epochs: about
+nine minutes on one CPU thread.
 """
 import time
 
@@ -49,52 +50,68 @@ def cnn(channels, seed=0):
 
 
 # ---------------------------------------------------------------------------------------
-# 1. Depth against width: fully connected networks
+# 1. Depth: 0 to 32 hidden layers of width 64, three initializations each
 # ---------------------------------------------------------------------------------------
-widths, depths = (8, 16, 32, 64, 128), (1, 2, 4)
-parameters, error = {}, {}
+depths, depth_width, seeds = (0, 1, 2, 4, 8, 16, 32), 64, (0, 1, 2)
+test_error, train_error = {}, {}                  # keyed by (depth, seed)
+for seed in seeds:
+    for depth in depths:
+        net, _, test_accuracy = C.train_mnist(mlp(depth_width, depth, seed), train, test, verbose=False)
+        test_error[depth, seed] = 100 * (1 - test_accuracy[-1])
+        train_error[depth, seed] = 100 * (1 - C.accuracy(net, *train))
+        print(f"MLP, {depth:2d} hidden layers of width {depth_width}, seed {seed}: {C.count_parameters(net):6d} parameters, "
+              f"test error {test_error[depth, seed]:5.2f}%, training error {train_error[depth, seed]:5.2f}%",
+              flush=True)
+
+
+def over_seeds(table, depth):
+    return np.array([table[depth, s] for s in seeds])
+
+
+print(f"width {depth_width}: median over the seeds (range) of the test error | training error:")
 for depth in depths:
-    for width in widths:
-        net = mlp(width, depth)
-        parameters[depth, width] = C.count_parameters(net)
-        error[depth, width] = run(net)
-        print(f"MLP, {depth} hidden layers of width {width:3d}: {parameters[depth, width]:6d} parameters, "
-              f"test error {error[depth, width]:.2f}%, accuracy {100 - error[depth, width]:.2f}%", flush=True)
-baseline = error[2, 16]
-assert parameters[2, 16] == 13002 and abs(baseline - 6.00) < 0.005     # the classifier of lecture 02: 94.0%
+    t, r = over_seeds(test_error, depth), over_seeds(train_error, depth)
+    print(f"  {depth:2d} hidden layers: {np.median(t):5.2f}% ({t.min():5.2f} to {t.max():5.2f}) | {np.median(r):5.2f}%")
+best = min(depths, key=lambda d: np.median(over_seeds(test_error, d)))
+print(f"  smallest median test error: {best} hidden layers")
+constant = 100 * (1 - (test[1] == test[1].mode().values).float().mean().item())
+print(f"answering the most frequent digit of the test set for every image: test error {constant:.2f}%")
 
-# how much does the baseline move when only the random initial weights change?
-seeds = [baseline] + [run(mlp(16, 2, seed=seed)) for seed in (1, 2)]
-print("baseline 784-16-16-10 with initialization seeds 0, 1, 2: test accuracy "
-      + ", ".join(f"{100 - e:.2f}%" for e in seeds))
+# why the deep networks do not train: at initialization, do different images still give different outputs?
+ratio = {}
+for depth in depths:
+    with torch.no_grad():
+        out = mlp(depth_width, depth)(test[0][:2000]).double()
+    ratio[depth] = (out.std(0).mean() / out.abs().mean()).item()
+print(f"width {depth_width}, at initialization, spread of the outputs over 2000 test images / their size: "
+      + ", ".join(f"L={d}: {ratio[d]:.1e}" for d in depths)
+      + f"; factor per layer from L=8 to L=16: {(ratio[16] / ratio[8]) ** (1 / 8):.2f}")
+print(f"PyTorch's default initialization: Var W_ij = 1/(3 n), so sigma_w^2 = 1/3 and sqrt(sigma_w^2 / 2) = {6 ** -0.5:.2f}")
 
-for width in widths:
-    values = [error[depth, width] for depth in depths]
-    print(f"width {width:3d}: test error with 1, 2, 4 hidden layers = "
-          + ", ".join(f"{v:.2f}%" for v in values) + f"; spread {max(values) - min(values):.2f} points")
-first_layer = {key: 100 * (784 * key[1] + key[1]) / count for key, count in parameters.items()}
-print(f"share of the parameters in the first layer: between {min(first_layer.values()):.0f}% "
-      f"and {max(first_layer.values()):.0f}%; baseline {first_layer[2, 16]:.0f}%")
-
-fig, ax = P.panels(figsize=(3.1, 2.4))
-for depth, color in zip(depths, (P.AQUA, P.BLUE, P.MAGENTA)):
-    ax.loglog([parameters[depth, w] for w in widths], [error[depth, w] for w in widths], "-o", ms=3.5, lw=1.2,
-              color=color, label=f"{depth} hidden layer" + ("s" if depth > 1 else ""))
-for width in widths:                                                # the widths, under the points of the curves
-    ax.text(parameters[2, width], 1.62, f"{width}", fontsize=6.5, color=P.NOTE, ha="center")
-ax.text(4.9e3, 1.62, "width", fontsize=6.5, color=P.NOTE, ha="right")
-ax.plot(parameters[2, 16], baseline, "o", ms=8, mfc="none", mec=P.INK, mew=0.9)
-ax.annotate("baseline", (parameters[2, 16], baseline), xytext=(5.2e3, 3.0), fontsize=7, ha="center",
-            arrowprops=dict(arrowstyle="-", color=P.INK, lw=0.6, shrinkA=1, shrinkB=4.5))
-P.label(ax, "parameters $P$", "test error (%)", title="Depth and width", xlim=(3.5e3, 2.2e5),
-        ylim=(1.5, 14), yticks=[2, 5, 10], legend=dict(fontsize=7, loc="upper right"))
-ax.set_yticklabels(["2", "5", "10"])
+fig, ax = P.panels(figsize=(4.25, 2.55))                            # the full width of the slide
+xs = np.arange(len(depths))                                         # the depths, evenly spaced
+t = np.array([over_seeds(test_error, d) for d in depths])
+ax.vlines(xs, t.min(1), t.max(1), color=P.BLUE, lw=2.6, alpha=0.35, zorder=1)        # range over the seeds
+ax.plot(xs, np.median(t, 1), "-o", ms=3.5, lw=1.2, color=P.BLUE, zorder=3)
+ax.set_yscale("log")
+P.label(ax, "hidden layers $L$", "test error (%)", xlim=(-0.4, 6.4), ylim=(2, 120))
+ax.set_xticks(xs, [str(d) for d in depths])
+ax.set_yticks([2, 5, 10, 20, 50, 100], ["2", "5", "10", "20", "50", "100"])
 ax.minorticks_off()
 C.save(fig, "mnist_depth_width")
 
+# width, with two hidden layers: the fully connected curve of the convolutional slide
+widths = (8, 16, 32, 64, 128)
+parameters = {(2, w): C.count_parameters(mlp(w, 2)) for w in widths}
+error = {(2, w): test_error[2, 0] if w == depth_width else run(mlp(w, 2)) for w in widths}
+baseline = error[2, 16]
+assert parameters[2, 16] == 13002 and abs(baseline - 6.00) < 0.005  # the classifier of lecture 02: 94.0%
+print("2 hidden layers, test error at width " + ", ".join(f"{w}: {error[2, w]:.2f}%" for w in widths)
+      + f"; {parameters[2, 128]} parameters at width 128")
+
 
 # ---------------------------------------------------------------------------------------
-# 2. A convolutional network, and the same images with their pixels shuffled
+# 2. A convolutional network
 # ---------------------------------------------------------------------------------------
 channels = (2, 4, 8)
 cnn_parameters, cnn_error = {}, {}
@@ -114,44 +131,14 @@ best = min(error, key=error.get)
 print(f"best fully connected network: {best[0]} hidden layers of width {best[1]}, {parameters[best]} parameters, "
       f"test error {error[best]:.2f}%")
 
-# one fixed permutation of the 784 pixels, applied to every training and test image
-permutation = torch.randperm(784, generator=torch.Generator().manual_seed(0))
-shuffled = ((train[0][:, permutation], train[1]), (test[0][:, permutation], test[1]))
-mlp_shuffled = run(mlp(16, 2), shuffled)
-cnn_shuffled = run(cnn(8), shuffled)
-print(f"shuffled pixels: baseline MLP test error {mlp_shuffled:.2f}% (accuracy {100 - mlp_shuffled:.2f}%; original pixels "
-      f"{baseline:.2f}%); CNN with 8 and 16 channels {cnn_shuffled:.2f}% (accuracy {100 - cnn_shuffled:.2f}%; "
-      f"original pixels {cnn_error[8]:.2f}%)")
-
-fig, (ax, ax_bar) = P.panels(1, 2, size=(2.9, 1.85))
-ax.loglog([parameters[2, w] for w in widths], [error[2, w] for w in widths], "-o", ms=3.5, lw=1.2, color=P.BLUE)
-ax.loglog([cnn_parameters[c] for c in channels], [cnn_error[c] for c in channels], "-o", ms=3.5, lw=1.2, color=P.ORANGE)
-ax.plot(parameters[2, 16], baseline, "o", ms=8, mfc="none", mec=P.INK, mew=0.9)
-ax.annotate("baseline", (parameters[2, 16], baseline), xytext=(7, 4), textcoords="offset points", fontsize=7)
-ax.text(1.9e5, 0.95, "fully connected,\n2 hidden layers", fontsize=7, color=P.BLUE, ha="right", va="bottom")
-for c in channels:
-    ax.annotate(f"$c={c}$", (cnn_parameters[c], cnn_error[c]), xytext=(5, 3), textcoords="offset points",
-                fontsize=7, color=P.ORANGE)
-ax.text(650, 1.0, "convolutional", fontsize=7, color=P.ORANGE)
-P.label(ax, "parameters $P$", "test error (%)", title="Test error against parameters", xlim=(5e2, 2.2e5),
-        ylim=(0.8, 14), yticks=[1, 2, 5, 10])
+fig, ax = P.panels(figsize=(2.9, 2.3))
+ax.loglog([parameters[2, w] for w in widths], [error[2, w] for w in widths], "-o", ms=3.5, lw=1.2, color=P.BLUE,
+          label="fully connected")
+ax.loglog([cnn_parameters[c] for c in channels], [cnn_error[c] for c in channels], "-o", ms=3.5, lw=1.2,
+          color=P.ORANGE, label="convolutional")
+P.label(ax, "parameters $P$", "test error (%)", xlim=(5e2, 2.2e5), ylim=(0.8, 14), yticks=[1, 2, 5, 10],
+        legend=dict(fontsize=7, loc="upper right"))
 ax.set_yticklabels(["1", "2", "5", "10"])
 ax.minorticks_off()
-
-groups = [("fully connected\n(baseline)", baseline, mlp_shuffled, P.BLUE), ("convolutional\n($c=8$)", cnn_error[8], cnn_shuffled, P.ORANGE)]
-for k, (name, original, permuted, color) in enumerate(groups):
-    ax_bar.bar(k - 0.19, original, 0.36, color=color, label="original" if k == 0 else None)
-    ax_bar.bar(k + 0.19, permuted, 0.36, color=color, alpha=0.4, hatch="////", edgecolor="white", linewidth=0,
-               label="shuffled" if k == 0 else None)
-    for x_bar, value in ((k - 0.19, original), (k + 0.19, permuted)):
-        ax_bar.annotate(f"{value:.1f}", (x_bar, value), xytext=(0, 2), textcoords="offset points", ha="center", fontsize=7)
-P.label(ax_bar, None, "test error (%)", title="Original and shuffled pixels", xticks=[0, 1], xlim=(-0.6, 1.6),
-        ylim=(0, 1.5 * max(baseline, mlp_shuffled, cnn_shuffled)), yticks=[0, 2, 4, 6],
-        legend=dict(fontsize=6.5, loc="upper center", ncols=2))
-ax_bar.set_xticklabels([name for name, *_ in groups], fontsize=7)
-legend = ax_bar.get_legend()
-for handle in legend.legend_handles:
-    handle.set_facecolor(P.GREY)
-legend.legend_handles[1].set_alpha(0.4)
 C.save(fig, "mnist_cnn")
 print(f"run time: {time.time() - start:.0f} s")

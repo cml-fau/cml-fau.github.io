@@ -4,15 +4,17 @@ Run from the repository root:
 
     .venv/bin/python lectures/03_the_training_loop/figures/part1_representations.py [preview_dir]
 
-1. Tokens.  The sentence of the slide "Text: tokens, embeddings, positions" is encoded with
-   the vocabulary of GPT-2 (two public files, downloaded once to notebooks/data/).
+1. Tokens.  The sentence of the slide "Text for a language model" is encoded with the
+   vocabulary of GPT-2 (two public files, downloaded once to notebooks/data/), and the
+   positional vectors drawn on that slide are computed.
 2. Two rings.  The same linear classifier in Cartesian and in polar coordinates
    (rings_coordinates.pdf).
-3. Fourier features.  The same network, loss and optimizer on x and on the first m
-   harmonics of x, fitting the rippled target of lecture 02 (fourier_features.pdf).
+3. Fourier features.  The same network, loss and optimizer on (x, t) and on the first m
+   harmonics of x and of t, fitting samples of a struck string, a solution of the wave
+   equation (fourier_features.pdf).
 
 Every number quoted on the slides of part 1 that concerns these experiments is printed here.
-The run takes about two minutes on one CPU thread.
+The run takes about ten minutes on one CPU thread, nearly all of it the 13 fits of the string.
 """
 import json
 import re
@@ -20,6 +22,7 @@ import urllib.request
 
 import common as C
 from common import P, np, plt, torch, nn
+from matplotlib.colors import LinearSegmentedColormap
 
 
 # ---------------------------------------------------------------------------------------
@@ -72,7 +75,7 @@ def tokenize(text):
     return [token for word in pieces.findall(text) for token in byte_pair_encode(word)]
 
 
-sentence = "The pendulum swings."
+sentence = "The dog bites the man."
 tokens = tokenize(sentence)
 print(f"GPT-2 vocabulary: {len(index_of)} tokens, {len(merges)} merges")
 print(f'"{sentence}" -> {[t.replace("Ġ", "_") for t in tokens]} -> {[index_of[t] for t in tokens]}')
@@ -85,6 +88,15 @@ print(f"ViT-B/16: 224 x 224 x 3 = {224 * 224 * 3:,} numbers, (224 / 16)^2 = {(22
       f"of 16 x 16 x 3 = {16 * 16 * 3} numbers")
 print(f"latent diffusion, f = 8: 256 x 256 x 3 = {256 * 256 * 3:,} numbers -> 32 x 32 x 4 = {32 * 32 * 4:,}, "
       f"a factor {256 * 256 * 3 / (32 * 32 * 4):.0f}")
+
+# The sinusoidal positions of Vaswani et al. (2017): p_t = (sin w_j t, cos w_j t)_{j < d/2} with
+# w_j = 10000^(-2j/d), sine and cosine of each frequency in neighbouring coordinates.  The slide
+# draws them with d = 8 for the six positions t = 0, ..., 5 of the sentence.
+d_position = 8
+omega = 10000.0 ** (-2 * np.arange(d_position // 2) / d_position)
+for t in range(len(tokens)):
+    p = np.ravel(np.column_stack([np.sin(omega * t), np.cos(omega * t)]))
+    print(f"p_{t} (d = {d_position}):", " ".join(f"{v:+.2f}" for v in p))
 
 
 # ---------------------------------------------------------------------------------------
@@ -115,18 +127,23 @@ def logistic_regression(features, steps=2000, lr=0.05):
     return score.weight.detach().numpy().ravel(), score.bias.item(), correct
 
 
-fig, axes = P.panels(2, size=(1.32, 1.42))
+# Drawn at the size of the slide and included unscaled, so that its text matches the slide's: one of the
+# two rows of the slide "Example: change of coordinates", next to normalization.pdf.
+fig, axes = C.coordinate_panels()                             # lined up with the other row
 settings = [("Cartesian", cartesian, "$x_1$", "$x_2$", (-2.9, 2.9), (-2.9, 2.9)),
             ("polar", polar, "$r$", r"$\theta$", (0.4, 2.9), (-np.pi, np.pi))]
 for ax, (name, features, xlabel, ylabel, xlim, ylim) in zip(axes, settings):
     a, b, correct = logistic_regression(features)
     print(f"two rings, {name} coordinates: {100 * correct:.1f}% correct, boundary {a[0]:+.3f} z1 {a[1]:+.3f} z2 {b:+.3f} = 0")
     for k, color in enumerate((P.BLUE, P.ORANGE)):
-        ax.plot(*features[ring == k].T, "o", color=color, ms=1.3, alpha=0.85, mew=0)
+        ax.plot(*features[ring == k].T, "o", color=color, ms=2.2, alpha=0.85, mew=0)
     line = np.array(ylim)                                              # the boundary, drawn as z1(z2)
-    ax.plot((-b - a[1] * line) / a[0], line, color=P.INK, lw=1.1)
+    ax.plot((-b - a[1] * line) / a[0], line, color=P.INK, lw=1.3)
     P.label(ax, xlabel, ylabel, title=f"{name}: {100 * correct:.0f}%", xlim=xlim, ylim=ylim)
     ax.title.set_fontsize(9)
+    ax.xaxis.label.set_size(9)
+    ax.yaxis.label.set_size(9)
+    ax.tick_params(labelsize=8)
     ax.yaxis.labelpad = 1
 axes[0].set(xticks=[-2, 0, 2], yticks=[-2, 0, 2])
 axes[0].set_aspect("equal")
@@ -138,101 +155,104 @@ C.save(fig, "rings_coordinates")
 # ---------------------------------------------------------------------------------------
 # 3. Fourier features: only the input of the network changes
 # ---------------------------------------------------------------------------------------
-# The experiment of "Surprise 3" (spectral bias, part 5): a tanh network . -> 64 -> 64 -> 1,
-# Adam with learning rate 1e-3, full batch, the 160 samples of the target with a ripple.
-# With m = 0 the network sees x and the run is the one of part 5, step for step.
-def rippled(t):
-    return torch.sin(3 * t) + 0.3 * t + 0.3 * torch.sin(20 * t)
+# A struck string: u_tt = u_xx on [0, 1], u = 0 at both ends, u(x, 0) a narrow bump at x = 0.3
+# and u_t(x, 0) = 0.  By d'Alembert, u(x, t) = (F(x - t) + F(x + t)) / 2, where F is the odd,
+# 2-periodic extension of the bump: the two halves of the bump run apart and come back inverted
+# from each end.  The network sees 4000 samples of u at random points of [0, 1] x [0, 2], one
+# period; it is the tanh network . -> 64 -> 64 -> 1 of part 5, with Adam, learning rate 1e-3,
+# full batch, and it is judged on a grid of 201 x 401 points.
+def bump(s):
+    return np.exp(-((s - 0.3) / 0.04) ** 2)
 
 
-inputs = torch.tensor(C.x, dtype=torch.float32)[:, None]
-grid = torch.linspace(-1, 1, 2001)[:, None]                          # the fit is judged between the samples too
-targets, ripple = rippled(inputs), 0.3 * torch.sin(20 * inputs)
+def string(x, t):
+    """d'Alembert's solution for the struck string."""
+    def extension(s):
+        s = (s + 1) % 2 - 1                                               # into [-1, 1)
+        return np.where(s >= 0, bump(s), -bump(-s))
+    return (extension(x - t) + extension(x + t)) / 2
 
 
-def harmonics(t, m, period=4.0):
-    """phi_m(t) = (cos(2 pi j t / period), sin(2 pi j t / period)), j = 1, ..., m; m = 0 returns t."""
+duration = 2.0
+samples = np.random.default_rng(0).uniform((0, 0), (1, duration), size=(4000, 2))
+inputs = torch.tensor(samples, dtype=torch.float32)
+targets = torch.tensor(string(*samples.T), dtype=torch.float32)[:, None]
+grid_x, grid_t = np.meshgrid(np.linspace(0, 1, 201), np.linspace(0, duration, 401), indexing="ij")
+grid = torch.tensor(np.stack([grid_x.ravel(), grid_t.ravel()], axis=1), dtype=torch.float32)
+exact = string(grid_x, grid_t)
+power = (exact ** 2).mean()
+
+
+def harmonics(v, m):
+    """phi_m(x, t) = (cos j pi x, sin j pi x, cos(j pi t / 2), sin(j pi t / 2)), j = 1, ..., m; m = 0 returns (x, t).
+    The periods, 2 and 4, are twice the sides of the box, so that phi_m is injective on it."""
     if m == 0:
-        return t
-    phase = 2 * np.pi * torch.arange(1, m + 1, dtype=torch.float32) * t / period
-    return torch.cat([torch.cos(phase), torch.sin(phase)], dim=1)
+        return v
+    j = torch.arange(1, m + 1, dtype=torch.float32)
+    phase_x, phase_t = np.pi * j * v[:, :1], np.pi * j * v[:, 1:] / duration
+    return torch.cat([torch.cos(phase_x), torch.sin(phase_x), torch.cos(phase_t), torch.sin(phase_t)], dim=1)
 
 
-def fit(m, steps=3000, seed=0, period=4.0, snapshot=1000):
-    """Returns the training error and the missing fraction of the ripple at every step, the first
-    step from which less than 10% of the ripple is missing, the fit on the grid after `snapshot`
-    steps, and the error on the grid at the end."""
+def fit(m, steps=3000, seed=0, snapshot=3000):
+    """Returns the fit on the grid after `snapshot` steps, the training error after `steps` steps, and the
+    relative error ||f - u|| / ||u|| on the grid every 500 steps."""
     torch.manual_seed(seed)
-    net = nn.Sequential(nn.Linear(max(1, 2 * m), 64), nn.Tanh(), nn.Linear(64, 64), nn.Tanh(), nn.Linear(64, 1))
+    net = nn.Sequential(nn.Linear(2 if m == 0 else 4 * m, 64), nn.Tanh(), nn.Linear(64, 64), nn.Tanh(),
+                        nn.Linear(64, 1))
     optimizer = torch.optim.Adam(net.parameters(), lr=1e-3)
-    features, grid_features = harmonics(inputs, m, period), harmonics(grid, m, period)
-    errors, missing, shot = [], [], None
+    features, grid_features = harmonics(inputs, m), harmonics(grid, m)
+    relative, shot = {}, None
     for k in range(steps + 1):
-        prediction = net(features)
-        loss = ((prediction - targets) ** 2).mean()
-        residual = (targets - prediction).detach()
-        errors.append(loss.item())
-        missing.append(((residual * ripple).sum() / (ripple * ripple).sum()).item())
-        if k == snapshot:
-            shot = net(grid_features).detach().numpy().ravel()
+        loss = ((net(features) - targets) ** 2).mean()
+        if k % 500 == 0 or k == snapshot:
+            with torch.no_grad():
+                field = net(grid_features).numpy().reshape(exact.shape)
+            relative[k] = np.sqrt(((field - exact) ** 2).mean() / power)
+            if k == snapshot:
+                shot = field
         if k == steps:
             break
         optimizer.zero_grad()
         loss.backward()
         optimizer.step()
-    with torch.no_grad():
-        grid_error = ((net(grid_features) - rippled(grid)) ** 2).mean().item()
-    missing = np.array(missing)
-    late = np.flatnonzero(np.abs(missing) >= 0.1)
-    learned = int(late[-1]) + 1 if len(late) else 0
-    return dict(errors=np.array(errors), missing=missing, learned=learned, shot=shot, grid_error=grid_error,
-                parameters=C.count_parameters(net))
+    return dict(shot=shot, error=loss.item(), relative=relative, parameters=C.count_parameters(net))
 
 
-sweep = [0, 1, 2, 4, 8, 16, 32, 64, 128, 256]
-runs = {m: fit(m) for m in sweep}
+LONG = 20_000
+runs = {m: fit(m, steps=LONG) for m in (0, 16)}                       # the figure is their step 3000
 for m, run in runs.items():
-    name = "x itself" if m == 0 else f"m = {m:3d} harmonics"
-    print(f"Fourier features, {name}: {max(1, 2 * m):3d} inputs, {run['parameters']} parameters, ripple learned from step "
-          f"{run['learned']:4d}; step 100: {run['errors'][100]:.2e}, step 1000: {run['errors'][1000]:.2e} "
-          f"({100 * run['missing'][1000]:+.1f}% of the ripple missing), step 3000: {run['errors'][3000]:.2e}; "
-          f"error on the grid after 3000 steps: {run['grid_error']:.2e}")
-for m in (0, 16):                                                    # how much depends on the initial weights?
-    steps_needed = [runs[m]["learned"]] + [fit(m, seed=seed)["learned"] for seed in range(1, 5)]
-    print(f"Fourier features, m = {m}: ripple learned from step {steps_needed} for the seeds 0-4")
+    name = "(x, t)" if m == 0 else f"phi_{m}(x, t)"
+    print(f"string, input {name}: {2 if m == 0 else 4 * m} inputs, {run['parameters']} parameters, training error "
+          f"{run['error']:.1e} after {LONG} steps; relative error on the grid {100 * run['relative'][3000]:.1f}% after "
+          f"3000 steps and {100 * run['relative'][LONG]:.1f}% after {LONG}")
+reached = min(k for k, r in runs[0]["relative"].items() if r <= runs[16]["relative"][3000])
+print(f"string, input (x, t): below the error of phi_16 at step 3000 from step {reached} (checked every 500 steps)")
+for m in (1, 4, 64):                                                  # the scale of the harmonics
+    run = fit(m)
+    print(f"string, phi_{m}: training error {run['error']:.1e}, relative error on the grid "
+          f"{100 * run['relative'][3000]:.1f}% after 3000 steps")
+for m in (0, 16):                                                     # how much depends on the initial weights?
+    errors = [runs[m]["relative"][3000]] + [fit(m, seed=seed)["relative"][3000] for seed in range(1, 5)]
+    print(f"string, m = {m}: relative error after 3000 steps {np.round(100 * np.array(errors), 1)}% for the seeds 0-4")
 
-# A representation can also lose information: with period 2 the two end points get the same
-# features, phi(-1) = phi(1), and the best any model can do there is the mean of g(-1) and g(1).
-periodic = fit(16, period=2.0)
-floor = 2 * ((rippled(torch.tensor(1.0)) - rippled(torch.tensor(-1.0))) / 2).item() ** 2 / len(inputs)
-print(f"Fourier features of period 2, m = 16: training error {periodic['errors'][1000]:.2e} after 1000 steps and "
-      f"{periodic['errors'][3000]:.2e} after 3000; the floor (g(1) - g(-1))^2 / (2 N) is {floor:.2e}")
-
-fig, (ax_fit, ax_ripple, ax_scale) = P.panels(3, size=(2.05, 1.75), ratios=[1.15, 1, 1])
-grid_x = grid.numpy().ravel()
-ax_fit.plot(grid_x, rippled(grid).numpy().ravel(), color=P.GHOST, lw=2.4, label="target")
-ax_fit.plot(grid_x, runs[0]["shot"], color=P.ORANGE, lw=1.1, label="input $x$")
-ax_fit.plot(grid_x, runs[16]["shot"], color=P.BLUE, lw=0.9, label=r"input $\varphi_{16}(x)$")
-P.label(ax_fit, "$x$", title="After 1000 steps", ylim=(-1.75, 1.6), xticks=[-1, 0, 1], yticks=[-1, 0, 1],
-        legend=dict(fontsize=6.5, loc="lower right", handlelength=1.2, borderpad=0.3, labelspacing=0.25))
-steps = np.arange(1, 3001)
-for m, color, name in ((0, P.ORANGE, "$x$"), (4, P.AQUA, r"$\varphi_4$"), (16, P.BLUE, r"$\varphi_{16}$")):
-    ax_ripple.semilogx(steps, runs[m]["missing"][1:], color=color, label=name)
-P.label(ax_ripple, "step $k$", title="Ripple still missing", zero="h", ylim=(-0.08, 1.45), yticks=[0, 0.5, 1],
-        xticks=[1, 10, 100, 1000], legend=dict(fontsize=6.5, loc="upper center", ncols=3, handlelength=1.2,
-                                               columnspacing=0.9))
-ax_ripple.minorticks_off()
-harmonic_counts = sweep[1:]
-ax_scale.loglog(harmonic_counts, [runs[m]["grid_error"] for m in harmonic_counts], "-o", ms=3)
-ax_scale.loglog(harmonic_counts, [runs[m]["errors"][-1] for m in harmonic_counts], "--o", ms=3, color=P.GREY)
-ax_scale.axhline(runs[0]["grid_error"], color=P.ORANGE, lw=1, ls=":")
-ax_scale.annotate("input $x$", (1, runs[0]["grid_error"]), xytext=(0, 3), textcoords="offset points", fontsize=6.5,
-                  color=P.ORANGE)
-ax_scale.text(105, 0.25, "between samples", fontsize=6.5, color=P.BLUE, ha="right", va="center")
-ax_scale.text(1, 2.5e-8, "on the samples", fontsize=6.5, color=P.NOTE, ha="left", va="center")
-P.label(ax_scale, "harmonics $m$", title="Error after 3000 steps", xticks=[1, 4, 16, 64, 256],
-        xticklabels=[1, 4, 16, 64, 256], ylim=(4e-9, 2), yticks=[1e-8, 1e-6, 1e-4, 1e-2, 1])
-ax_scale.minorticks_off()
-for ax in (ax_fit, ax_ripple, ax_scale):
-    ax.title.set_fontsize(9)
+# Drawn at the size of the slide (the text width, 4.25 in) and included unscaled.
+DIV = LinearSegmentedColormap.from_list("div", ["#0f3a73", P.BLUE, "#ffffff", P.ORANGE, "#8f3410"])  # as in part1_objects.py
+fig, axes = P.panels(4, ratios=[1, 1, 1, 0.05], figsize=(4.25, 1.72))
+fields = [(exact, "exact (d'Alembert)"),
+          (runs[0]["shot"], rf"$(x,t)$: ${100 * runs[0]['relative'][3000]:.0f}\%$ error"),
+          (runs[16]["shot"], rf"$\varphi(x,t)$: ${100 * runs[16]['relative'][3000]:.0f}\%$ error")]
+for ax, (field, title) in zip(axes, fields):
+    image = ax.pcolormesh(grid_t, grid_x, field, cmap=DIV, vmin=-1, vmax=1, shading="auto", rasterized=True)
+    ax.set(xticks=[0, 1, 2], yticks=[0, 1])
+    ax.set_xlabel("$t$", fontsize=7, labelpad=0)
+    ax.set_title(title, fontsize=7, pad=3)
+    ax.tick_params(labelsize=6, length=2, pad=1.5)
+    for side in ("top", "right"):
+        ax.spines[side].set_visible(True)
+axes[0].set_ylabel("$x$", fontsize=7, labelpad=1)
+for ax in axes[1:3]:
+    ax.set_yticklabels([])
+bar = fig.colorbar(image, cax=axes[3], ticks=[-1, 0, 1])
+bar.ax.tick_params(labelsize=6, length=2, pad=1.5)
+bar.outline.set_edgecolor(P.RULE)
 C.save(fig, "fourier_features")

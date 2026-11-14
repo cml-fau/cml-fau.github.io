@@ -89,23 +89,22 @@ for k in ks:
 shown = [8, 32, 128, 784]
 rows = [torch.cat([(mean + components(digit[None], k) @ directions[:, :k].T).reshape(28, 28) for k in shown], dim=1)
         for digit in test_images[:2]]                                # the first two test images
-fig, (ax_digits, ax_accuracy) = P.panels(2, size=(2.65, 1.75), ratios=[1.1, 1])
+# Drawn at the size of the slide and included unscaled, so that its text matches the slide's.
+fig, (ax_digits, ax_accuracy) = P.panels(2, figsize=(4.25, 2.1), ratios=[1.45, 1])
 ax_digits.imshow(torch.cat(rows, dim=0), cmap="gray_r", vmin=0, vmax=1)
 for j, k in enumerate(shown):
-    ax_digits.text(28 * j + 14, -2, f"${k}$", ha="center", va="bottom", fontsize=7.5)
-ax_digits.text(-2, -2, "$k=$", ha="right", va="bottom", fontsize=7.5)
+    ax_digits.text(28 * j + 14, 58, f"$k={k}$", ha="center", va="top", fontsize=8)   # below the two rows
 P.label(ax_digits, off=True)
-ax_digits.set_title("Two digits from $k$ components", pad=14, fontsize=9)
-ax_accuracy.semilogx(ks, 100 * np.array(pca_accuracy), "-o", ms=3.5, label="test accuracy")
-ax_accuracy.semilogx(ks, 100 * kept[np.array(ks) - 1], "--", color=P.GREY, lw=1.2, label="variance kept")
+ax_accuracy.semilogx(ks, 100 * np.array(pca_accuracy), "-o", ms=3.5)
 ax_accuracy.axhline(100 * baseline_accuracy, color=P.ORANGE, lw=1, ls=":")
 ax_accuracy.annotate("784 pixels", (2, 100 * baseline_accuracy), xytext=(0, 3), textcoords="offset points",
-                     fontsize=7, color=P.ORANGE)
-P.label(ax_accuracy, "principal components $k$", "%", title="The baseline on $k$ components", ylim=(0, 109),
-        xticks=[2, 8, 32, 128], xticklabels=[2, 8, 32, 128], yticks=[0, 50, 100],
-        legend=dict(fontsize=7, loc="lower right"))
+                     fontsize=8, color=P.ORANGE)
+P.label(ax_accuracy, "components $k$", title="Test accuracy (%)",
+        ylim=(0, 109), xticks=[2, 8, 32, 128], xticklabels=[2, 8, 32, 128], yticks=[0, 50, 100])
 ax_accuracy.minorticks_off()
 ax_accuracy.title.set_fontsize(9)
+ax_accuracy.xaxis.label.set_size(9)
+ax_accuracy.tick_params(labelsize=8)
 C.save(fig, "mnist_pca")
 
 # ---------------------------------------------------------------------------------------
