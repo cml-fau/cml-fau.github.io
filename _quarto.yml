@@ -66,6 +66,10 @@ website:
                 href: https://drive.google.com/file/d/1iTSIfdrd_4o3Lwf-c-V_9y__BtAXT8Vc/view
           - text: "01 · Introduction to Control Theory"
             href: lectures/01_introduction_control_theory/introduction_control_theory.pdf
+          - text: "02 · Universal Approximation and Optimization"
+            href: lectures/02_universal_approximation_and_optimization/universal_approximation_and_optimization.pdf
+          - text: "03 · The Training Loop"
+            href: lectures/03_the_training_loop/the_training_loop.pdf
       - section: Notebooks
         contents: notebooks/*.ipynb
   page-footer:
