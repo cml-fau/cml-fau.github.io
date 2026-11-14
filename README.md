@@ -72,15 +72,55 @@ code to the shortest fragment that illustrates the mathematics.
 Each notebook in [`notebooks/`](notebooks/) is self-contained: the mathematics is developed in the
 text and the code is the smallest runnable confirmation of it.
 
+**Part 0 — The map**
+
 | # | Notebook | Topics |
 |---|---|---|
-| 01 | [Introduction to Machine Learning & Deep Learning](notebooks/01_intro_to_ml.ipynb) | Risk minimization, representations, models (linear regression, neural networks, softmax classifiers), training (gradient descent, backpropagation, mini-batch SGD), generalization, a zoo of architectures |
-| 02 | [Control Theory](notebooks/02_control_theory.ipynb) | Kalman rank condition, controllability Gramian, pole placement, LQR and the Riccati equation, model predictive control |
-| 03 | [Optimization and gradient descent](notebooks/03_optimization.ipynb) | Descent lemma, convergence in the convex and non-convex case, momentum, noisy gradients and the Gibbs measure |
-| 04 | [Neural ODEs](notebooks/04_neuralodes.ipynb) | Residual networks as Euler steps, numerical ODE solvers, learning dynamics and representations |
-| 05 | [Diffusion models](notebooks/05_diffusion_models.ipynb) | The heat equation as noising, Feynman–Kac, Ornstein–Uhlenbeck forward process, reverse-time SDE and probability-flow ODE, score matching |
-| 06 | [Transformers](notebooks/06_transformers.ipynb) | Self-attention, multi-head attention, positional encoding, the transformer block, masked language modelling |
-| 07 | [Reinforcement Learning](notebooks/07_reinforcement_learning.ipynb) | Bellman equation and value iteration, Q-learning, exploration vs. exploitation, Pontryagin's maximum principle, Hamilton–Jacobi–Bellman (appendix) |
+| 00 | [The Big Picture: Control and Machine Learning](notebooks/00_course_map.ipynb) | The three control problems and the learning problem, the course map, a control ↔ ML dictionary, the recurring examples |
+
+**Part I — Control**
+
+| # | Notebook | Topics |
+|---|---|---|
+| 01 | [What is Control?](notebooks/01_control_fundamentals.ipynb) | States, controls, targets; optimal control vs. controllability vs. stabilization; open and closed loop; the overdamping paradox; a short history |
+| 02 | [Linear Control Systems and the Kalman Rank Condition](notebooks/02_linear_control_kalman.ipynb) | Variation of constants, reachable sets, the Kalman theorem with proof, the controllability Gramian and an explicit steering control, quantitative controllability |
+| 03 | [Observability, Duality and the Construction of Controls](notebooks/03_observability_duality_adjoints.ipynb) | The adjoint system, the duality identity, the HUM functional, observability and coercivity, minimal-norm controls, conditioning and gradient descent |
+| 04 | [Bang-Bang and Switching Controls](notebooks/04_bangbang_switching.ipynb) | Structured controls from modified dual functionals: minimal-amplitude bang-bang controls, switching controls, Hölder duality |
+| 05 | [Feedback Stabilization, LQR and MPC](notebooks/05_feedback_stabilization.ipynb) | Stabilization from observability, the overdamping ceiling, pole placement, LQR and the Riccati equation, model predictive control |
+
+**Part II — Optimization and long-time control**
+
+| # | Notebook | Topics |
+|---|---|---|
+| 06 | [Minimizers, Gradient Flows and Gradient Descent](notebooks/06_variational_principles_gradient_flows.ipynb) | Lagrange multipliers, existence of minimizers, the gradient flow and its Lyapunov function, step sizes and conditioning, Snell's law, optimal transport |
+| 07 | [Adjoint Methods, Density and Control of the Heat Equation](notebooks/07_adjoints_density_heat_control.ipynb) | The adjoint method (two solves per gradient), density and approximate controllability, null controllability of the heat equation, where observability fails |
+| 08 | [Long-Time Optimal Control and the Turnpike Property](notebooks/08_long_time_control_turnpike.ipynb) | The steady optimum, forward–backward optimality systems, hyperbolicity of the Hamiltonian matrix, the exponential turnpike theorem |
+
+**Part III — Machine learning**
+
+| # | Notebook | Topics |
+|---|---|---|
+| 09 | [Machine Learning Foundations: Fitting Is Not Learning](notebooks/09_machine_learning_foundations_generalization.ipynb) | Risks and representations, models and training, backpropagation, overfitting and selection bias, the train/validation/test protocol, federated learning, a zoo of architectures |
+| 10 | [Universal Approximation and Optimization](notebooks/10_universal_approximation_and_optimization.ipynb) | Polynomials, Gaussian translates, hat functions and sigmoid neurons as approximation families, gradient descent and the descent lemma, momentum, noisy gradients, mini-batch training |
+| 11 | [Optimization Algorithms: Momentum and Adaptive Methods](notebooks/11_optimization.ipynb) | Heavy ball and Nesterov momentum as damped dynamics, RMSProp and Adam, fair comparisons of optimizers, the Gibbs measure of noisy gradient descent (appendix) |
+
+**Part IV — Neural networks as dynamical systems**
+
+| # | Notebook | Topics |
+|---|---|---|
+| 12 | [Shallow Networks: Representation, Sparsity, Convexity](notebooks/12_shallow_networks.ipynb) | Universal approximation, the outer-weight convexification, sparsity via linear programming |
+| 13 | [ResNets and Neural ODEs](notebooks/13_neuralodes.ipynb) | Residual networks as Euler schemes, numerical ODE solvers, the error of Euler's method, training as simultaneous optimal control, backpropagation as the discrete adjoint, learning the Lorenz dynamics, flows that deform the plane |
+| 14 | [Classification as Simultaneous Control](notebooks/14_classification_simultaneous_control.ipynb) | The classification theorem, the three exact actions of a ReLU neuron, explicit switching controls, switch counts and width vs. depth, a pre-registered comparison of constructed and trained classifiers |
+| 15 | [Transformers: Attention and Token Dynamics](notebooks/15_transformers.ipynb) | Self-attention, multi-head attention, positional encoding, a character-level BERT on Tiny Shakespeare, hardmax attention as interacting particles, the clustering theorem |
+| 16 | [Neural Transport and Learning Dynamics from Data](notebooks/16_neural_transport.ipynb) | Push-forward and the transport equation, the Wasserstein-1 distance, atoms versus laws, semi-autonomous neural ODEs, Gronwall estimates |
+| 17 | [Diffusion Models](notebooks/17_diffusion_models.ipynb) | The heat equation as noising, Feynman–Kac, Ornstein–Uhlenbeck forward process, reverse-time SDE and probability-flow ODE, score matching |
+
+**Part V — Closing the loop**
+
+| # | Notebook | Topics |
+|---|---|---|
+| 18 | [Reinforcement Learning](notebooks/18_reinforcement_learning.ipynb) | Bellman equation and value iteration, Q-learning, exploration vs. exploitation, Pontryagin's maximum principle, Hamilton–Jacobi–Bellman (appendix) |
+| 19 | [Control and Learning: A Synthesis](notebooks/19_synthesis_control_and_learning.ipynb) | The three threads of the course, the dictionary with its scope, one oscillator hosting four different problems, capacity vs. optimization vs. generalization |
 
 Lecture slides go in [`lectures/`](lectures/), one folder per lecture
 (`00_introduction_control_and_machine_learning/`, `01_introduction_control_theory/`); each holds
@@ -129,7 +169,7 @@ The website is built with [Quarto](https://quarto.org) from `_quarto.yml`, `inde
 notebooks, and is deployed to GitHub Pages by
 [`.github/workflows/publish.yml`](.github/workflows/publish.yml) on every push to `main`. Notebooks
 are **not re-executed**: the site shows the outputs saved in them, so run a notebook and save it
-before pushing. Code cells are folded by default. To hide a cell on the site, put one of these
+before pushing. Code cells are shown unfolded. To hide a cell on the site, put one of these
 comments on its first line: `#| include: false` (drop the cell), `#| echo: false` (hide the code,
 keep the output) or `#| output: false` (keep the code, hide the output).
 

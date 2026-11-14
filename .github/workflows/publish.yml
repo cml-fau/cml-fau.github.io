@@ -20,6 +20,10 @@ jobs:
     steps:
       - uses: actions/checkout@v7
       - uses: quarto-dev/quarto-actions/setup@v2
+        with:
+          # Pinned so a new Quarto release can't change the site unnoticed; keep it in step with
+          # the local install (`quarto --version`) when upgrading.
+          version: 1.11.9
       - run: quarto render
       - uses: actions/upload-pages-artifact@v5
         with:

@@ -13,6 +13,9 @@ project:
     - presentations/old/*.pdf
     - lectures/*/*.pdf
     - lectures/*/videos/*.mp4
+    - favicon.ico
+    # Google Search Console ownership check; must stay at the site root, unchanged.
+    - google71a06efc573aa717.html
 
 # Notebooks are rendered with the outputs saved in them; nothing is re-executed.
 execute:
@@ -20,7 +23,17 @@ execute:
 
 website:
   title: "Mathematical Foundations of Control and Machine Learning"
+  description: "Master's course at FAU Erlangen-Nürnberg (Winter 2026/27) by Prof. Enrique Zuazua: a unified mathematical view of control theory and machine learning, with lecture slides and Python/PyTorch notebooks."
   site-url: https://cml-fau.github.io/
+  # Browser-tab icon: a sigmoid on the theme's blue tile. favicon.ico is the fallback for browsers
+  # and crawlers that request /favicon.ico directly; after editing favicon.svg, rebuild it with
+  # `convert -background none -density 1536 favicon.svg -define icon:auto-resize=48,32,16 favicon.ico`
+  favicon: favicon.svg
+  # Link previews when the site is shared (Open Graph / Twitter cards).
+  open-graph: true
+  twitter-card: true
+  # Writes llms.txt and a Markdown copy of every page (*.llms.md) for LLM tools.
+  llms-txt: true
   repo-url: https://github.com/cml-fau/cml-fau.github.io
   repo-actions: [source, issue]
   page-navigation: true
