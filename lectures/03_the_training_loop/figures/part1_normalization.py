@@ -16,7 +16,6 @@ The script runs in a second and prints the numbers that the slide quotes.
 """
 import common as C
 from common import P, np
-from matplotlib.patches import Rectangle
 
 
 def skew_normal(location, scale, shape, n, rng):
@@ -47,15 +46,14 @@ for j in range(2):
 
 # Drawn at the size of the slide and included unscaled, so that its text matches the slide's.
 # One of the two rows of the slide "Example: change of coordinates", next to rings_coordinates.pdf.
-# Equal axes in both panels; the dashed box is the mean +- one standard deviation per coordinate.
+# Equal axes in both panels; the cross marks the mean.
 fig, axes = C.coordinate_panels()                             # lined up with the other row
-settings = [(x, mean, sd, ("$x_1$", "$x_2$"), "raw", (-15, 150), (-82.5, 82.5)),
-            (z, np.zeros(2), np.ones(2), ("$z_1$", "$z_2$"), "standardized", (-3.5, 5.5), (-4.5, 4.5))]
-for ax, (points, centre, spread, (xlabel, ylabel), title, xlim, ylim) in zip(axes, settings):
+settings = [(x, mean, ("$x_1$", "$x_2$"), "raw", (-15, 150), (-82.5, 82.5)),
+            (z, np.zeros(2), ("$z_1$", "$z_2$"), "standardized", (-3.5, 5.5), (-4.5, 4.5))]
+for ax, (points, centre, (xlabel, ylabel), title, xlim, ylim) in zip(axes, settings):
     ax.axhline(0, color=P.RULE, lw=0.8, zorder=0)
     ax.axvline(0, color=P.RULE, lw=0.8, zorder=0)
     ax.plot(*points.T, "o", color=P.BLUE, ms=1.8, alpha=0.45, mew=0)
-    ax.add_patch(Rectangle(centre - spread, *(2 * spread), fill=False, ec=P.INK, lw=1.0, ls=(0, (2.5, 1.5)), zorder=3))
     ax.plot(*centre, "+", color=P.INK, ms=6, mew=1.2, zorder=3)
     P.label(ax, xlabel, ylabel, title=title, xlim=xlim, ylim=ylim)
     ax.set_aspect("equal")

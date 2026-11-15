@@ -39,42 +39,47 @@ n_digit = C.count_parameters(C.make_classifier([784, 16, 16, 10]))
 print(f"ResNet-50 counted from Table 1 of He et al.: {n_resnet50:,} parameters; digit classifier: {n_digit:,}")
 
 # (name, parameters P, training-set size N, kind, label offset in points, horizontal alignment)
-# N counts labelled examples: images for the classifiers, words or tokens for the language
-# models, in which every token is a prediction target.
+# N counts labelled examples: images for the classifiers and the diffusion models (image-caption
+# pairs for latent diffusion), words or tokens for the language models, in which every token is
+# a prediction target.  Kimi K2 and DeepSeek-V4-Pro are mixtures of experts: P is the total
+# count, of which each token uses 32.6e9 and 49e9.
 models = [
     ("LeNet-5 (1998)",          6.0e4,      6.0e4,   "image", (6, 3),    "left"),    # LeCun et al. 1998; MNIST
-    ("AlexNet (2012)",          6.0e7,      1.2e6,   "image", (0, 6),    "center"),  # Krizhevsky et al. 2012; ImageNet
+    ("AlexNet (2012)",          6.0e7,      1.2e6,   "image", (-5, -2),  "right"),  # Krizhevsky et al. 2012; ImageNet
     ("ResNet-50 (2015)",        n_resnet50, 1.28e6,  "image", (34, -17), "left"),    # He et al. 2016; ImageNet
     ("Inception\non CIFAR-10",  1_649_402,  5.0e4,   "image", (0, 6),    "center"),  # Zhang et al. 2017, Table 1
-    ("ViT-H/14 (2021)",         6.32e8,     3.03e8,  "image", (-6, 3),   "right"),   # Dosovitskiy et al. 2021; JFT-300M
+    ("ViT-H/14 (2021)",         6.32e8,     3.03e8,  "image", (8, -26),  "left"),    # Dosovitskiy et al. 2021; JFT-300M
     ("BERT-large (2018)",       3.4e8,      3.3e9,   "text",  (6, -9),   "left"),    # Devlin et al. 2019; words
     ("GPT-3 (2020)",            1.75e11,    3.0e11,  "text",  (-6, 4),   "right"),   # Brown et al. 2020; tokens
     ("Chinchilla (2022)",       7.0e10,     1.4e12,  "text",  (0, -11),  "center"),  # Hoffmann et al. 2022; tokens
+    ("Kimi K2 (2025)",          1.04e12,    1.55e13, "text",  (0, -10),  "center"),  # Kimi Team 2025, Section 2; tokens
+    ("DeepSeek-V4-Pro (2026)",  1.6e12,     3.3e13,  "text",  (-30, 5),  "right"),   # DeepSeek-AI 2026, Section 1; tokens
+    ("DiT-XL/2 (2023)",         6.75e8,     1.28e6,  "diffusion", (0, 6),  "center"),  # Peebles and Xie 2023, Table 4; ImageNet
+    ("Latent diffusion (2022)", 1.45e9,     4.0e8,   "diffusion", (6, 15), "right"),   # Rombach et al. 2022, Section 4.3.1; LAION-400M
 ]
 print("parameters P, training-set size N and the ratio P/N:")
 for name, parameters, samples, kind, *_ in models:
-    print(f"  {name.replace(chr(10), ' '):24s} P = {parameters:9.3g}  N = {samples:8.3g} ({'images' if kind == 'image' else 'words or tokens'})"
+    print(f"  {name.replace(chr(10), ' '):24s} P = {parameters:9.3g}  N = {samples:8.3g} ({'words or tokens' if kind == 'text' else 'images'})"
           f"  P/N = {parameters / samples:.3g}")
 print(f"  digit classifier of lecture 02: P = {n_digit}, N = 60000 images, P/N = {n_digit / 60000:.2f}")
 
-fig, ax = P.panels(figsize=(3.1, 2.6))
-diagonal = np.array([1e4, 1e13])
-ax.fill_between(diagonal, diagonal, 1e13, color=P.GHOST, alpha=0.45, lw=0)
+fig, ax = P.panels(figsize=(4.3, 2.65))       # the width of the slide
+diagonal = np.array([1e4, 1e14])
+ax.fill_between(diagonal, diagonal, 1e14, color=P.GHOST, alpha=0.45, lw=0)
 ax.loglog(diagonal, diagonal, color=P.INK, ls="--", lw=1)
-ax.text(1.1e9, 5.5e9, "$P=N$", fontsize=7.5, ha="center", va="bottom")
-ax.annotate("more parameters\nthan data", (2.2e4, 1.1e10), fontsize=7, color=P.NOTE, va="center")
-for kind, color, label in (("image", P.BLUE, "images"), ("text", P.ORANGE, "text")):
+for kind, color, label in (("image", P.BLUE, "classifiers"), ("diffusion", P.AQUA, "diffusion"),
+                           ("text", P.ORANGE, "language")):
     chosen = [m for m in models if m[3] == kind]
     ax.loglog([m[2] for m in chosen], [m[1] for m in chosen], "o", color=color, ms=4.5, label=label)
 for name, parameters, samples, kind, offset, align in models:
-    leader = dict(arrowstyle="-", color=P.NOTE, lw=0.5, shrinkA=1, shrinkB=3) if abs(offset[0]) > 20 else None
+    leader = dict(arrowstyle="-", color=P.NOTE, lw=0.5, shrinkA=1, shrinkB=3) if max(map(abs, offset)) > 12 else None
     ax.annotate(name, (samples, parameters), xytext=offset, textcoords="offset points", fontsize=6.5,
                 ha=align, linespacing=0.95, arrowprops=leader)
 ax.loglog([6e4], [n_digit], "o", mfc="white", mec=P.INK, ms=4.5)
 ax.annotate("our digit classifier", (6e4, n_digit), xytext=(6, -3), textcoords="offset points", fontsize=6.5)
-P.label(ax, "size of the training set $N$", "parameters $P$", xlim=(1e4, 1e13), ylim=(5e3, 2e12),
-        xticks=[1e4, 1e6, 1e8, 1e10, 1e12], yticks=[1e4, 1e6, 1e8, 1e10, 1e12],
-        legend=dict(fontsize=6.5, loc="upper left", borderpad=0.3, handletextpad=0.2, labelspacing=0.25))
+P.label(ax, "size of the training set $N$", "parameters $P$", xlim=(1e4, 1e14), ylim=(5e3, 1e13),
+        xticks=[1e4, 1e6, 1e8, 1e10, 1e12, 1e14], yticks=[1e4, 1e6, 1e8, 1e10, 1e12],
+        legend=dict(fontsize=6.5, loc="lower right", borderpad=0.3, handletextpad=0.2, labelspacing=0.25))
 C.save(fig, "parameters_vs_data")
 
 

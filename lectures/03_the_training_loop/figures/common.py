@@ -102,12 +102,13 @@ def load_mnist(split):
     return images, labels
 
 
-def make_classifier(sizes, seed=0):
-    """Fully connected ReLU network with the given layer sizes, input first."""
+def make_classifier(sizes, seed=0, activation=nn.ReLU):
+    """Fully connected network with the given layer sizes, input first (ReLU unless told otherwise).
+    The activation has no parameters, so the same seed gives the same weights for every activation."""
     torch.manual_seed(seed)
     layers = []
     for n_in, n_out in zip(sizes[:-1], sizes[1:]):
-        layers += [nn.Linear(n_in, n_out), nn.ReLU()]
+        layers += [nn.Linear(n_in, n_out), activation()]
     return nn.Sequential(*layers[:-1])                              # the outputs are raw scores
 
 

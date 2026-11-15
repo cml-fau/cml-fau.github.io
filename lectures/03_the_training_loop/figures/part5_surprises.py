@@ -11,9 +11,10 @@ Run from the repository root:
    rises to 2 / eta.
 4. spectral_bias: the smooth part of a target is learned before its ripple.
 
-Figures 2 to 4 were made for the second part of lecture 02 and moved here with their code and
-seeds unchanged.  Every number quoted on the slides is printed below.  The run takes about
-four minutes; nearly all of it is the exact Hessians of figure 3.
+Figures 2 to 4 were made for the second part of lecture 02 and moved here with their seeds
+unchanged; figure 4 now measures the error on all of sin(3x) + 0.3x.  Every number quoted on
+the slides is printed below.  The run takes about four minutes; nearly all of it is the exact
+Hessians of figure 3.
 """
 import common as C
 from common import P, np, plt, torch, nn
@@ -78,7 +79,7 @@ ax.fill_between(sizes_dd[classical], *np.quantile(risk, [0.25, 0.75], axis=0)[:,
                 color=P.BLUE, alpha=0.2, lw=0)
 ax.semilogy(sizes_dd[classical], risk_median[classical], "-o", ms=2.5, color=P.BLUE, label=r"test error $\mathcal{R}$")
 ax.semilogy(sizes_dd[classical], train_error.mean(axis=0)[classical], "-o", ms=2.5, color=P.GREY,
-            label="training error $F$")
+            label="training error $J$")
 ax.axhline(noise ** 2, color=P.INK, ls=":", lw=0.9)
 ax.annotate("$s^2$", (16.75, noise ** 2), fontsize=8, color=P.NOTE, ha="left", va="center", annotation_clip=False)
 best = sizes_dd[below][np.argmin(median[below])]
@@ -174,7 +175,7 @@ for eta, color in ((0.2, P.BLUE), (0.1, P.ORANGE), (0.05, P.AQUA)):
 eos_ticks = [0, 4000, 8000, 12_000]
 P.label(ax_loss, "step $k$", "training loss", title="The loss still decreases", xticks=eos_ticks,
         legend=dict(fontsize=7, loc="upper right"))
-P.label(ax_sharp, "step $k$", r"$\lambda_{\max}(\nabla^2F(w_k))$", ylim=(0, 46), xticks=eos_ticks,
+P.label(ax_sharp, "step $k$", r"$\lambda_{\max}(\nabla^2J(w_k))$", ylim=(0, 46), xticks=eos_ticks,
         title=r"The sharpness rises to $2/\eta$ (dashed)")
 C.save(fig, "edge_of_stability")
 
@@ -200,21 +201,21 @@ for k in range(10_001):
         snapshots[k] = prediction.detach().numpy().ravel()
     if k in record_at:
         residual = (wiggly - prediction).detach()
-        record[k] = (missing(residual, torch.sin(3 * inputs)), missing(residual, high_part))
+        record[k] = (missing(residual, low_part), missing(residual, high_part))
     optimizer.zero_grad()
     loss.backward()
     optimizer.step()
 for k in (100, 1000, 3000, 10_000):
-    print(f"spectral bias, step {k}: missing fraction of sin(3x) = {record[k][0]:+.3f}, of sin(20x) = {record[k][1]:+.3f}")
+    print(f"spectral bias, step {k}: missing fraction of sin(3x) + 0.3x = {record[k][0]:+.3f}, of sin(20x) = {record[k][1]:+.3f}")
 
-fig, (ax_fit, ax_modes) = P.panels(2, size=(3.1, 2.3), ratios=[1.25, 1])
-ax_fit.plot(x, wiggly.numpy().ravel(), color=P.GHOST, lw=2.2, label="target")
+fig, (ax_fit, ax_modes) = P.panels(2, size=(3.1, 3.0), ratios=[1.25, 1])
+ax_fit.plot(x, wiggly.numpy().ravel(), "--", color=P.INK, lw=1, zorder=3, label="target")   # on top of the fits
 for (k, values), color in zip(snapshots.items(), [P.AQUA, P.ORANGE, P.BLUE]):
     ax_fit.plot(x, values, color=color, lw=1.1, label=f"step {k}")
-P.label(ax_fit, "$x$", title=r"Target $g(x)+0.3\sin(20x)$", legend=dict(fontsize=7, loc="upper left"))
+P.label(ax_fit, "$x$", title=r"Target $\sin(3x)+0.3x+0.3\sin(20x)$", legend=dict(fontsize=7, loc="upper left"))
 record_steps = np.array(sorted(record))
-ax_modes.semilogx(record_steps, [record[k][0] for k in record_steps], label=r"$\sin(3x)$")
-ax_modes.semilogx(record_steps, [record[k][1] for k in record_steps], label=r"$0.3\sin(20x)$")
+ax_modes.semilogx(record_steps, [record[k][0] for k in record_steps], color=P.MAGENTA, label=r"$\sin(3x)+0.3x$")
+ax_modes.semilogx(record_steps, [record[k][1] for k in record_steps], color=P.YELLOW, label=r"$0.3\sin(20x)$")
 P.label(ax_modes, "step $k$", "fraction still missing", zero="h", title="Each component of the error",
         ylim=(-0.08, 1.7), yticks=[0, 0.5, 1], legend=dict(fontsize=7, loc="upper center", ncols=2))
 C.save(fig, "spectral_bias")

@@ -1,4 +1,5 @@
-"""Figure of part 4 (optimization) on the digit classifier: mnist_batch_size.
+"""Figures of part 4 (optimization) on the digit classifier: mnist_batch_fixed_step and
+mnist_batch_fixed_ratio.
 
 Run from the repository root:
 
@@ -6,102 +7,161 @@ Run from the repository root:
 
 The data, the network 784 -> 16 -> 16 -> 10, the cross-entropy and the five epochs of the
 baseline of lecture 02 are kept; only the optimizer changes: its batch size B, its step
-eta, and Adam or plain SGD.  Every number quoted on the slide is printed here.  About four
-minutes on one CPU thread.
+eta, and Adam or plain SGD.  mnist_batch_fixed_step: a fixed step.  mnist_batch_fixed_ratio:
+SGD with eta = c B, which keeps the ratio eta / B = c.  Left in each: the training loss J(w) along
+the runs that start from SGD with eta = 0.05 at B = 64 and change B.  Right: the test error
+after five epochs against B.  Every run prints
+its numbers.  The runs go to a pool of one-thread processes: about seven minutes on 16 cores.
 """
+import os
 import time
+from multiprocessing import Pool
+
+from matplotlib.colors import LinearSegmentedColormap
 
 import common as C
 from common import P, np, plt, torch, nn
 
 train, test = C.load_mnist("train"), C.load_mnist("test")
 N = len(train[0])
-cross_entropy = nn.CrossEntropyLoss()
 EPOCHS = 5
+PER_EPOCH = 50                     # evaluations of J per epoch, for the curves of the bottom row
+cross_entropy = nn.CrossEntropyLoss()
 
 
-def run(method, batch, eta, init_seed=0, shuffle_seed=1):
-    """Five epochs from the initial weights of the baseline.  Returns the number of steps, the
-    test accuracy in percent and the loss on the whole training set."""
-    net = C.make_classifier([784, 16, 16, 10], seed=init_seed)
-    optimizer = (torch.optim.Adam if method == "Adam" else torch.optim.SGD)(net.parameters(), lr=eta)
-    start = time.time()
-    net, losses, test_accuracy = C.train_mnist(net, train, test, epochs=EPOCHS, batch_size=batch, optimizer=optimizer,
-                                               shuffle_seed=shuffle_seed, verbose=False)
+def training_loss(net):
     with torch.no_grad():
-        training_loss = cross_entropy(net(train[0]), train[1]).item()
-    print(f"  {method:<4} B = {batch:<5} eta = {eta:<8.5g} eta/B = {eta / batch:.2e}  steps = {len(losses):<5} "
-          f"test accuracy = {100 * test_accuracy[-1]:.2f}%  training loss = {training_loss:.4f}  "
-          f"({time.time() - start:.0f} s)", flush=True)
-    return len(losses), 100 * test_accuracy[-1], training_loss
+        return cross_entropy(net(train[0]), train[1]).item()
 
 
-results = {}
+def run(key):
+    """Five epochs from the initial weights of the baseline, with the loop and the shuffling of
+    C.train_mnist.  Returns the test accuracy in percent and, if `curve`, the training loss J
+    before training and at PER_EPOCH equally spaced points of every epoch."""
+    method, batch, eta, curve, seed = key
+    start = time.time()
+    net = C.make_classifier([784, 16, 16, 10], seed=seed)
+    optimizer = (torch.optim.Adam if method == "Adam" else torch.optim.SGD)(net.parameters(), lr=eta)
+    generator = torch.Generator().manual_seed(1 if seed == 0 else seed + 10)
+    marks = np.linspace(0, N, PER_EPOCH + 1).round().astype(int)[1:]     # samples seen at each evaluation
+    losses = [training_loss(net)] if curve else []
+    for epoch in range(EPOCHS):
+        seen, next_mark = 0, 0
+        for indices in torch.randperm(N, generator=generator).split(batch):
+            optimizer.zero_grad()
+            cross_entropy(net(train[0][indices]), train[1][indices]).backward()
+            optimizer.step()
+            seen += len(indices)
+            while curve and next_mark < PER_EPOCH and seen >= marks[next_mark]:
+                losses.append(training_loss(net))
+                next_mark += 1
+    accuracy = 100 * C.accuracy(net, *test)
+    line = (f"  {method:<4} B = {batch:<5} eta = {eta:<9.4g} eta/B = {eta / batch:.2e}  seed = {seed}  "
+            f"test accuracy = {accuracy:.2f}%  J = {training_loss(net):.4f}  ({time.time() - start:.0f} s)")
+    return key, accuracy, np.array(losses), line
 
 
-def result(method, batch, eta):
-    key = (method, batch, eta)
-    if key not in results:
-        results[key] = run(*key)
-    return results[key]
-
-
-batches = [16, 64, 256, 1024, 4096]
+# ---------------------------------------------------------------------------------------
+# The runs.  Top left: a fixed step, Adam with the baseline eta = 1e-3 and SGD with two
+# steps.  Top right: SGD with eta = c B, for c = eta_64 / 64 (the step eta_64 at B = 64).
+# Bottom: SGD with eta = 0.05 (left) and eta = (0.05 / 64) B (right).
+# ---------------------------------------------------------------------------------------
+batches = [2 ** k for k in range(13)]                               # 1, 2, 4, ..., 4096
 with_full_batch = batches + [N]
+fixed = {"Adam, $\\eta=10^{-3}$": ("Adam", 1e-3, P.INK, "o"),
+         "SGD, $\\eta=0.05$": ("SGD", 0.05, P.AQUA, "s"),
+         "SGD, $\\eta=0.2$": ("SGD", 0.2, P.ORANGE, "^")}
+scaled = {0.0125: P.BLUE, 0.05: P.AQUA, 0.2: P.ORANGE}               # eta_64; c = eta_64 / 64
+curve_batches = [1, 4, 16, 64, 256, 1024]
 
-# ---------------------------------------------------------------------------------------
-# 1. A fixed step: the baseline optimizer (Adam, eta = 1e-3) and plain SGD, B from 16 to N
-# ---------------------------------------------------------------------------------------
-fixed = {"Adam, $\\eta=10^{-3}$": ("Adam", 1e-3), "SGD, $\\eta=0.05$": ("SGD", 0.05), "SGD, $\\eta=0.2$": ("SGD", 0.2)}
-print("a fixed step, five epochs:")
-for method, eta in fixed.values():
-    for batch in with_full_batch:
-        result(method, batch, eta)
 
-# ---------------------------------------------------------------------------------------
-# 2. SGD with a step proportional to the batch: eta = eta_64 B / 64
-# ---------------------------------------------------------------------------------------
-scaled = {0.0125: P.BLUE, 0.05: P.AQUA, 0.2: P.ORANGE}              # eta_64, the step at B = 64
-print("SGD with eta proportional to B, five epochs:")
-for eta_64 in scaled:
-    for batch in batches:
-        result("SGD", batch, eta_64 * batch / 64)
+def key(method, batch, eta):
+    """A run is (method, B, eta, whether J is recorded, seed); J is recorded for the bottom row."""
+    return method, batch, eta, method == "SGD" and batch in curve_batches and eta in (0.05, 0.05 * batch / 64), 0
 
-# ---------------------------------------------------------------------------------------
-# 3. How much do two runs of the same configuration differ?  Three seeds of the initial
-#    weights and of the shuffling, for the baseline and for SGD with eta = 0.05, B = 64.
-# ---------------------------------------------------------------------------------------
-print("run-to-run variation (initial weights and shuffling):")
-for method, eta in (("Adam", 1e-3), ("SGD", 0.05)):
-    accuracies = [result(method, 64, eta)[1]] + [run(method, 64, eta, init_seed=s, shuffle_seed=s + 10)[1]
-                                                  for s in (1, 2)]
-    print(f"  {method}, B = 64: test accuracies {', '.join(f'{a:.2f}' for a in accuracies)}; "
-          f"range {max(accuracies) - min(accuracies):.2f} points")
 
-# ---------------------------------------------------------------------------------------
-# The figure: test error against the batch size
-# ---------------------------------------------------------------------------------------
-fig, (ax_fixed, ax_scaled) = P.panels(2, size=(3.1, 2.2), sharey=True)
-for (name, (method, eta)), color, marker in zip(fixed.items(), (P.INK, P.AQUA, P.ORANGE), ("o", "s", "^")):
-    ax_fixed.loglog(with_full_batch, [100 - result(method, batch, eta)[1] for batch in with_full_batch],
-                    "-" + marker, color=color, ms=3.5, lw=1.1, label=name)
-P.label(ax_fixed, "batch size $B$", "test error (%)", title=r"A fixed step $\eta$",
-        legend=dict(fontsize=6.3, loc="upper left"))
+keys = {key(method, batch, eta) for method, eta, _, _ in fixed.values() for batch in with_full_batch}
+keys |= {key("SGD", batch, eta_64 * batch / 64) for eta_64 in scaled for batch in batches}
+keys |= {(method, 64, eta, False, seed) for method, eta in (("Adam", 1e-3), ("SGD", 0.05)) for seed in (1, 2)}
 
-for eta_64, color in scaled.items():
-    etas = [eta_64 * batch / 64 for batch in batches]
-    errors = [100 - result("SGD", batch, eta)[1] for batch, eta in zip(batches, etas)]
-    ax_scaled.loglog(batches, errors, "-", color=color, lw=1.1, label=rf"$\eta_{{64}}={eta_64}$")
-    for batch, eta, error in zip(batches, etas, errors):            # hollow markers: steps of 0.8 and more
-        ax_scaled.loglog([batch], [error], "o", color=color, ms=3.8, mfc="white" if eta >= 0.8 else color, mew=1.1)
-ax_scaled.plot([], [], "o", color=P.GREY, ms=3.8, mfc="white", mew=1.1, label=r"$\eta\geq0.8$")
-P.label(ax_scaled, "batch size $B$", title=r"SGD with $\eta=\eta_{64}\,B/64$",
-        legend=dict(fontsize=6.3, loc="upper left", handlelength=1.4, labelspacing=0.3))
-for ax in (ax_fixed, ax_scaled):
-    ax.set_xticks(batches + ([N] if ax is ax_fixed else []))
-    ax.set_xticklabels([str(b) for b in batches] + (["60 000"] if ax is ax_fixed else []), fontsize=7)
-    ax.minorticks_off()
-    ax.set_yticks([5, 10, 20, 50, 90])
-    ax.set_yticklabels(["5", "10", "20", "50", "90"])
-    ax.set_ylim(3.5, 100)
-C.save(fig, "mnist_batch_size")
+
+def compute():
+    """All the runs, in a pool of one-thread processes, the longest (small B) first."""
+    start, results = time.time(), {}
+    with Pool(min(15, os.cpu_count())) as pool:
+        for k, accuracy, losses, line in pool.imap_unordered(run, sorted(keys, key=lambda k: (k[1], -k[3]))):
+            results[k] = accuracy, losses
+            print(line, flush=True)
+    print(f"{len(keys)} runs in {(time.time() - start) / 60:.1f} minutes")
+    return results
+
+
+def report(results):
+    accuracy = lambda method, batch, eta: results[key(method, batch, eta)][0]
+    print("test accuracy (%) after five epochs, B = 1, 2, 4, ...:")
+    for method, eta, _, _ in fixed.values():
+        values = [accuracy(method, batch, eta) for batch in with_full_batch]
+        print(f"  {method} eta = {eta}: " + ", ".join(f"{v:.1f}" for v in values)
+              + f"   best B = {with_full_batch[int(np.argmax(values))]}")
+    for eta_64 in scaled:
+        values = [accuracy("SGD", batch, eta_64 * batch / 64) for batch in batches]
+        print(f"  SGD eta = ({eta_64}/64) B: " + ", ".join(f"{v:.1f}" for v in values))
+    for method, eta in (("Adam", 1e-3), ("SGD", 0.05)):
+        values = [accuracy(method, 64, eta)] + [results[method, 64, eta, False, seed][0] for seed in (1, 2)]
+        print(f"  {method} eta = {eta}, B = 64, seeds 0, 1, 2: " + ", ".join(f"{v:.2f}" for v in values)
+              + f"; range {max(values) - min(values):.2f} points")
+
+
+def figures(results):
+    accuracy = lambda method, batch, eta: results[key(method, batch, eta)][0]
+    shades = LinearSegmentedColormap.from_list("aqua", ["#b5e8d4", P.AQUA, "#0b4d35"])     # lighter for smaller B
+    epochs = np.linspace(0, EPOCHS, EPOCHS * PER_EPOCH + 1)
+
+    def error_axes(ax, sizes, title, legend):
+        """Right panel: the test error against B."""
+        P.label(ax, "batch size $B$", "test error (%)", title=title, legend=legend)
+        ticks = [b for b in (1, 4, 16, 64, 256, 1024, 4096, N) if b in sizes]
+        ax.set_xticks(ticks)
+        ax.set_xticklabels(["60 000" if b == N else str(b) for b in ticks], fontsize=7)
+        ax.minorticks_off()
+        ax.set_yticks([5, 10, 20, 50, 90])
+        ax.set_yticklabels(["5", "10", "20", "50", "90"])
+        ax.set_ylim(3.5, 100)
+
+    def loss_axes(ax, step, title):
+        """Left panel: J along the runs of SGD with the step `step(B)`."""
+        for i, batch in enumerate(curve_batches):
+            ax.semilogy(epochs, results[key("SGD", batch, step(batch))][1], color=shades(i / (len(curve_batches) - 1)),
+                        lw=0.9, label=f"$B={batch}$")
+        P.label(ax, "epoch", "training loss $J(w)$", title=title,
+                legend=dict(fontsize=6.3, loc="upper right", ncol=3, columnspacing=1.0, handlelength=1.4))
+        ax.minorticks_off()
+        ax.set_yticks([0.2, 0.5, 1, 2])
+        ax.set_yticklabels(["0.2", "0.5", "1", "2"])
+        ax.set_ylim(0.12, 7)
+        ax.set_xlim(0, EPOCHS)
+
+    # Growing B at a fixed step
+    fig, (ax_loss, ax_error) = P.panels(2, size=(3.1, 3.4))
+    for name, (method, eta, color, marker) in fixed.items():
+        ax_error.loglog(with_full_batch, [100 - accuracy(method, batch, eta) for batch in with_full_batch],
+                        "-" + marker, color=color, ms=3, lw=1.1, label=name)
+    error_axes(ax_error, with_full_batch, r"A fixed step $\eta$",
+               legend=dict(fontsize=6.3, loc="upper center", bbox_to_anchor=(0.42, 1)))
+    loss_axes(ax_loss, lambda batch: 0.05, r"SGD, $\eta=0.05$")
+    C.save(fig, "mnist_batch_fixed_step")
+
+    # Keeping the ratio eta / B fixed
+    fig, (ax_loss, ax_error) = P.panels(2, size=(3.1, 3.4))
+    for eta_64, color in scaled.items():
+        ax_error.loglog(batches, [100 - accuracy("SGD", batch, eta_64 * batch / 64) for batch in batches],
+                        "-o", color=color, ms=3, lw=1.1, label=rf"$c={eta_64}/64$")
+    error_axes(ax_error, batches, r"SGD with $\eta=c\,B$", legend=dict(fontsize=6.3, loc="upper left"))
+    loss_axes(ax_loss, lambda batch: 0.05 * batch / 64, r"SGD, $\eta=(0.05/64)\,B$")
+    C.save(fig, "mnist_batch_fixed_ratio")
+
+
+if __name__ == "__main__":
+    results = compute()
+    report(results)
+    figures(results)

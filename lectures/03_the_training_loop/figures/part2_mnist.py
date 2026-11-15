@@ -14,7 +14,7 @@ common.train_mnist.
   Also printed: the training error, and how much the outputs at initialization still depend
   on the image.
 - mnist_cnn.pdf: a small convolutional network with c and 2c channels (c = 2, 4, 8; the slide
-  prints c = 8) against the fully connected networks with 2 hidden layers.
+  quotes c = 8) against the fully connected networks with 2 hidden layers.
 
 Every number quoted on the slides is printed here.  28 training runs of 5 epochs: about
 nine minutes on one CPU thread.

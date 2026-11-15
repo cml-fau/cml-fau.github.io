@@ -303,21 +303,23 @@ report("exact p(x), threshold 1/2 (the classifier of highest accuracy)", exact_t
 print(f"mean test log-loss: plain network {-np.mean(np.where(labels_test == 1, np.log(p_test), np.log1p(-p_test))):.4f}, "
       f"exact p(x) {-np.mean(np.where(labels_test == 1, np.log(exact_test), np.log1p(-exact_test))):.4f}")
 
-# --- the data and the decision boundary of the plain network ---
-side = np.linspace(-3.6, 6.2, 300)
-G1, G2 = np.meshgrid(side, side)
-p_grid = probability(plain, np.column_stack([G1.ravel(), G2.ravel()])).reshape(G1.shape)
+# --- the data alone: the slide's classifier answers "normal" everywhere, so no boundary ---
 shown = slice(0, 5000)
 normal, anomaly = labels_train[shown] == 0, labels_train[shown] == 1
 print(f"scatter plot: the first 5000 training points, {int(anomaly.sum())} of them anomalies")
 
-fig, ax = P.panels(figsize=(2.7, 2.6))
-ax.plot(*points_train[shown][normal].T, ".", color=P.BLUE, ms=1.6, alpha=0.5, rasterized=True)
-ax.plot(*points_train[shown][anomaly].T, "o", color=P.ORANGE, ms=3.2, mec="white", mew=0.3)
-ax.contour(G1, G2, p_grid, levels=[0.5], colors=P.INK, linewidths=1.2)
-ax.plot([], [], color=P.INK, lw=1.2, label="$p(x;w)=1/2$")
-P.label(ax, "$x_1$", "$x_2$", xlim=(-3.6, 6.2), ylim=(-3.6, 6.2), equal=True, xticks=[-2, 0, 2, 4, 6],
-        yticks=[-2, 0, 2, 4, 6], legend=dict(fontsize=7, loc="lower right", handlelength=1.8))
+# Drawn at about its size on the slide (a column of 0.42 \textwidth, 45 mm), so the legend's text matches.
+fig, ax = P.panels(figsize=(1.85, 1.85))
+ax.plot(*points_train[shown][normal].T, ".", color=P.BLUE, ms=1.4, alpha=0.5, rasterized=True)
+ax.plot(*points_train[shown][anomaly].T, "o", color=P.ORANGE, ms=2.8, mec="white", mew=0.3)
+ax.plot([], [], "o", color=P.BLUE, ms=3.5, alpha=0.7, label="normal")      # legend handles, larger than the dots
+ax.plot([], [], "o", color=P.ORANGE, ms=3.5, mec="white", mew=0.3, label="anomaly")
+# The slide reads the two coordinates as two sensors of an aircraft engine; the data stay synthetic,
+# hence no ticks and no units.
+P.label(ax, "vibration", "temperature", xlim=(-3.6, 6.2), ylim=(-3.6, 6.2), equal=True, ticks=False,
+        legend=dict(fontsize=7, loc="lower right", handletextpad=0.2, borderpad=0.4))
+ax.xaxis.label.set_size(8)
+ax.yaxis.label.set_size(8)
 C.save(fig, "rare_event_data")
 
 

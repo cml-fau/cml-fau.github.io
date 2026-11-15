@@ -59,7 +59,7 @@
 \newcommand{\N}{\mathbb{N}}
 \newcommand{\E}{\mathbb{E}}
 \newcommand{\Prob}{\mathbb{P}}
-\newcommand{\Risk}{\mathcal{R}}    % the population risk; the empirical risk is F
+\newcommand{\Risk}{\mathcal{R}}    % the population risk; the empirical risk is J
 \newcommand{\Gram}{\mathcal{G}}
 \newcommand{\ctrl}[1]{\textcolor{ctrl}{#1}}
 % \sliderow{k} at the start of a table row shades the row on overlay k only.
@@ -81,6 +81,10 @@
   left=4pt, right=4pt, top=2pt, bottom=2pt,
   title=\textbf{#2}, fonttitle=\small, coltitle=white, colbacktitle=boxframe,
   halign=left, #1}
+% assumptions get their own colour: \begin{mathbox}[assumption]{...}
+\definecolor{asmbg}{RGB}{245,240,251}
+\definecolor{asmframe}{RGB}{125,90,165}
+\tcbset{assumption/.style={colback=asmbg, colframe=asmframe, colbacktitle=asmframe}}
 
 % --- The four steps of the lecture ------------------------------------------
 % \loopdiagram{k} draws the loop with step k highlighted: 1 data, 2 architecture, 3 loss,
@@ -289,6 +293,17 @@
   year      = {2017}
 }
 
+@article{rosenblatt1958,
+  author  = {Rosenblatt, Frank},
+  title   = {The Perceptron: A Probabilistic Model for Information Storage and Organization in the Brain},
+  journal = {Psychological Review},
+  volume  = {65},
+  number  = {6},
+  pages   = {386--408},
+  year    = {1958},
+  doi     = {10.1037/h0042519}
+}
+
 @book{minsky1969,
   author    = {Minsky, Marvin and Papert, Seymour},
   title     = {Perceptrons: An Introduction to Computational Geometry},
@@ -347,6 +362,24 @@
   doi       = {10.1109/SFCS.1985.49}
 }
 
+@mastersthesis{hochreiter1991,
+  author = {Hochreiter, Sepp},
+  title  = {Untersuchungen zu dynamischen neuronalen {N}etzen},
+  school = {Technische Universit{\"a}t M{\"u}nchen},
+  type   = {Diploma thesis},
+  year   = {1991}
+}
+
+@inproceedings{glorot2010,
+  author    = {Glorot, Xavier and Bengio, Yoshua},
+  title     = {Understanding the Difficulty of Training Deep Feedforward Neural Networks},
+  booktitle = {Proceedings of the 13th International Conference on Artificial Intelligence and Statistics (AISTATS)},
+  series    = {Proceedings of Machine Learning Research},
+  volume    = {9},
+  pages     = {249--256},
+  year      = {2010}
+}
+
 @incollection{rumelhart1986pdp,
   author    = {Rumelhart, David E. and Hinton, Geoffrey E. and Williams, Ronald J.},
   title     = {Learning Internal Representations by Error Propagation},
@@ -384,6 +417,28 @@
   pages   = {73--101},
   year    = {1964},
   doi     = {10.1214/aoms/1177703732}
+}
+
+@article{hoerl1970,
+  author  = {Hoerl, Arthur E. and Kennard, Robert W.},
+  title   = {Ridge Regression: Biased Estimation for Nonorthogonal Problems},
+  journal = {Technometrics},
+  volume  = {12},
+  number  = {1},
+  pages   = {55--67},
+  year    = {1970},
+  doi     = {10.1080/00401706.1970.10488634}
+}
+
+@article{tibshirani1996,
+  author  = {Tibshirani, Robert},
+  title   = {Regression Shrinkage and Selection via the Lasso},
+  journal = {Journal of the Royal Statistical Society: Series B},
+  volume  = {58},
+  number  = {1},
+  pages   = {267--288},
+  year    = {1996},
+  doi     = {10.1111/j.2517-6161.1996.tb02080.x}
 }
 
 @book{bishop2006,
@@ -475,12 +530,49 @@
   doi     = {10.1137/16M1080173}
 }
 
+@article{polyak1964,
+  author  = {Polyak, Boris T.},
+  title   = {Some Methods of Speeding up the Convergence of Iteration Methods},
+  journal = {USSR Computational Mathematics and Mathematical Physics},
+  volume  = {4},
+  number  = {5},
+  pages   = {1--17},
+  year    = {1964},
+  doi     = {10.1016/0041-5553(64)90137-5}
+}
+
+@article{nesterov1983,
+  author  = {Nesterov, Yurii E.},
+  title   = {A Method for Solving the Convex Programming Problem with Convergence Rate {$O(1/k^2)$}},
+  journal = {Doklady Akademii Nauk SSSR},
+  volume  = {269},
+  number  = {3},
+  pages   = {543--547},
+  year    = {1983}
+}
+
+@inproceedings{kingma2015,
+  author    = {Kingma, Diederik P. and Ba, Jimmy},
+  title     = {Adam: A Method for Stochastic Optimization},
+  booktitle = {International Conference on Learning Representations (ICLR)},
+  year      = {2015},
+  note      = {arXiv:1412.6980}
+}
+
 @inproceedings{loshchilov2017,
   author    = {Loshchilov, Ilya and Hutter, Frank},
   title     = {{SGDR}: Stochastic Gradient Descent with Warm Restarts},
   booktitle = {International Conference on Learning Representations (ICLR)},
   year      = {2017},
   note      = {arXiv:1608.03983}
+}
+
+@inproceedings{loshchilov2019,
+  author    = {Loshchilov, Ilya and Hutter, Frank},
+  title     = {Decoupled Weight Decay Regularization},
+  booktitle = {International Conference on Learning Representations (ICLR)},
+  year      = {2019},
+  note      = {arXiv:1711.05101}
 }
 
 @inproceedings{smith2018,
@@ -496,6 +588,20 @@
   title  = {Accurate, Large Minibatch {SGD}: Training {ImageNet} in 1 Hour},
   year   = {2017},
   note   = {arXiv:1706.02677}
+}
+
+@misc{mccandlish2018,
+  author = {McCandlish, Sam and Kaplan, Jared and Amodei, Dario and {OpenAI Dota Team}},
+  title  = {An Empirical Model of Large-Batch Training},
+  year   = {2018},
+  note   = {arXiv:1812.06162}
+}
+
+@misc{berner2019,
+  author = {Berner, Christopher and Brockman, Greg and Chan, Brooke and Cheung, Vicki and D{\k{e}}biak, Przemys{\l}aw and Dennison, Christy and others},
+  title  = {Dota 2 with Large Scale Deep Reinforcement Learning},
+  year   = {2019},
+  note   = {arXiv:1912.06680}
 }
 
 @inproceedings{devlin2019,
@@ -528,6 +634,44 @@
   booktitle = {International Conference on Learning Representations (ICLR)},
   year      = {2017},
   note      = {arXiv:1611.03530}
+}
+@inproceedings{peebles2023,
+  author    = {Peebles, William and Xie, Saining},
+  title     = {Scalable Diffusion Models with Transformers},
+  booktitle = {IEEE/CVF International Conference on Computer Vision (ICCV)},
+  year      = {2023},
+  note      = {arXiv:2212.09748}
+}
+@misc{kimi2025,
+  author = {{Kimi Team}},
+  title  = {Kimi {K2}: Open Agentic Intelligence},
+  year   = {2025},
+  note   = {arXiv:2507.20534}
+}
+@misc{deepseek2026,
+  author = {{DeepSeek-AI}},
+  title  = {{DeepSeek-V4}: Towards Highly Efficient Million-Token Context Intelligence},
+  year   = {2026},
+  note   = {arXiv:2606.19348}
+}
+@misc{deepseek2024,
+  author = {{DeepSeek-AI}},
+  title  = {{DeepSeek-V3} Technical Report},
+  year   = {2024},
+  note   = {arXiv:2412.19437}
+}
+@misc{silver2017,
+  author = {Silver, David and Hubert, Thomas and Schrittwieser, Julian and Antonoglou, Ioannis and Lai, Matthew and Guez, Arthur and others},
+  title  = {Mastering Chess and Shogi by Self-Play with a General Reinforcement Learning Algorithm},
+  year   = {2017},
+  note   = {arXiv:1712.01815}
+}
+@misc{compvis2022,
+  author       = {{CompVis}},
+  title        = {Stable Diffusion v1-4 Model Card},
+  year         = {2022},
+  howpublished = {Hugging Face},
+  url          = {https://huggingface.co/CompVis/stable-diffusion-v1-4}
 }
 
 @article{belkin2019,
@@ -583,6 +727,39 @@
   howpublished = {Essay, 13 March},
   year         = {2019},
   url          = {http://www.incompleteideas.net/IncIdeas/BitterLesson.html}
+}
+
+@misc{fog2025,
+  author       = {Fog, Agner},
+  title        = {Instruction Tables: Lists of Instruction Latencies, Throughputs and Micro-Operation Breakdowns for {Intel}, {AMD} and {VIA} {CPUs}},
+  howpublished = {Technical University of Denmark},
+  note         = {Last updated 20 September 2025},
+  year         = {2025},
+  url          = {https://www.agner.org/optimize/instruction_tables.pdf}
+}
+
+@misc{nvidiacuda,
+  author       = {{NVIDIA}},
+  title        = {{CUDA C++} Programming Guide},
+  howpublished = {Section ``Arithmetic Instructions''},
+  year         = {2025},
+  url          = {https://docs.nvidia.com/cuda/cuda-c-programming-guide/}
+}
+
+@misc{nvidiah100,
+  author       = {{NVIDIA}},
+  title        = {{NVIDIA H100} Tensor Core {GPU}},
+  howpublished = {Datasheet},
+  year         = {2023},
+  url          = {https://www.nvidia.com/en-us/data-center/h100/}
+}
+
+@misc{altman2025,
+  author       = {Altman, Sam},
+  title        = {``we will cross well over 1 million {GPUs} brought online by the end of this year!''},
+  howpublished = {Post on X, 20 July},
+  year         = {2025},
+  url          = {https://x.com/sama/status/1947057625780396512}
 }
 
 @inproceedings{cohen2021,
@@ -729,7 +906,7 @@ Training a model means computing, approximately,
 \setlength{\tabcolsep}{1mm}
 \renewcommand{\arraystretch}{1.3}
 \begin{tabular}{@{}*{4}{>{\centering\arraybackslash}p{2.42cm}}@{}}
-what the model sees & what it assumes & what an error is & how $w$ is found
+what the model sees & what it assumes & what it learns & how $w$ is found
 \end{tabular}
 \end{center}
 
@@ -758,73 +935,6 @@ what the model sees & what it assumes & what an error is & how $w$ is found
 
 
 \centerline{\includegraphics{representation_examples.pdf}}   % drawn at its size on the slide, 120 mm
-\end{frame}
-
-
-% =========================================================================
-
-
-
-% =========================================================================
-\begin{frame}{Example: Text for a language model}
-% The values of p_t (d = 8, t = 0..5) are computed below with the formula on the right;
-% figures/part1_representations.py prints them.  The entries of e_{i_t} are learned: drawn
-% here as random numbers in [-1, 1], from a fixed seed.  Both use one colour scale.
-\definecolor{posneg}{HTML}{2A78D6}
-\begin{columns}[c]
-\begin{column}{0.57\textwidth}
-\centering
-\begin{tikzpicture}[x=0.95cm, y=1cm, >=Stealth, font=\footnotesize,
-    tok/.style={draw=boxframe, fill=boxbg, rounded corners=1pt, minimum height=4.6mm, minimum width=8.2mm,
-                inner sep=1pt, font=\ttfamily\footnotesize},
-    cell/.style={minimum width=3.4mm, minimum height=2.4mm, inner sep=0pt, line width=0.3pt},
-    lab/.style={anchor=east, inner sep=1pt}]
-  \node[font=\ttfamily\small] (text) at (2.5,0) {The dog bites the man.};
-  \pgfmathsetseed{2026}
-  \foreach \t/\w in {0/The, 1/dog, 2/bites, 3/the, 4/man, 5/.} {
-    \node[tok] (t\t) at (\t,-0.85) {\strut\w};
-    \draw[->, black!45] (text.south) -- (t\t.north);
-    \draw[->, black!45] (t\t.south) -- (\t,-1.32);
-    \foreach \k in {0,...,7} {
-      % e_{i_t}: a random entry in [-1, 1]
-      \pgfmathsetmacro\v{rand}
-      \pgfmathtruncatemacro\pct{round(100*abs(\v))}
-      \pgfmathtruncatemacro\isneg{\v<0}
-      \ifnum\isneg=1 \def\pc{posneg}\else\def\pc{ctrl}\fi
-      \node[cell, draw=black!30, fill=\pc!\pct!white] at (\t,-1.5-0.24*\k) {};
-      % p_t: sin and cos of omega_j t, omega_j = 10000^(-2j/d), in neighbouring coordinates
-      \pgfmathsetmacro\angle{10000^(-2*floor(\k/2)/8)*\t}
-      \pgfmathsetmacro\v{mod(\k,2)==0 ? sin(\angle r) : cos(\angle r)}
-      \pgfmathtruncatemacro\pct{round(100*abs(\v))}
-      \pgfmathtruncatemacro\isneg{\v<0}
-      \ifnum\isneg=1 \def\pc{posneg}\else\def\pc{ctrl}\fi
-      \node[cell, draw=black!30, fill=\pc!\pct!white] at (\t,-3.82-0.24*\k) {};
-    }
-    \node at (\t,-3.47) {$+$};
-  }
-  \node[lab] at (-0.55,-0.85) {$i_t$};
-  \node[lab] at (-0.55,-2.34) {$e_{i_t}$};
-  \node[lab] at (-0.55,-4.66) {$\ctrl{p_t}$};
-\end{tikzpicture}
-\end{column}
-\begin{column}{0.41\textwidth}
-\small
-\begin{align*}
-x_t&=e_{i_t}+\ctrl{p_t}\\
-\ctrl{p_t}&=\big(\sin\omega_jt,\ \cos\omega_jt\big)_{j<d/2}\\
-\omega_j&=10000^{-2j/d}
-\end{align*}
-
-\scriptsize
-Drawn: $d=8$. One learned vector $e_i\in\R^d$ per token of the vocabulary. 
-
-\medskip
-GPT-3: $V=50\,257$ tokens, $d=12\,288$ \citep{brown2020}.
-
-% \medskip
-% Without \ctrl{$p_t$}, \texttt{The man bites the dog.} gives the same vectors: the model would not see the \alert{order} \citep{vaswani2017}.
-\end{column}
-\end{columns}
 \end{frame}
 
 
@@ -858,13 +968,13 @@ Given $x\in\R^n$, a representation is a map $\varphi:\R^n\to\R^m$. Three choices
 \begin{frame}{Example: change of coordinates}
 % Top: figures/part1_representations.py, two rings, one linear classifier in Cartesian and in polar coordinates.
 % Bottom: figures/part1_normalization.py, 1000 samples of a skewed Gaussian in R^2, drawn to scale;
-% the dashed box is the mean +- one standard deviation per coordinate.
+% the cross marks the mean.
 \small
 \begin{columns}[c, onlytextwidth]
 \begin{column}{0.75\textwidth}
 \includegraphics{rings_coordinates.pdf}
 \end{column}
-\begin{column}{0.25\textwidth}
+\begin{column}{0.26\textwidth}
 \alert{Polar:} $\varphi(x)=(r,\theta)$.
 
 \smallskip
@@ -877,7 +987,7 @@ Same points, same linear classifier.
 \begin{column}{0.75\textwidth}
 \includegraphics{normalization.pdf}
 \end{column}
-\begin{column}{0.25\textwidth}
+\begin{column}{0.27\textwidth}
 \alert{Standardized:} $z_j=(x_j-\bar x_j)/s_j$.
 
 \smallskip
@@ -886,6 +996,29 @@ Each coordinate has mean $0$ and standard deviation $1$.
 \end{columns}
 \end{frame}
 
+
+% =========================================================================
+\begin{frame}{Example: principal components}
+% figures/part1_mnist.py: the baseline of lecture 02 trained on the first m principal components.
+% Both figures are drawn at their size on the slide.
+\centerline{\includegraphics{mnist_pca_digits.pdf}}
+
+\medskip
+\begin{columns}[c, onlytextwidth]
+\begin{column}{0.49\textwidth}
+\small
+\alert{Principal components} $\varphi\colon\R^{784}\to\R^m$:
+\[
+\varphi(x)=U^\top(x-\bar x),
+\]
+where the columns of $U\in\R^{784\times m}$ are the orthonormal eigenvectors of the covariance with the $m$ largest eigenvalues; $\bar x$ is the mean image.
+
+\end{column}
+\begin{column}{0.51\textwidth}
+\includegraphics{mnist_pca_accuracy.pdf}
+\end{column}
+\end{columns}
+\end{frame}
 
 
 % =========================================================================
@@ -909,49 +1042,15 @@ The input is $(x,t)$ or
 \end{frame}
 
 
-% =========================================================================
-\begin{frame}{Example: principal components}
-% figures/part1_mnist.py: the baseline of lecture 02 trained on the first k principal components.
-\centerline{\includegraphics{mnist_pca.pdf}}   % drawn at its size on the slide
-
-% \medskip
-% \small
-% \alert{Principal components:} the coordinates of an image along the $k$ orthogonal directions of largest variance. On $64$ of them the baseline reaches $94.05\%$, against $94.00\%$ on the $784$ pixels.
-\end{frame}
 
 
-% =========================================================================
-\begin{frame}{Designed or learned?}
-\vspace{1.5mm}
-\centerline{\includegraphics[width=0.95\textwidth]{mnist_directions.pdf}}
-
-\footnotesize
-The network of lecture 02 is a \alert{linear} classifier on a \alert{learned} representation $\psi$:
-\[
-f(x;w)=W_3\,\psi(x)+b_3,\qquad\psi(x)=\sigma\big(W_2\,\sigma(W_1x+b_1)+b_2\big)\in\R^{16}.
-\]
-The same linear classifier on 16 numbers reaches $84.9\%$ on 16 principal components and $94.0\%$ on the 16 learned features $\psi(x)$. On all $784$ pixels it reaches $92.5\%$.
-
-\smallskip
-\renewcommand{\arraystretch}{1.2}
-\begin{tabularx}{\textwidth}{@{}>{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}X@{}}
-\toprule
-\textbf{Designed:} $(\cos q,\sin q)$ for an angle, $(q,\dot q)$ for an oscillation, Fourier features, spectrograms, principal components & \textbf{Learned:} the embedding matrix $E$, the projection of the patches, the hidden layers of a network \\
-\midrule
-knowledge enters before training; little or nothing to fit; the same for every task & found by the optimizer; needs data; adapted to the task; hard to read \\
-\bottomrule
-\end{tabularx}
-
-\smallskip
-\alert{Which representations can be learned is decided by the next box: the architecture.}
-\end{frame}
 
 
 % #########################################################################
 % PART 2: ARCHITECTURE
 % #########################################################################
 
-% Part 2: architecture.  Figures and numbers: figures/part2_depth.py, figures/part2_symmetry.py and figures/part2_mnist.py.
+% Part 2: architecture.  Figures and numbers: figures/part2_depth.py, figures/part2_symmetry.py, figures/part2_mnist.py and figures/part2_gradients.py.
 
 % =========================================================================
 \section{Architecture}
@@ -974,6 +1073,24 @@ knowledge enters before training; little or nothing to fit; the same for every t
  & $a_{ij}(x)=\softmax_j\big(\langle Qx_i,Kx_j\rangle/\sqrt d\big)$ & \\
 \bottomrule
 \end{tabularx}
+
+% Timeline of the six layers, in the style of lecture 01: evenly spaced, not to scale.
+\bigskip
+\centering
+\begin{tikzpicture}[x=1.5cm, y=1cm, every node/.style={font=\scriptsize}]
+  \draw[gray, line width=0.8pt] (-0.4,0) -- (5.4,0);
+  \foreach \x/\yr/\txt/\anc/\dy in {
+     0/1958/{\alert{Perceptron}\\Rosenblatt~\citep{rosenblatt1958}}/south/0.18,
+     1/1989/{\alert{CNN}\\LeCun et~al.~\citep{lecun1989}}/north/-0.18,
+     2/1990/{\alert{RNN}\\Elman~\citep{elman1990}}/south/0.18,
+     3/2016/{\alert{ResNet}\\He et~al.~\citep{he2016}}/north/-0.18,
+     4/2017/{\alert{GNN}\\Gilmer et~al.~\citep{gilmer2017}}/south/0.18,
+     5/2017/{\alert{Transformer}\\Vaswani et~al.~\citep{vaswani2017}}/north/-0.18}
+  {
+    \fill[boxframe] (\x,0) circle (2pt);
+    \node[anchor=\anc, align=center, text width=2.5cm] at (\x,\dy) {\textbf{\yr}\\\txt};
+  }
+\end{tikzpicture}
 
 % \smallskip
 % \raggedright
@@ -1010,6 +1127,143 @@ x = torch.relu(layer(x))
 \end{lstlisting}
 \end{onlyenv}
 
+% Step 2 shows the payoff; the code of the CNN comes in the second copy of this frame, after the
+% history slide.  The CNN is the c = 8 network of figures/part2_mnist.py.
+\begin{onlyenv}<2>
+\begin{columns}[c]
+\begin{column}{0.48\textwidth}
+\centering
+\includegraphics[height=4.5cm]{mnist_cnn.pdf}
+\end{column}
+\begin{column}{0.5\textwidth}
+\raggedright
+\alert{On MNIST:} a convolutional network with $5\,994$ parameters reaches $1.3\%$ test error; a fully connected one with $118\,282$ parameters, $2.2\%$.
+\end{column}
+\end{columns}
+\end{onlyenv}
+\end{frame}
+
+
+% =========================================================================
+% The four images: figures/part2_symmetry.py (the "2" of part 1 on a periodic 20 x 20 grid,
+% shifted by 5 rows and 6 columns; k is the Laplacian stencil).  The two squares have the
+% same geometry, so their rows line up.
+\tikzset{
+  cdsquare/.style={x=1mm, y=1mm, >=Stealth, font=\footnotesize},
+  cdcorner/.style={inner sep=0pt},
+  cdlabel/.style={font=\footnotesize, inner sep=1.5pt, text height=1.7ex, text depth=0.5ex},  % one height: the rows line up
+}
+\begin{frame}{Invariance and equivariance}
+\begin{columns}[t]
+\begin{column}{0.5\textwidth}
+\begin{mathbox}[halign=center, equal height group=symmetry]{Equivariance}
+$f\colon\R^n\to\R^n$\\
+$f(Tx)=T\,f(x)$ for every shift $T$
+\end{mathbox}
+\centering
+\begin{tikzpicture}[cdsquare]
+  \node[cdcorner] (x)   at (0,0)    {\includegraphics{symmetry_x.pdf}};
+  \node[cdcorner] (kx)  at (30,0)   {\includegraphics{symmetry_kx.pdf}};
+  \node[cdcorner] (Tx)  at (0,-23)  {\includegraphics{symmetry_Tx.pdf}};
+  \node[cdcorner] (kTx) at (30,-23) {\includegraphics{symmetry_kTx.pdf}};
+  \draw[->] ([xshift=1mm]x.east)  -- node[above] {$k\star$} ([xshift=-1mm]kx.west);
+  \draw[->] ([xshift=1mm]Tx.east) -- node[below] {$k\star$} ([xshift=-1mm]kTx.west);
+  \draw[->] ([yshift=-1mm]x.south)  -- node[left]  {$T$} ([yshift=1mm]Tx.north);
+  \draw[->] ([yshift=-1mm]kx.south) -- node[right] {$T$} ([yshift=1mm]kTx.north);
+  \node[cdlabel, above] at (x.north)   {$x$};
+  \node[cdlabel, above] at (kx.north)  {$k\star x$};
+  \node[cdlabel, below] at (Tx.south)  {$Tx$};
+  \node[cdlabel, below] at (kTx.south) {$k\star Tx=T(k\star x)$};
+\end{tikzpicture}
+\end{column}
+\begin{column}{0.5\textwidth}
+\begin{mathbox}[halign=center, equal height group=symmetry]{Invariance}
+$f\colon\R^n\to\{0,\dots,9\}$\\
+$f(Tx)=f(x)$ for every shift $T$
+\end{mathbox}
+\centering
+\begin{tikzpicture}[cdsquare]
+  \node[cdcorner] (x)   at (0,0)    {\includegraphics{symmetry_x.pdf}};
+  \node[cdcorner] (Tx)  at (0,-23)  {\includegraphics{symmetry_Tx.pdf}};
+  \path (30,0) node[cdcorner, minimum size=14mm] (fx) {}  (30,-23) node[cdcorner, minimum size=14mm] (fTx) {};
+  \node[draw=boxframe, fill=boxbg, rounded corners=1pt, minimum size=8mm, font=\Large] (two)  at (fx)  {$2$};
+  \node[draw=boxframe, fill=boxbg, rounded corners=1pt, minimum size=8mm, font=\Large] (two') at (fTx) {$2$};
+  \draw[->] ([xshift=1mm]x.east)  -- node[above] {$f$} ([xshift=-1mm]two.west);
+  \draw[->] ([xshift=1mm]Tx.east) -- node[below] {$f$} ([xshift=-1mm]two'.west);
+  \draw[->] ([yshift=-1mm]x.south)  -- node[left]  {$T$} ([yshift=1mm]Tx.north);
+  \draw[double equal sign distance] ([yshift=-1mm]fx.south) -- ([yshift=1mm]fTx.north);
+  \node[cdlabel, above] at (x.north)   {$x$};
+  \node[cdlabel, above] at (fx.north)  {$f(x)$};
+  \node[cdlabel, below] at (Tx.south)  {$Tx$};
+  \node[cdlabel, below] at (fTx.south) {$f(Tx)=f(x)$};
+\end{tikzpicture}
+\end{column}
+\end{columns}
+\end{frame}
+
+
+% =========================================================================
+% The two pictures are not ours: see images/SOURCES.md, part 2.  Waibel's time-delay network
+% (1987, a convolution in time) and Zhang et al. (1988) were trained by backpropagation
+% before 1989, hence no "first" on the slide.
+\begin{frame}{Convolutional networks: where they come from}
+\footnotesize
+\begin{columns}[T]
+\begin{column}{0.58\textwidth}
+\centering
+\includegraphics[height=3cm]{hubel_wiesel_cat.png}
+
+\smallskip
+\raggedright
+\alert{The visual cortex}. Hubel and Wiesel, 1962 \citep{hubel1962}: a neuron in the visual cortex of a cat fires for a bar of light at one orientation even if it is moved. Nobel prize, 1981.
+
+\medskip
+\begin{mathbox}[notitle]{}
+Every linear and translation-equivariant map $F:\mathbb{R}^n\to\mathbb{R}^n$ is a convolution.
+\[
+F(x):=(K\ast x)(t)=\int K(s-t)x(t)\,dt,
+\]
+we need to learn $K$.
+\end{mathbox}
+
+\end{column}
+\begin{column}{0.4\textwidth}
+\centering
+\href{https://www.youtube.com/watch?v=FwFduRA_L6Q}{\includegraphics[height=5cm]{lecun_1993.jpg}}\par
+{\scriptsize\href{https://www.youtube.com/watch?v=FwFduRA_L6Q}{$\blacktriangleright$\ Demo, 1993}\par}
+
+\smallskip
+\raggedright
+\alert{Backpropagation}. LeCun et~al., 1989 \citep{lecun1989}: a convolutional network trained on handwritten zip-code digits. Turing award to LeCun, 2018.
+\end{column}
+\end{columns}
+
+
+\end{frame}
+
+
+% =========================================================================
+% The same frame, steps 2 to 6, after the history of the CNN: <2-> keeps the slide numbers, so
+% \sliderow still matches.  Step 2 repeats the CNN row, now with its code.
+\begin{frame}<2->[fragile,t]{Six layers, and what they assume}
+\footnotesize
+\renewcommand{\arraystretch}{1.0}
+\lstset{aboveskip=3pt, belowskip=3pt}  % three listings per step
+\begin{tabularx}{\textwidth}{@{}l l >{\raggedright\arraybackslash}X@{}}
+\toprule
+ & \textbf{One layer} & \textbf{Symmetry} \\
+\midrule
+\sliderow{1}\alert{MLP} & $x\leftarrow\sigma(Wx+b)$ & — \\
+\sliderow{2}\alert{CNN} & $x\leftarrow\sigma(K\star x+b)$ & translations of a grid \\
+\sliderow{3}\alert{RNN} & $h_{t}=\sigma(W_hh_{t-1}+\ctrl{W_x}x_t+\ctrl{b})$ & translations in time \\
+\sliderow{4}\alert{ResNet} & $x_{t+1}=x_t+h\,\sigma(\ctrl{W_t}x_t+\ctrl{b_t})$ & — \\
+\sliderow{5}\alert{GNN} & $x_i\leftarrow\sigma\big(Ux_i+\sum_{j\sim i}Vx_j\big)$ & permutations of the nodes \\
+\sliderow{6}\alert{Transformer} & $x_i\leftarrow x_i+\sum_ja_{ij}(x)\,Vx_j$ & permutations of the tokens \\
+\sliderow{6} & $a_{ij}(x)=\softmax_j\big(\langle Qx_i,Kx_j\rangle/\sqrt d\big)$ & \\
+\bottomrule
+\end{tabularx}
+
+\smallskip
 \begin{onlyenv}<2>
 \begin{lstlisting}
 x = torch.randn(1, 28, 28)  # 1 channel
@@ -1073,7 +1327,7 @@ x = torch.randn(10, 32)              # 10 tokens in R^32
 attn = nn.MultiheadAttention(32, 4)  # 4 heads
 f = lambda x: x + attn(x, x, x)[0]
 \end{lstlisting}
-\alert{Permutation equivariance:} a GNN on the complete graph, with weights $a_{ij}(x)$. Order enters only through the \alert{positional encoding} of part 1.
+\alert{Permutation equivariance:} a GNN on the complete graph, with weights $a_{ij}(x)$. Order enters only through the \alert{positional encoding} of the next slide.
 \begin{lstlisting}[belowskip=2pt]
 p = torch.randperm(10)  # a permutation
 torch.allclose(f(x[p]), f(x)[p], atol=1e-6)
@@ -1086,65 +1340,71 @@ torch.allclose(f(x[p]), f(x)[p], atol=1e-6)
 
 
 % =========================================================================
-% The four images: figures/part2_symmetry.py (the "2" of part 1 on a periodic 20 x 20 grid,
-% shifted by 5 rows and 6 columns; k is the Laplacian stencil).  The two squares have the
-% same geometry, so their rows line up.
-\tikzset{
-  cdsquare/.style={x=1mm, y=1mm, >=Stealth, font=\footnotesize},
-  cdcorner/.style={inner sep=0pt},
-  cdlabel/.style={font=\footnotesize, inner sep=1.5pt, text height=1.7ex, text depth=0.5ex},  % one height: the rows line up
-}
-\begin{frame}{Invariance and equivariance}
-\begin{columns}[t]
-\begin{column}{0.5\textwidth}
-\begin{mathbox}[halign=center, equal height group=symmetry]{Equivariance}
-$f(Tx)=T\,f(x)$ for every shift $T$
-\end{mathbox}
+\begin{frame}{Transformers: text for a language model}
+% The values of p_t (d = 8, t = 0..5) are computed below with the formula on the right;
+% figures/part1_representations.py prints them.  The entries of e_{i_t} are learned: drawn
+% here as random numbers in [-1, 1], from a fixed seed.  Both use one colour scale.
+\definecolor{posneg}{HTML}{2A78D6}
+\begin{columns}[c]
+\begin{column}{0.57\textwidth}
 \centering
-\begin{tikzpicture}[cdsquare]
-  \node[cdcorner] (x)   at (0,0)    {\includegraphics{symmetry_x.pdf}};
-  \node[cdcorner] (kx)  at (30,0)   {\includegraphics{symmetry_kx.pdf}};
-  \node[cdcorner] (Tx)  at (0,-23)  {\includegraphics{symmetry_Tx.pdf}};
-  \node[cdcorner] (kTx) at (30,-23) {\includegraphics{symmetry_kTx.pdf}};
-  \draw[->] ([xshift=1mm]x.east)  -- node[above] {$k\star$} ([xshift=-1mm]kx.west);
-  \draw[->] ([xshift=1mm]Tx.east) -- node[below] {$k\star$} ([xshift=-1mm]kTx.west);
-  \draw[->] ([yshift=-1mm]x.south)  -- node[left]  {$T$} ([yshift=1mm]Tx.north);
-  \draw[->] ([yshift=-1mm]kx.south) -- node[right] {$T$} ([yshift=1mm]kTx.north);
-  \node[cdlabel, above] at (x.north)   {$x$};
-  \node[cdlabel, above] at (kx.north)  {$k\star x$};
-  \node[cdlabel, below] at (Tx.south)  {$Tx$};
-  \node[cdlabel, below] at (kTx.south) {$k\star Tx=T(k\star x)$};
+\begin{tikzpicture}[x=0.95cm, y=1cm, >=Stealth, font=\footnotesize,
+    tok/.style={draw=boxframe, fill=boxbg, rounded corners=1pt, minimum height=4.6mm, minimum width=8.2mm,
+                inner sep=1pt, font=\ttfamily\footnotesize},
+    cell/.style={minimum width=3.4mm, minimum height=2.4mm, inner sep=0pt, line width=0.3pt},
+    lab/.style={anchor=east, inner sep=1pt}]
+  \node[font=\ttfamily\small] (text) at (2.5,0) {The dog bites the man.};
+  \pgfmathsetseed{2026}
+  \foreach \t/\w in {0/The, 1/dog, 2/bites, 3/the, 4/man, 5/.} {
+    \node[tok] (t\t) at (\t,-0.85) {\strut\w};
+    \draw[->, black!45] (text.south) -- (t\t.north);
+    \draw[->, black!45] (t\t.south) -- (\t,-1.32);
+    \foreach \k in {0,...,7} {
+      % e_{i_t}: a random entry in [-1, 1]
+      \pgfmathsetmacro\v{rand}
+      \pgfmathtruncatemacro\pct{round(100*abs(\v))}
+      \pgfmathtruncatemacro\isneg{\v<0}
+      \ifnum\isneg=1 \def\pc{posneg}\else\def\pc{ctrl}\fi
+      \node[cell, draw=black!30, fill=\pc!\pct!white] at (\t,-1.5-0.24*\k) {};
+      % p_t: sin and cos of omega_j t, omega_j = 10000^(-2j/d), in neighbouring coordinates
+      \pgfmathsetmacro\angle{10000^(-2*floor(\k/2)/8)*\t}
+      \pgfmathsetmacro\v{mod(\k,2)==0 ? sin(\angle r) : cos(\angle r)}
+      \pgfmathtruncatemacro\pct{round(100*abs(\v))}
+      \pgfmathtruncatemacro\isneg{\v<0}
+      \ifnum\isneg=1 \def\pc{posneg}\else\def\pc{ctrl}\fi
+      \node[cell, draw=black!30, fill=\pc!\pct!white] at (\t,-3.82-0.24*\k) {};
+    }
+    \node at (\t,-3.47) {$+$};
+  }
+  \node[lab] at (-0.55,-0.85) {$i_t$};
+  \node[lab] at (-0.55,-2.34) {$e_{i_t}$};
+  \node[lab] at (-0.55,-4.66) {$\ctrl{p_t}$};
 \end{tikzpicture}
 \end{column}
-\begin{column}{0.5\textwidth}
-\begin{mathbox}[halign=center, equal height group=symmetry]{Invariance}
-$f(Tx)=f(x)$ for every shift $T$
-\end{mathbox}
-\centering
-\begin{tikzpicture}[cdsquare]
-  \node[cdcorner] (x)   at (0,0)    {\includegraphics{symmetry_x.pdf}};
-  \node[cdcorner] (Tx)  at (0,-23)  {\includegraphics{symmetry_Tx.pdf}};
-  \path (30,0) node[cdcorner, minimum size=14mm] (fx) {}  (30,-23) node[cdcorner, minimum size=14mm] (fTx) {};
-  \node[draw=boxframe, fill=boxbg, rounded corners=1pt, minimum size=8mm, font=\Large] (two)  at (fx)  {$2$};
-  \node[draw=boxframe, fill=boxbg, rounded corners=1pt, minimum size=8mm, font=\Large] (two') at (fTx) {$2$};
-  \draw[->] ([xshift=1mm]x.east)  -- node[above] {$f$} ([xshift=-1mm]two.west);
-  \draw[->] ([xshift=1mm]Tx.east) -- node[below] {$f$} ([xshift=-1mm]two'.west);
-  \draw[->] ([yshift=-1mm]x.south)  -- node[left]  {$T$} ([yshift=1mm]Tx.north);
-  \draw[->] ([yshift=-1mm]fx.south) -- node[right] {id} ([yshift=1mm]fTx.north);
-  \node[cdlabel, above] at (x.north)   {$x$};
-  \node[cdlabel, above] at (fx.north)  {$f(x)$};
-  \node[cdlabel, below] at (Tx.south)  {$Tx$};
-  \node[cdlabel, below] at (fTx.south) {$f(Tx)=f(x)$};
-\end{tikzpicture}
+\begin{column}{0.41\textwidth}
+\small
+\begin{align*}
+x_t&=e_{i_t}+\ctrl{p_t}\\
+\ctrl{p_t}&=\big(\sin\omega_jt,\ \cos\omega_jt\big)_{j<d/2}\\
+\omega_j&=10000^{-2j/d}
+\end{align*}
+
+\scriptsize
+Drawn: $d=8$. One learned vector $e_i\in\R^d$ per token of the vocabulary.\footnotemark
+
+% \medskip
+% Without \ctrl{$p_t$}, \texttt{The man bites the dog.} gives the same vectors: the model would not see the \alert{order} \citep{vaswani2017}.
 \end{column}
 \end{columns}
+\footnotetext{GPT-3: $V=50\,257$ tokens, $d=12\,288$ \citep{brown2020}.}
 \end{frame}
 
 
+% =========================================================================
 
 
 % =========================================================================
-\begin{frame}{What depth buys: 1 layer limited expressivity}
+\begin{frame}{What depth buys: 1 and 2 layers}
 \small
 We want to learn $(x_1,x_2)\xmapsto{f}x_1\oplus x_2$ (XOR).
 
@@ -1167,7 +1427,7 @@ We want to learn $(x_1,x_2)\xmapsto{f}x_1\oplus x_2$ (XOR).
 
 \medskip
 \begin{mathbox}[halign=flush center]{M.~Minsky and S.~Papert, \emph{Perceptrons}, 1969 \citep{minsky1969}}
-No single neuron $f(x)=\mathbf 1[w_1x_1+w_2x_2\ge b]$ computes XOR.
+No single-layer perceptron $f(x)=\mathbf 1[w_1x_1+w_2x_2\ge b]$ computes XOR.
 \end{mathbox}
 
 \smallskip
@@ -1176,7 +1436,7 @@ Two layers $\sum_j c_j\,\sigma(a_j\cdot x+b_j)$ approximate any continuous $f$.
 \end{mathbox}
 
 \medskip
-\alert{For $n$ bits, $x_1\oplus\dots\oplus x_n$: how many neurons, and how many layers?}
+\alert{Why do we need more layers?}
 \end{frame}
 
 
@@ -1194,19 +1454,28 @@ We want to learn $(x_1,\dots,x_n)\xmapsto{f}x_1\oplus\dots\oplus x_n$ with gates
     bit/.style={circle, fill=black!60, inner sep=0pt, minimum size=1.2mm},
     gate/.style={circle, draw=boxframe, fill=boxbg, inner sep=0pt, minimum size=3mm, font=\tiny},
     top/.style={draw=ctrl, fill=ctrl!15},
-    wire/.style={black!25, line width=0.15pt},
+    lit1/.style={black!75, line width=0.35pt},                             % wire carries x_i
+    lit0/.style={black!40, line width=0.3pt, dash pattern=on 1.5pt off 1pt}, % wire carries \neg x_i
     link/.style={black!55, line width=0.35pt}]
   \foreach \i in {0,...,7} \node[bit] (a\i) at (0,{2.1-0.3*\i}) {};
-  \foreach \j in {0,1,2} \node[gate] (g\j) at (1.6,{2.1-0.45*\j}) {$\wedge$};
-  \node at (1.6,0.65) {$\vdots$};
-  \node[gate] (g3) at (1.6,0) {$\wedge$};
-  \node[gate, top] (or) at (3.2,1.05) {$\vee$};
-  \foreach \i in {0,...,7} \foreach \j in {0,...,3} \draw[wire] (a\i) -- (g\j);
+  \foreach \j in {0,1,2} \node[gate] (g\j) at (1.8,{2.1-0.55*\j}) {$\wedge$};
+  \node at (1.8,0.55) {$\vdots$};
+  \node[gate] (g3) at (1.8,0) {$\wedge$};
+  \node[gate, top] (or) at (3.3,1.05) {$\vee$};
+  % one AND per input with an odd number of ones: x_1\neg x_2..\neg x_n, \neg x_1 x_2..., ...;
+  % dashed wires first, so the solid ones stay on top
+  \foreach \pass in {0,1}
+    \foreach \j/\w in {0/{1,0,0,0,0,0,0,0}, 1/{0,1,0,0,0,0,0,0},
+                       2/{0,0,1,0,0,0,0,0}, 3/{1,1,1,1,1,1,1,0}}
+      \foreach \b [count=\i from 0] in \w
+        {\ifnum\b=\pass \draw[lit\b] (a\i) -- (g\j);\fi}
   \foreach \j in {0,...,3} \draw[link] (g\j) -- (or);
-  \draw[link, ->] (or) -- (3.75,1.05);
+  \draw[link, ->] (or) -- (3.85,1.05);
   \node[left] at (a0.west) {$x_1$};
   \node[left] at (a7.west) {$x_n$};
-  \node at (1.6,-0.4) {$2^{n-1}$ ANDs};
+  \node at (1.8,-0.4) {$2^{n-1}$ ANDs};
+  \draw[lit1] (0.45,-0.8) -- +(0.4,0) node[right, text=black] {$x_i$};
+  \draw[lit0] (1.85,-0.8) -- +(0.4,0) node[right, text=black] {$\neg x_i$};
 \end{tikzpicture}
 
 \end{column}
@@ -1228,95 +1497,17 @@ We want to learn $(x_1,\dots,x_n)\xmapsto{f}x_1\oplus\dots\oplus x_n$ with gates
   \draw[link, ->] (r) -- (3.75,1.05);
   \node[left] at (b0.west) {$x_1$};
   \node[left] at (b7.west) {$x_n$};
-  \node at (1.6,-0.4) {$n-1$ XORs};
+  \node at (1.6,-0.4) {$n-1$ XORs\footnotemark};
 \end{tikzpicture}
-
-\smallskip
-\footnotesize
-XOR $=(x\vee y)\wedge\neg(x\wedge y)$: $4(n-1)$ gates.
 \end{column}
 \end{columns}
-
-\medskip
-\raggedright\footnotesize
-In between, \citet{hastad1986}: depth $d$ needs $\exp(c\,n^{1/(d-1)})$ gates \citep{furst1984,ajtai1983,yao1985}.
-\end{frame}
-
-
-% =========================================================================
-\begin{frame}{What depth buys: neurons and Telgarsky's theorem}
-\small
-\alert{Neurons add:} parity is a function of $s=x_1+\dots+x_n$ alone, a \alert{sawtooth}.
-
-\medskip
-\centering
-\begin{tikzpicture}[x=1cm, y=1cm, font=\scriptsize, >=Stealth,
-    bit/.style={circle, fill=black!60, inner sep=0pt, minimum size=1.2mm},
-    gate/.style={circle, draw=boxframe, fill=boxbg, inner sep=0pt, minimum size=2.8mm},
-    top/.style={draw=ctrl, fill=ctrl!15},
-    wire/.style={black!25, line width=0.15pt},
-    link/.style={black!55, line width=0.35pt}]
-  % k = 3 layers of two ReLU neurons, drawn for n = 8 bits
-  \foreach \i in {0,...,7} \node[bit] (c\i) at (0,{1.05-0.15*\i}) {};
-  \foreach \l in {1,2,3} {
-    \node[gate] (u\l) at ({1.2*\l},0.8) {};
-    \node[gate] (v\l) at ({1.2*\l},0.25) {};
-  }
-  \node[gate, top] (o) at (4.8,0.525) {};
-  \foreach \i in {0,...,7} { \draw[wire] (c\i) -- (u1); \draw[wire] (c\i) -- (v1); }
-  \foreach \l/\m in {1/2,2/3} {
-    \draw[link] (u\l) -- (u\m); \draw[link] (u\l) -- (v\m);
-    \draw[link] (v\l) -- (u\m); \draw[link] (v\l) -- (v\m);
-  }
-  \draw[link] (u3) -- (o); \draw[link] (v3) -- (o);
-  \draw[link, ->] (o) -- (5.35,0.525) node[right, text=black] {parity};
-  \node[left] at (c0.west) {$x_1$};
-  \node[left] at (c7.west) {$x_8$};
-  % what the network has computed after each layer, as a function of s = 0, ..., 8
-  \foreach \l in {1,2,3} \draw[black!35, densely dotted, line width=0.3pt] (u\l.north) -- ({1.2*\l},1.27);
-  \begin{scope}[shift={(0.72,1.33)}, x=0.12cm, y=0.32cm]
-    \draw[black!30, line width=0.2pt] (0,0) -- (8,0);
-    \draw[boxframe, line width=0.6pt] (0,0) -- (4,1) -- (8,0);
-  \end{scope}
-  \begin{scope}[shift={(1.92,1.33)}, x=0.12cm, y=0.32cm]
-    \draw[black!30, line width=0.2pt] (0,0) -- (8,0);
-    \draw[boxframe, line width=0.6pt] (0,0) -- (2,1) -- (4,0) -- (6,1) -- (8,0);
-  \end{scope}
-  \begin{scope}[shift={(3.12,1.33)}, x=0.12cm, y=0.32cm]
-    \draw[black!30, line width=0.2pt] (0,0) -- (8,0);
-    \draw[ctrl, line width=0.6pt] (0,0) -- (1,1) -- (2,0) -- (3,1) -- (4,0) -- (5,1) -- (6,0) -- (7,1) -- (8,0);
-    \foreach \s in {0,2,4,6,8} \fill[ctrl] (\s,0) circle (0.7pt);
-    \foreach \s in {1,3,5,7} \fill[ctrl] (\s,1) circle (0.7pt);
-  \end{scope}
-  \node at (1.2,1.83) {$T$};
-  \node at (2.4,1.83) {$T^{\circ2}$};
-  \node[text=ctrl] at (3.6,1.83) {$T^{\circ3}$};
-  \node[left] at (0.6,1.5) {in $s$:};
-\end{tikzpicture}
-
-\raggedright
-\footnotesize
-\begin{columns}[T]
-\begin{column}{0.48\textwidth}
-\alert{One layer:} $n$ neurons $\mathbf 1[s\ge j]$, signs $+,-,+,\dots$ For $n=20$: $20$ neurons.
-\end{column}
-\begin{column}{0.52\textwidth}
-\alert{$k$ layers of two}, $2^k\ge n$: $T^{\circ k}(s/2^k)$, $T(t)=2\sigma(t)-4\sigma(t-\tfrac12)$ \citep{telgarsky2015}. For $n=20$: $10$ neurons.
-\end{column}
-\end{columns}
-
-\smallskip
-\begin{mathbox}{Theorem of \citet{telgarsky2016}: no shallow network comes close}
-For every $k\ge1$ the sawtooth $f(x)=T^{\circ(k^3+4)}(x_1)$, a ReLU network with $2k^3+8$ layers and $3k^3+12$ nodes, satisfies $\int_{[0,1]^d}|f-g|\,dx\ge\tfrac1{64}$ for every ReLU network $g$ with at most $k$ layers and at most $2^k$ nodes.
-\end{mathbox}
-\scriptsize
-\alert{Why:} with $k$ layers and $m$ nodes, $g$ crosses $\tfrac12$ at most $2(2m/k)^k$ times; $f$ crosses it $2^{k^3+4}$ times. Layers enter the exponent, nodes only the base.
+\footnotetext{XOR $=(x\vee y)\wedge\neg(x\wedge y)$: $4(n-1)$ gates.}
 \end{frame}
 
 
 % =========================================================================
 \begin{frame}{Digits: how many layers?}
-\footnotesize
+\small
 $L$ hidden layers of width 64. \alert{Too few or too many: both hurt.}
 
 \medskip
@@ -1326,67 +1517,88 @@ $L$ hidden layers of width 64. \alert{Too few or too many: both hurt.}
 
 
 % =========================================================================
-% The two pictures are not ours: see images/SOURCES.md, part 2.  Waibel's time-delay network
-% (1987, a convolution in time) and Zhang et al. (1988) were trained by backpropagation
-% before 1989, hence no "first" on the slide.
-\begin{frame}{Convolutional networks: where they come from}
-\footnotesize
-\begin{columns}[T]
-\begin{column}{0.58\textwidth}
-\centering
-\includegraphics[height=3cm]{hubel_wiesel_cat.png}
 
-\smallskip
-\raggedright
-\alert{The visual cortex} \citep{hubel1959,hubel1962}. A neuron in the visual cortex of a cat fires for a bar of light at one place and one orientation: its \alert{receptive field}. Cells of the same kind tile the visual field. Nobel prize, 1981.
-\end{column}
-\begin{column}{0.4\textwidth}
-\centering
-\includegraphics[height=3.5cm]{lecun_1993.jpg}
-
-\smallskip
-\raggedright
-\alert{Backpropagation} \citep{lecun1989}. LeCun et~al.\ train a convolutional network handwritten zip-code digits. Nobel prize, 2018.
-\end{column}
-\end{columns}
-
-\medskip
-\begin{mathbox}{Convolutions are the translation-equivariant linear maps}
-Every linear, translation-equivariant map $F$ is a convolution.
+\begin{frame}{Why too deep hurts: vanishing gradients}
+Five layers $A_k(x)=W_kx+b_k$:
 \[
-F(x)=\int K(s-t)x(t)\,dt,\qquad\text{we need to learn }K.
+\begin{aligned}
+f&=A_5\circ\sigma\circ A_4\circ\sigma\circ\cdots\circ\sigma\circ A_1,\\
+\partial_xf(x)&=JA_5\,J\sigma\,JA_4\,J\sigma\cdots J\sigma\,JA_1
+\end{aligned}
 \]
-\end{mathbox}
+where $\sigma'\le\tfrac14$, ReLU: $\sigma'\in\{0,1\}$.
+
+\smallskip
+\vspace{1em}
+\centering
+\includegraphics[width=\textwidth]{mnist_gradients.pdf}
+
 \end{frame}
 
 
 % =========================================================================
-\begin{frame}[fragile]{Digits: a convolutional network}
-\footnotesize
-\begin{columns}[c]
-\begin{column}{0.55\textwidth}
-\begin{lstlisting}
-cnn = nn.Sequential(
-  nn.Unflatten(1, (1, 28, 28)),   # 1x28x28
-  nn.Conv2d(1, 8, 5), nn.ReLU(),  # 8x24x24
-  nn.MaxPool2d(2),                # 8x12x12
-  nn.Conv2d(8, 16, 5), nn.ReLU(), # 16x8x8
-  nn.MaxPool2d(2), nn.Flatten(),  # 256
-  nn.Linear(256, 10))             # 10 scores
-\end{lstlisting}
-A small LeNet \citep{lecun1998}, trained like the baseline. Plot: $2$, $4$, $8$ channels in the first convolution (8 above).
+\begin{frame}{How many parameters, how many data?}
+\centering
+\includegraphics[width=\textwidth]{parameters_vs_data.pdf}
 
-\medskip
-\alert{$5\,994$ parameters: $1.3\%$} test error. Baseline: $13\,002$, $6.0\%$.
-\end{column}
-\begin{column}{0.45\textwidth}
-\includegraphics[width=\textwidth]{mnist_cnn.pdf}
-\end{column}
-\end{columns}
-
-\medskip
-\centering\alert{An architecture is an assumption on the data.}
+\raggedright\scriptsize $N$: images or tokens. For the mixtures of experts (Kimi, DeepSeek), $P$ counts all experts. Counts from \citep{brown2020,deepseek2026,devlin2019,dosovitskiy2021,he2016,hoffmann2022,kimi2025,krizhevsky2012,lecun1998,peebles2023,rombach2022,zhang2017}.
 \end{frame}
+
+
+\begin{frame}{Scaling laws (OpenAI, 2020)}
+\centerline{\includegraphics[width=120mm]{kaplan2020_scaling_laws.pdf}}   % a little wider than the text
+\smallskip
+{\centering\scriptsize Figure~1 of \citet{kaplan2020}. $N$: parameters, $D$: tokens, PF-day: $8.64\cdot10^{19}$ operations.\par}
+
+
+\begin{mathbox}{R.~Sutton, \emph{The Bitter Lesson}, 2019 \citep{sutton2019}}
+``The biggest lesson that can be read from 70 years of AI research is that general methods that leverage computation are ultimately the most effective, and by a large margin.''
+\end{mathbox}
+
+\end{frame}
+
+
+
+
+% =========================================================================
+\begin{frame}{Scaling in miniature: more data, more parameters}
+\centering
+\includegraphics[width=\textwidth]{scaling_mnist.pdf}
+
+\raggedright\small $784\to h\to h\to10$ on the first $N$ digits. \alert{A power law, until the other quantity runs out.}
+\end{frame}
+
+
+
+\begin{frame}{The cost of one operation}
+\small
+{\centering
+\renewcommand{\arraystretch}{1.05}
+\begin{tabular}{@{}l r r@{}}
+\toprule
+ & \textbf{CPU}: Ryzen 9 7950X & \textbf{GPU}: H100\footnotemark \\
+\midrule
+units & 16 & 132 \\
+clock & $\approx 5$ GHz & 1.83 GHz \\
+\midrule
+\textbf{TFLOP/s} \citep{fog2025,nvidiacuda,nvidiah100} &  &  \\
+FMA ($a\cdot b+c$) & \alert{2.6} & \alert{989} \\
+add, multiply & 1.3 & 67 \\
+$\max$ (ReLU) & 1.3 & 33 \\
+divide & 0.2 & 4 \\
+square root & 0.13 & 4 \\
+$\exp$, $\log$, $\sin$, $\cos$ & 0.05 & 4 \\
+\midrule
+read from memory ($10^{12}$ numbers/s) & 0.02 & 1.7 \\
+\bottomrule
+\end{tabular}\par}
+\footnotetext{OpenAI: ``well over 1 million GPUs'' by the end of 2025 \citep{altman2025}.}
+
+\medskip
+\alert{TFLOP/s}: trillions ($10^{12}$) of floating-point operations per second.
+
+\end{frame}
+
 
 
 % #########################################################################
@@ -1399,478 +1611,434 @@ A small LeNet \citep{lecun1998}, trained like the baseline. Plot: $2$, $4$, $8$ 
 \section{Loss}
 
 \begin{frame}{The loss states what an error is}
-\centering
-\loopdiagram{3}
 
 \raggedright\footnotesize
 \smallskip
-The loss $\ell(\hat y,y)\ge0$ compares the output of the model with the label. \alert{Each problem has its own:}
+The loss $\ell(\hat y,y)\ge0$ compares the model's output with the label.
 
 \smallskip
 \renewcommand{\arraystretch}{1.25}
-\begin{tabularx}{\textwidth}{@{}l l >{\raggedright\arraybackslash}X@{}}
+\begin{tabularx}{\textwidth}{@{}>{\raggedright\arraybackslash}p{0.32\textwidth} >{\raggedright\arraybackslash}X@{}}
 \toprule
-\textbf{Problem} & \textbf{Output of the model} & \textbf{Loss} \\
+\textbf{Regression}& \textbf{Loss:} distance \\
 \midrule
-regression & a number $\hat y=f(x;w)$ & squared: $(\hat y-y)^2$ \\
-regression with outliers & a number $\hat y$ & absolute: $|\hat y-y|$, or Huber \citep{huber1964} \\
-classification, $K$ classes & probabilities $p_1,\dots,p_K$ & cross-entropy: $-\log p_y$ \\
-one rare class & a probability $p$ & weighted cross-entropy \\
-several possible answers & a law $p(\,\cdot\mid x;w)$ for $y$ & log-loss: $-\log p(y\mid x;w)$ \\
+without outliers $y\in\mathbb{R}$ & squared: $(\hat y-y)^2$ \\
+with outliers  $y\in\mathbb{R}$ & absolute: $|\hat y-y|$ \\
+\midrule
+\textbf{Classification} & \textbf{Loss:} MLE or MAP \\
+\midrule
+2 classes, $y\in\{0,1\}$ & binary cross-entropy: $-y\log p-(1-y)\log(1-p)$ \\
+multi-class, $y\in\{1,\dots,K\}$ & cross-entropy: $-\sum_{k=1}^K\mathbf 1[y=k]\log p_k=-\log p_y$ \\
+multi-label, $y\in\{0,1\}^K$ & sum of binary cross-entropies:\newline \mbox{$-\sum_k\big[y_k\log p_k+(1-y_k)\log(1-p_k)\big]$} \\
 \bottomrule
 \end{tabularx}
 
 \medskip
-Lecture 02 used the first row for the curve $g$ and the third for the digits. Three questions: where do these losses come from, what does each of them learn, and what changes when one class is rare?
-\end{frame}
-
-
-% =========================================================================
-\begin{frame}{Maximum likelihood: one principle, many losses}
-\footnotesize
-Let the model output a \alert{law} $p(y\mid x;w)$ for the label, instead of one value. For independent samples, maximizing the likelihood $\prod_ip(y_i\mid x_i;w)$ is minimizing the empirical risk of the \alert{log-loss}:
-\[
-F(w)=-\frac1N\sum_{i=1}^N\log p(y_i\mid x_i;w),\qquad\ell=-\log p(y\mid x;w).
-\]
-\begin{mathbox}{Three models of the noise, three losses $-\log p(y\mid x;w)$}
-\renewcommand{\arraystretch}{1.35}
-\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}X l@{}}
-Gaussian: \ $y=f(x;w)+\varepsilon$,\ \ $\varepsilon\sim\mathcal N(0,s^2)$ & $\tfrac1{2s^2}\,(y-f(x;w))^2+\text{const}$ \\
-Laplace: \ $y=f(x;w)+\varepsilon$,\ \ $\varepsilon$ of density $\tfrac1{2b}\,e^{-|\varepsilon|/b}$ & $\tfrac1b\,|y-f(x;w)|+\text{const}$ \\
-Categorical: \ $\Prob(y=j\mid x)=p_j(x;w)$ & $-\log p_y(x;w)$ \\
-\end{tabularx}
-\end{mathbox}
-The squared loss, the absolute loss and the cross-entropy are one loss, for three models of the noise.
-
-\smallskip
-\alert{In expectation.} If $y$ is discrete, or has a conditional density $\rho(y\mid x)$ of finite entropy,
-\[
-\Risk(w)=\E_x\Big[\KL\big(\rho(\,\cdot\mid x)\,\big\|\,p(\,\cdot\mid x;w)\big)\Big]+H,\qquad H=\E\big[-\log\rho(y\mid x)\big].
-\]
-$H$ does not depend on $w$: maximum likelihood minimizes the Kullback--Leibler divergence from the data to the model.
-\end{frame}
-
-
-% =========================================================================
-\begin{frame}{The loss decides what is learned}
-\footnotesize
-\begin{mathbox}[top=1pt, bottom=1pt]{Proposition (the minimizers of three population risks)}
-Let $(x,y)\sim\rho$ with $y\in\R$ and $\E\,y^2<\infty$. Among all functions $f$ of $x$ and all conditional densities $q$ of $y$ given $x$:
-\begin{enumerate}
-\item $\E\,(f(x)-y)^2$ is minimal for $f(x)=\E[y\mid x]$, the \alert{conditional mean};
-\item $\E\,|f(x)-y|$ is minimal for $f(x)$ a \alert{median} of the law of $y$ given $x$;
-\item $\E\big[-\log q(y\mid x)\big]$ is minimal only for $q=\rho(\,\cdot\mid x)$, the \alert{conditional law} itself.
-\end{enumerate}
-\end{mathbox}
-\emph{Proof.} Minimize for each $x$ separately, with $a=f(x)$. (1) $\E\big[(a-y)^2\mid x\big]=\big(a-\E[y\mid x]\big)^2+\Var(y\mid x)$. (2) $a\mapsto\E\big[|a-y|\mid x\big]$ is convex with slope $\Prob(y<a\mid x)-\Prob(y>a\mid x)$, which changes sign at a median. (3) By the previous slide the risk is $\E_x\KL\big(\rho\,\|\,q\big)+H$, and $\KL\ge0$ with equality only for equal laws. \hfill$\square$
+What we ask of a loss:
 \begin{itemize}
-\item The squared loss learns one number for each $x$, at best the mean. The log-loss learns a law: mean, median and spread follow from it \citep[Section~1.5]{bishop2006}.
-\item The log-loss is \alert{strictly proper} (item 3), as is the squared error on the probabilities \citep{gneiting2007}, which gives $93.6\%$ on the digits (cross-entropy: $94.0\%$).
-\item The accuracy sees a law only through its most probable class: of the $600$ test errors of the digit classifier, $86$ are made with a probability above $0.9$.
+\item \alert{simple}
+\item \alert{easy to compute and fast}
+\item \alert{differentiable} in $\hat y$
 \end{itemize}
 \end{frame}
 
 
-% =========================================================================
-\begin{frame}{Why predict a law: an inverse problem}
-\footnotesize
-Invert the target of lecture 02: $y$ uniform on $[-1,1]$, $x=g(y)+0.05\,\xi$, $\xi\sim\mathcal N(0,1)$; predict $y$ from $x$. For $0.44<|x|<1.16$ two values of $y$ are compatible with $x$.
-\begin{center}
-\includegraphics[width=0.80\textwidth]{inverse_problem_losses.pdf}
-\end{center}
-The same network twice ($1\to64\to64$, $\tanh$); only the output and the loss change.
-\begin{itemize}
-\item \alert{One output, squared loss.} The network finds $\E[y\mid x]$ (test RMSE $0.237$ for both). At $x=0.8$ it answers $0.57$, between the two solutions: $g(0.57)=1.16$.
-\item \alert{50 bins of $y$, softmax and cross-entropy}, as for the digits. At $x=0.8$ the law has two bumps, at $0.26$ and $0.86$ (solutions: $0.268$ and $0.856$). Mean test log-density: $1.51$; exact law: $1.64$; a Gaussian around the squared-loss fit: $0.02$.
-\item Language models output the law of the next token for the same reason \citep{vaswani2017}; inverse problems: \citep{bishop1994}.
-\end{itemize}
-\end{frame}
+
+
+% % =========================================================================
+% \begin{frame}{The loss decides what is learned}
+% \footnotesize
+% \begin{mathbox}[top=1pt, bottom=1pt]{Proposition (the minimizers of three population risks)}
+% Let $(x,y)\sim\rho$ with $y\in\R$ and $\E\,y^2<\infty$. Among all functions $f$ of $x$ and all conditional densities $q$ of $y$ given $x$:
+% \begin{enumerate}
+% \item $\E\,(f(x)-y)^2$ is minimal for $f(x)=\E[y\mid x]$, the \alert{conditional mean};
+% \item $\E\,|f(x)-y|$ is minimal for $f(x)$ a \alert{median} of the law of $y$ given $x$;
+% \item $\E\big[-\log q(y\mid x)\big]$ is minimal only for $q=\rho(\,\cdot\mid x)$, the \alert{conditional law} itself.
+% \end{enumerate}
+% \end{mathbox}
+% \emph{Proof.} Minimize for each $x$ separately, with $a=f(x)$. (1) $\E\big[(a-y)^2\mid x\big]=\big(a-\E[y\mid x]\big)^2+\Var(y\mid x)$. (2) $a\mapsto\E\big[|a-y|\mid x\big]$ is convex with slope $\Prob(y<a\mid x)-\Prob(y>a\mid x)$, which changes sign at a median. (3) The risk is $\E_x\KL\big(\rho\,\|\,q\big)+H$, and $\KL\ge0$ with equality only for equal laws. \hfill$\square$
+% % \begin{itemize}
+% % \item The squared loss learns one number for each $x$, at best the mean. The log-loss learns a law: mean, median and spread follow from it \citep[Section~1.5]{bishop2006}.
+% % \item The log-loss is \alert{strictly proper} (item 3), as is the squared error on the probabilities \citep{gneiting2007}, which gives $93.6\%$ on the digits (cross-entropy: $94.0\%$).
+% % \item The accuracy sees a law only through its most probable class: of the $600$ test errors of the digit classifier, $86$ are made with a probability above $0.9$.
+% % \end{itemize}
+% \end{frame}
+
+
 
 
 % =========================================================================
+% The data of the figure are synthetic (figures/part3_loss.py): normal points N(0, I), anomalies
+% N(mu, I) with |mu| = 3.  The sensor names only illustrate an application; hence no ticks.
 \begin{frame}{A rare event: accuracy says little}
-\begin{columns}[T]
-\begin{column}{0.66\textwidth}
+\small
+\alert{Anomaly detection in flight.} Two sensors of an aircraft engine, $x=(\text{vibration},\text{temperature})$; $y=1$ for an anomaly, a fault: $1\%$ of the records.
+
+\begin{columns}[c]
+\begin{column}{0.56\textwidth}
 \footnotesize
-\alert{Anomaly detection.} $y=1$ for an anomaly: $1\%$ of the points. Normal points are $\mathcal N(0,I)$ in the plane, anomalies $\mathcal N(\mu,I)$ with $|\mu|=3$. A network $2\to16\to16\to1$ with the loss and the optimizer of the digits.
+The classifier that always predicts $y=0$:
 
 \medskip
-$10^6$ test points, anomaly predicted when $p(x;w)>\tfrac12$:
-
-\smallskip
 {\centering
 \renewcommand{\arraystretch}{1.15}
 \begin{tabular}{@{}l r r@{}}
 \toprule
- & \textbf{predicted anomaly} & \textbf{predicted normal} \\
+ & \textbf{predicted fault} & \textbf{predicted normal} \\
 \midrule
-\textbf{anomaly} & $TP=5\,130$ & $FN=4\,744$ \\
-\textbf{normal} & $FP=1\,497$ & $TN=988\,629$ \\
+\textbf{fault} & $TP=0$ & $FN=1\%$ \\
+\textbf{normal} & $FP=0$ & $TN=99\%$ \\
 \bottomrule
 \end{tabular}\par}
 \end{column}
-\begin{column}{0.30\textwidth}
+\begin{column}{0.40\textwidth}
 \centering
 \includegraphics[width=\textwidth]{rare_event_data.pdf}
-
-\scriptsize $5\,000$ training points,\\ 51 anomalies (orange)
 \end{column}
 \end{columns}
 
-\footnotesize
 \[
 \begin{array}{@{}l@{\qquad}l@{}}
-\text{accuracy}=\dfrac{TP+TN}{N}=99.38\%, & \text{\alert{precision}}=\dfrac{TP}{TP+FP}=0.77,\\[7pt]
-\text{\alert{recall}}=\dfrac{TP}{TP+FN}=0.52, & \text{\alert{$F_1$}}=\dfrac{2\,TP}{2\,TP+FP+FN}=0.62 .
+\tikz[baseline=(acc.base)]\node[draw=red, line width=0.8pt, rounded corners=2pt, inner sep=3pt] (acc) {$\text{accuracy}=TP+TN=99\%$};, & \text{\alert{precision}}=\dfrac{TP}{TP+FP}=\dfrac00,\\[9pt]
+\text{\alert{recall}}=\dfrac{TP}{TP+FN}=0, & \text{\alert{$F_1$}}=\dfrac{2\,TP}{2\,TP+FP+FN}=0 .
 \end{array}
 \]
-\vspace{2pt}
-
-Precision counts the alarms that are anomalies, recall the anomalies that are found; $F_1$ is their harmonic mean. The classifier that always answers ``normal'' has an accuracy of $99.01\%$, with recall $0$ and $F_1=0$: the accuracy is dominated by $TN$, which the other three leave out \citep{saito2015}.
 \end{frame}
 
 
 % =========================================================================
-\begin{frame}{The threshold trades precision for recall}
-\begin{center}
-\includegraphics[width=0.93\textwidth]{rare_event_metrics.pdf}
-\end{center}
-\footnotesize
+% The threshold and the weighted loss.  Figure and numbers: figures/part3_loss.py (10^6 test
+% points; the threshold of best F_1 is chosen on 20 000 validation points).  The network is
+% 2 -> 16 -> 16 -> 1, trained with Adam as the digits.
+\begin{frame}{A weight in the loss is a threshold}
+\small
+The cross-entropy gives $p(x;w)\approx\Prob(y=1\mid x)$. Predict a fault when $p(x;w)>t$.
+
+\centering
+\includegraphics[width=0.9\textwidth]{rare_event_metrics.pdf}
+
+\raggedright\footnotesize
 \begin{itemize}
-\item \alert{The accuracy barely moves.} It is at least $99\%$ for every $t\ge0.22$, and largest, $99.38\%$, at $t=0.52$, where about half of the anomalies are missed.
-\item \alert{A lower threshold} finds more anomalies and raises more false alarms. $F_1$ is largest at $t=0.42$ (chosen on validation data): precision $0.70$, recall $0.58$, $F_1=0.63$.
-\item At $t=0.01$ the recall is $0.94$ and the precision $0.11$: nine alarms out of ten are false. The accuracy, $92.1\%$, is below that of the classifier that always answers ``normal''.
+\item \alert{The accuracy barely moves:} at least $99\%$ for every $t\ge0.22$. A lower $t$ trades precision for recall; $F_1$ is best at $t=0.42$, chosen on validation data.
+\item \alert{Weighting the faults by $c$} in the cross-entropy moves the threshold. The weighted risk is minimal for $q=\frac{c\,p}{c\,p+1-p}$, and $q>\tfrac12\iff p>\tfrac1{1+c}$ \citep{elkan2001}. With $c=99$ (triangle), the decisions agree with $t=0.01$ on $98.9\%$ of the test points.
+\item \alert{The metric is not the loss.} Accuracy and $F_1$ are piecewise constant in $w$, with zero gradient almost everywhere. Train on the cross-entropy, then choose $t$.
 \end{itemize}
-Which threshold is right depends on what a missed anomaly and a false alarm cost.
 \end{frame}
 
 
-% =========================================================================
-\begin{frame}{Imbalance in the loss: a weight is a threshold}
-\footnotesize
-\begin{mathbox}{Proposition (weighted cross-entropy)}
-Let $y\in\{0,1\}$, $p(x)=\Prob(y=1\mid x)$ and $c>0$. Among all functions $q$ of $x$ with values in $(0,1)$, the risk $\E\big[-c\,y\log q(x)-(1-y)\log(1-q(x))\big]$ is minimal for
-\[
-q^\star(x)=\frac{c\,p(x)}{c\,p(x)+1-p(x)},\qquad\text{so that}\qquad q^\star(x)>\tfrac12\iff p(x)>\frac1{1+c}.
-\]
-\end{mathbox}
-\emph{Proof.} For each $x$ minimize $-c\,p\log q-(1-p)\log(1-q)$, convex in $q$: its derivative $-\frac{c\,p}{q}+\frac{1-p}{1-q}$ vanishes for $q\,(1-p)=c\,p\,(1-q)$. \hfill$\square$
-\begin{itemize}
-\item \alert{Weighting the loss is moving the threshold.} The weight $c$ is the cost of a missed anomaly, counted in false alarms \citep{elkan2001}. It adds $\log c$ to the score.
-\item \alert{Experiment}, $c=99$: recall $0.95$, precision $0.10$, the triangle of the last figure. The plain network with $t=0.01$ decides the same on $98.9\%$ of the test points.
-\item \alert{Relatives.} Repeating each anomaly $c$ times gives the same empirical risk. The focal loss $-(1-p_y)^\gamma\log p_y$ down-weights well-classified examples \citep{lin2017}.
-\item \alert{The metric is not the loss.} Accuracy and $F_1$ are piecewise constant in $w$, with zero gradient almost everywhere. Train on the log-loss; choose $t$ on validation data.
-\end{itemize}
-\end{frame}
 
 
 % #########################################################################
 % PART 4: OPTIMIZATION
 % #########################################################################
 
-% Part 4: optimization.  Figures: figures/part4_sgd.py and figures/part4_mnist_batch.py.
+% Part 4: optimization.  Figures: figures/part4_sgd.py, figures/part4_mnist_batch.py and
+% figures/part4_regularization.py.
 
 % =========================================================================
 \section{Optimization}
 
 \begin{frame}{Optimization: which function do we minimize?}
-\centering
-\loopdiagram{4}
 
-\smallskip
-\raggedright\footnotesize
-The samples $(x_i,y_i)$, $i=1,\dots,N$, are independent draws from an unknown law $\rho$. Data, architecture and loss being chosen, there are two functions of the parameters $w$:
-\begin{mathbox}{Two risks}
+The samples $(x_i,y_i)_{i=1}^N$ are independent draws from an unknown law $\rho$. 
+\begin{columns}[T, onlytextwidth]
+\begin{column}{0.48\textwidth}
+\begin{mathbox}[equal height group=risks]{Population risk}
+What we want to be small:
 \[
-\underbrace{\Risk(w)=\E_{(x,y)\sim\rho}\,\ell\big(f(x;w),y\big)}_{\text{\alert{population risk}: what we want to be small}}
-\qquad\quad
-\underbrace{F(w)=\frac1N\sum_{i=1}^{N}\ell\big(f(x_i;w),y_i\big)}_{\text{\alert{empirical risk}: what we can evaluate}}
+\Risk(w)=\E_{(x,y)\sim\rho}\,\ell\big(f(x;w),y\big)
 \]
 \end{mathbox}
-\begin{itemize}
-\item $F$ is the population risk of the \alert{empirical measure} $\rho_N=\frac1N\sum_i\delta_{(x_i,y_i)}$: what is proved for a law $\rho$ also holds for $\rho_N$.
-\item One gradient step on $F$ costs $N$ gradients. \alert{This part} samples the gradient: what is then minimized, what does the noise do, how does the batch size enter?
-\end{itemize}
-\end{frame}
-
-
-% =========================================================================
-\begin{frame}{Sampling the data is stochastic gradient descent}
-\footnotesize
-For a sample $z=(x,y)$ write $\ell_w(z)=\ell\big(f(x;w),y\big)$. A \alert{mini-batch gradient} averages $B$ independent draws $z_b\sim\rho$:
-$g(w)=\frac1B\sum_{b=1}^{B}\nabla_w\ell_w(z_b)$.
-\begin{mathbox}{Proposition (the sampled gradient is unbiased)}
-Let $w'\mapsto\ell_{w'}(z)$ be Lipschitz near $w$ with a constant $G(z)$, $\E\,G(z)^2<\infty$, and differentiable at $w$ for $\rho$-almost every $z$. Then $\Risk$ is differentiable at $w$ and
-\[
-\E\,g(w)=\nabla\Risk(w),\qquad \Cov g(w)=\frac1B\,\Sigma(w),\qquad \Sigma(w)=\Cov_{z\sim\rho}\big(\nabla_w\ell_w(z)\big).
-\]
-\end{mathbox}
-\emph{Proof.} $\big(\ell_{w+h}(z)-\ell_w(z)-\nabla_w\ell_w(z)\cdot h\big)/\|h\|\to0$ as $h\to0$ for almost every $z$, and is bounded by $2\,G(z)$: by dominated convergence $\nabla\Risk(w)=\E\,\nabla_w\ell_w(z)$. Covariances of independent gradients add. \hfill$\square$
-\begin{itemize}
-\item \alert{Fresh samples:} $\E[g_k\mid w_k]=\nabla\Risk(w_k)$. SGD is a stochastic approximation \citep{robbins1951}, a noisy Euler scheme for the gradient flow of the \alert{population} risk.
-\item \alert{A fixed training set}, indices drawn with replacement: the proposition for $\rho_N$ gives $\E[g_k\mid w_k]=\nabla F(w_k)$. Once samples are reused, SGD descends $F$ and not $\Risk$.
-\item \alert{Reshuffled epochs} (lecture 02): for a fixed $w$ a batch is unbiased, with covariance $\frac{N-B}{N-1}\,\frac{\Sigma}{B}$, zero for $B=N$; the batches of one epoch are dependent.
-\end{itemize}
-\end{frame}
-
-
-% =========================================================================
-\begin{frame}{Mini-batch SGD is an Euler--Maruyama scheme}
-\footnotesize
-Split the gradient into its mean and a centred noise, $g_k=\nabla F(w_k)+\zeta_k$. Then
-\[
-w_{k+1}=w_k-\eta\,\nabla F(w_k)-\sqrt\eta\,\big(\sqrt\eta\,\zeta_k\big),\qquad \Cov\big[\sqrt\eta\,\zeta_k\mid w_k\big]=\frac{\eta}{B}\,\Sigma(w_k).
-\]
-\begin{mathbox}{The stochastic modified equation \citep{li2017}}
-\[
-dW_t=-\nabla F(W_t)\,dt+\Big(\frac{\eta}{B}\,\Sigma(W_t)\Big)^{1/2}d\beta_t,\qquad t=k\eta,\quad\beta_t\text{ a Brownian motion}.
-\]
-SGD is its Euler--Maruyama scheme of step $\eta$, with $\sqrt\eta\,\zeta_k$ in the place of a Gaussian of the same covariance.
-\end{mathbox}
-\alert{Theorem \citep{li2017}.} For smooth losses, every $T>0$ and every $\psi$ of polynomial growth, $\big|\E\,\psi(w_k)-\E\,\psi(W_{k\eta})\big|\le C_{T,\psi}\,\eta$ for all $k\le T/\eta$: a \alert{weak approximation of order 1}.
-\begin{itemize}
-\item Lecture 02 added a noise $\sigma\sqrt\eta\,\xi_k$ with a fixed $\sigma$. Mini-batches give $\sigma^2=\frac{\eta}{B}\,\Sigma$: step and batch size enter the noise through the \alert{ratio $\eta/B$}, the temperature.
-\item \alert{Weak:} laws, not paths, up to a finite time $T$. The noise of SGD is not Gaussian, and $\Sigma$ depends on $w$: no Gibbs measure $e^{-2F/\sigma^2}$ in general.
-\item The equation contains $\eta$. As $\eta\to0$ the noise disappears and the gradient flow $\dot w=-\nabla F(w)$ remains.
-\end{itemize}
-\end{frame}
-
-
-% =========================================================================
-\begin{frame}{Near a minimum: an Ornstein--Uhlenbeck process}
-\footnotesize
-Near a minimizer: $F(w)\approx F^\star+\tfrac12(w-w^\star)^\top H\,(w-w^\star)$, and freeze $D=\frac{\eta}{B}\,\Sigma(w^\star)$.
-\begin{mathbox}{A linear equation with the Gaussian stationary law $\mathcal N(w^\star,S)$}
-\[
-dW_t=-H\,(W_t-w^\star)\,dt+D^{1/2}d\beta_t,\quad\;
-HS+SH=D,\quad\;
-\E\,F(W)-F^\star=\frac{\eta}{4B}\operatorname{tr}\Sigma .
-\]
-\end{mathbox}
-$S$ is the \alert{Gramian} $\Gram_\infty$ of lecture 01 for $\dot x=-Hx+D^{1/2}u$: white noise as the control.
-\begin{center}
-\includegraphics[width=0.71\textwidth]{sgd_stationary.pdf}
-\end{center}
-\scriptsize
-Least squares with 8 hat functions on 160 noisy samples of $g$; 400 runs of SGD from $w^\star$. \alert{Left:} three pairs with $\eta/B=0.0125$ coincide with the prediction (dashed); $\eta/B=0.05$ doubles the spread. \alert{Right:} the floor is $\frac{\eta}{4B}\operatorname{tr}\Sigma$ within $5\%$ for $\eta\le0.05$. For $\eta=0.8$ it is higher: by $9\%$ because the step is not small, and by a factor $2.3$ for $B=1$, where $\Sigma(w)$ is far from constant.
-\end{frame}
-
-
-% =========================================================================
-\begin{frame}{SGD with a constant step: the noise floor}
-\footnotesize
-\begin{mathbox}{Theorem (stochastic gradient descent with a constant step)}
-Let $F$ be $L$-smooth with $\|\nabla F(w)\|^2\ge2\mu\big(F(w)-F^\star\big)$, as for a $\mu$-strongly convex $F$. Let $w_{k+1}=w_k-\eta\,g_k$, where $g_k$ is unbiased with bounded variance:
-\[
-\E\big[g_k\mid w_k\big]=\nabla F(w_k),\qquad\E\big[\|g_k-\nabla F(w_k)\|^2\mid w_k\big]\le\sigma^2 .
-\]
-Then, for $0<\eta\le1/L$,
-\[
-\E\,F(w_k)-F^\star\;\le\;(1-\eta\mu)^k\big(F(w_0)-F^\star\big)\;+\;\frac{\eta\,L\,\sigma^2}{2\mu}.
-\]
-\end{mathbox}
-\emph{Proof.} Apply the descent lemma of lecture 02 with $v=w_k-\eta g_k$ and take the expectation given $w_k$, using $\E\|g_k\|^2\le\|\nabla F(w_k)\|^2+\sigma^2$ and then $1-L\eta/2\ge1/2$. With $\Delta_k=F(w_k)-F^\star$,
-\[
-\E\big[\Delta_{k+1}\mid w_k\big]\le\Delta_k-\tfrac\eta2\,\|\nabla F(w_k)\|^2+\tfrac12L\eta^2\sigma^2
-\le(1-\eta\mu)\,\Delta_k+\tfrac12L\eta^2\sigma^2.
-\]
-Take expectations and iterate: $\E\Delta_k\le(1-\eta\mu)^k\Delta_0+\tfrac12L\eta^2\sigma^2\sum_{j<k}(1-\eta\mu)^j$, and the geometric sum is at most $1/(\eta\mu)$. \hfill$\square$
-
-The first term is the rate of gradient descent, the second a \alert{floor proportional to $\eta\,\sigma^2$}. A batch of size $B$ has $\sigma^2=\operatorname{tr}\Sigma/B$ \citep{bottou2018}: the ratio $\eta/B$ again, as a bound.
-\end{frame}
-
-
-% =========================================================================
-\begin{frame}{From the noise floor to schedules}
-\begin{center}
-\includegraphics[width=0.84\textwidth]{noise_floor.pdf}
-\end{center}
-\footnotesize
-\alert{Left.} The same least-squares problem, now from $w_0=0$; mean of 20 runs.
-\begin{itemize}
-\item $\eta=0.5$, $B=1$ stalls at $4.1\cdot10^{-2}$. Dividing $\eta$ by 10 lowers the floor to $2.8\cdot10^{-3}$ and slows the start; $B=16$ lowers it to $1.8\cdot10^{-3}$ at 16 times the cost per step.
-\item The values $\frac{\eta}{4B}\operatorname{tr}\Sigma$ are $2.7\cdot10^{-2}$, $2.7\cdot10^{-3}$ and $1.7\cdot10^{-3}$; the floor of the theorem is $2L/\mu=7.4$ times larger.
-\item A step $\eta_k\sim1/k$ keeps descending, like $1/k$ \citep{bottou2018}.
-\end{itemize}
-\alert{Right.} Hence schedules: large steps first, small steps at the end, such as warm-up and cosine decay \citep{loshchilov2017}. Decaying $\eta$ and increasing $B$ lower the same ratio $\eta/B$ \citep{smith2018}.
-\end{frame}
-
-
-% =========================================================================
-\begin{frame}{The digit classifier with different batch sizes}
-\begin{center}
-\includegraphics[width=0.82\textwidth]{mnist_batch_size.pdf}
-\end{center}
-\footnotesize
-Data, network, loss and five epochs of the baseline; only the optimizer changes. One run per point: other seeds move the accuracy by up to one point.
-\begin{itemize}
-\item \alert{Left: a fixed step.} Five epochs are $5N/B$ steps, from $18\,750$ ($B=16$) to $5$ ($B=N$). Adam: $94.6\%$, then the baseline $94.0\%$, down to $26.8\%$.
-\item \alert{Right: $\eta\propto B$}, the linear scaling rule \citep{goyal2017}: the same time $k\eta=5N\,\eta/B$ and the same noise $\eta/B$. SGD with $\eta_{64}=0.0125$ gives $91.3$, $91.2$, $91.2$ and $90.3\%$ for $B=16$ to $1024$.
-\item The rule ends where the step is unstable: with $\eta\ge0.8$ (hollow) five of six runs fail. The noise scales with $B$, a stability limit such as $\eta<2/L$ does not.
-\end{itemize}
-\end{frame}
-
-
-% =========================================================================
-\begin{frame}{Inside the fourth box: training is a feedback loop}
-\begin{columns}[c]
-\begin{column}{0.50\textwidth}
-\centering
-\begin{tikzpicture}[>=Stealth, thick,
-  block/.style={draw=boxframe, fill=boxbg, rounded corners=2pt, align=center, font=\scriptsize, inner sep=3pt, minimum height=9mm, minimum width=17mm}]
-  \node[block] (net) {forward pass\\[1pt] loss on a mini-batch};
-  \node[block, right=8mm of net] (back) {backward pass\\[1pt] (adjoint)};
-  \node[block, draw=ctrl, fill=ctrl!12] (opt) at ($(net)!0.5!(back)+(0,-1.75)$) {\ctrl{optimizer}\\[1pt] $w_{k+1}=w_k-\eta_k\,d_k$};
-  \draw[->] (net) -- (back);
-  \draw[->] (back.south) |- node[pos=0.25, left, font=\scriptsize]{$g_k$} (opt.east);
-  \draw[->] (opt.west) -| node[pos=0.75, right, font=\scriptsize]{$w_{k+1}$} (net.south);
-\end{tikzpicture}
-
-\medskip
-\scriptsize The optimizer observes the gradient $g_k$ and decides the new weights $w_{k+1}$: it is the \ctrl{controller} of the loop.
 \end{column}
-\begin{column}{0.50\textwidth}
-\footnotesize
-Lecture 01 distinguished two kinds of control.
-
-\smallskip
-\alert{Open loop}, $u=u(t)$: decided in advance.
-\begin{itemize}
-\item a \emph{schedule} $\eta_k$: step decay, cosine, warm-up
-\end{itemize}
-
-\smallskip
-\alert{Closed loop}, $u=F(x(t))$: computed from what is observed.
-\begin{itemize}
-\item line search: shrink $\eta$ until $F$ decreases
-\item Adam: rescale each coordinate by a running average of $|g_k|$
-\item early stopping: stop when the validation loss rises
-\end{itemize}
+\begin{column}{0.48\textwidth}
+\begin{mathbox}[equal height group=risks]{Empirical risk}
+What we can evaluate:
+\[
+J(w)=\frac1N\sum_{i=1}^{N}\ell\big(f(x_i;w),y_i\big)
+\]
+\end{mathbox}
 \end{column}
 \end{columns}
 
 \medskip
-\footnotesize
-``Tuning'' is the design of this controller, and not only by analogy. In the modified equation of a one-dimensional quadratic, the steps $\eta\,u_t$, $u_t\in[0,1]$, that minimize the expected loss at a time $T$ solve an optimal control problem. The solution is a \alert{feedback law}: the full step while the loss dominates the noise, then a decay like $1/t$ \citep{li2017}.
+Training computes a minimizer of $J$.
+\[
+\hat w\in\argmin_{w}J(w).
+\]
+We want $\Risk$ small, and split it as
+\[
+\Risk(\hat w)=J(\hat w)+\underbrace{\Risk(\hat w)-J(\hat w)}_{\text{generalization gap}}.
+\]
+A trained $\hat w$ \alert{generalizes} when the gap is small.
 \end{frame}
 
 
 % =========================================================================
-\begin{frame}{Where $g_k$ comes from: backpropagation is an adjoint equation}
+% Gradient descent and why it converges: notebook 10, section 4, and lecture 02, with J for F.
+\begin{frame}{Gradient descent and the descent lemma}
 \small
-A network is a discrete dynamical system: layer $k$ is the time, the depth $L$ the horizon.
+Gradient descent on the empirical risk: $w_{k+1}=w_k-\eta\,\nabla J(w_k)$.
+\begin{mathbox}[assumption]{Assumption ($L$-smoothness)}
+$J$ is differentiable and $\|\nabla J(u)-\nabla J(v)\|\le L\,\|u-v\|$ for all $u,v$.
+\end{mathbox}
+\begin{mathbox}{Lemma (descent lemma)}
 \[
-x_{k+1}=f_k(x_k,w_k),\quad k=0,\dots,L-1,\qquad x_0=x,\qquad\text{loss }\ell(x_L).
-\]
-\begin{mathbox}{Backpropagation}
-\textbf{Forward.} Compute and store $x_0,\dots,x_L$.\qquad \textbf{Backward.} Set $p_L=\nabla\ell(x_L)$ and
-\[
-p_k=\big(\partial_xf_k(x_k,w_k)\big)^{\!\top}p_{k+1},\qquad
-\nabla_{w_k}\ell=\big(\partial_wf_k(x_k,w_k)\big)^{\!\top}p_{k+1}.
+J(v)\le J(u)+\langle\nabla J(u),\,v-u\rangle+\frac L2\,\|v-u\|^2\qquad\text{for all }u,v.
 \]
 \end{mathbox}
-\footnotesize
-\begin{itemize}
-\item One forward and one backward pass give the derivative with respect to \alert{all} the parameters, at the cost of a few evaluations of the network \citep{rumelhart1986}.
-\item $p_k$ is the \alert{adjoint state}: a linear system running backward, like $\varphi'=-A^*\varphi$ behind the control of lecture 01.
-\item $p_0=\big(\partial_xf_0\big)^{\!\top}\cdots\big(\partial_xf_{L-1}\big)^{\!\top}p_L$ is a \alert{product of $L$ Jacobians}. Whether it vanishes or explodes is a question of stability: appendix.
-\end{itemize}
-\end{frame}
-
-
-% #########################################################################
-% PART 5: THE LOOP AT SCALE
-% #########################################################################
-
-% Part 5: the loop at scale.  Overfitting, parameters against data, the implicit bias of
-% gradient descent, double descent, scaling laws, the bitter lesson, the edge of stability
-% and spectral bias.  Figures: figures/part5_surprises.py and figures/part5_scale.py.
-
-% =========================================================================
-\section{The loop at scale}
-
-\begin{frame}{The whole loop: fitting is not learning}
-\centering
-\loopdiagram{5}
-
-\vspace{1mm}
-\begin{columns}[c]
-\begin{column}{0.40\textwidth}
-\includegraphics[width=\textwidth]{overfitting_classical.pdf}
-\end{column}
-\begin{column}{0.60\textwidth}
-\footnotesize
-The loop makes the empirical risk $F$ small. We want the population risk $\Risk$ small. The \alert{generalization gap} is $\Risk(\hat w)-F(\hat w)$.
-
-\smallskip
-\alert{Figure.} Least squares, $m$ polynomials, $s=0.2$.
-\begin{itemize}
-\item Best at $m=4$: $\Risk=0.049$, for a noise level $s^2=0.04$.
-\item At $m=16$: $F=0.008$ and $\Risk=0.28$. The model fits the noise: \alert{overfitting}.
-\end{itemize}
-\end{column}
-\end{columns}
-\footnotesize\raggedright
-\alert{Why.} With $m\le N$ linearly independent features and uncorrelated noise of variance $s^2$, the fitted values are a projection of rank $m$ of the labels. On average over the noise,
+\emph{Proof.} Integrate along the segment $u+t(v-u)$, $t\in[0,1]$:
 \[
-F(\hat w)=b_m^2+s^2\Big(1-\frac mN\Big),\qquad
-F'(\hat w)=b_m^2+s^2\Big(1+\frac mN\Big),
+\begin{aligned}
+J(v)-J(u)-\langle\nabla J(u),v-u\rangle&=\int_0^1\big\langle\nabla J\big(u+t(v-u)\big)-\nabla J(u),\ v-u\big\rangle\,dt\\
+&\le\int_0^1L\,t\,\|v-u\|^2\,dt=\frac L2\,\|v-u\|^2,
+\end{aligned}
 \]
-with $F'$ on fresh labels at the same inputs and $b_m^2$ the mean squared distance, at the samples, from $g$ to their span. The gap $2s^2m/N$ counts \alert{parameters per sample}.
+by Cauchy--Schwarz and the Lipschitz bound. \hfill$\square$
 \end{frame}
 
 
 % =========================================================================
-\begin{frame}{How many parameters, how many data?}
-\begin{columns}[T]
-\begin{column}{0.55\textwidth}
-\includegraphics[width=\textwidth]{parameters_vs_data.pdf}
-
-\scriptsize $N$ counts labelled examples: images, or the words or tokens of the training text. Counts from \citep{brown2020,devlin2019,dosovitskiy2021,he2016,hoffmann2022,krizhevsky2012,lecun1998,zhang2017}.
-\end{column}
-\begin{column}{0.45\textwidth}
-\footnotesize
-The classical advice: $P\ll N$.
-\begin{itemize}
-\item Our digit classifier: $13\,002$ parameters for $60\,000$ images.
-\item AlexNet (2012): $6\cdot10^{7}$ parameters for $1.2\cdot10^{6}$ images, $50$ \alert{parameters per image}.
-\item Such networks fit their training set \alert{exactly}, even with random labels \citep{zhang2017}. On the true labels they predict well.
-\item Language models have fewer parameters than tokens, and do not interpolate: the regime of the scaling laws below.
-\end{itemize}
-
-\smallskip
-\begin{center}
-\alert{With more parameters than data, zero training loss does not determine the model. What does?}
-\end{center}
-\end{column}
-\end{columns}
-\end{frame}
-
-
-% =========================================================================
-\begin{frame}{Which interpolant? The implicit bias of gradient descent}
-\footnotesize
-With $m>N$ parameters, $\Phi w=y$ has infinitely many solutions. The algorithm chooses one: steering a state with the least energy and fitting data with the smallest weights are one problem.
-\begin{mathbox}{Proposition (gradient descent selects the minimal-norm solution)}
-Let $F(w)=\tfrac12\|\Phi w-y\|^2$ with $\Phi\in\R^{N\times m}$ of rank $N$. Gradient descent from $w_0=0$ with $\eta<2/\|\Phi\|^2$ converges to
-$w^\dagger=\Phi^\top\big(\Phi\Phi^\top\big)^{-1}y$, the solution of $\Phi w=y$ of smallest norm.
+\begin{frame}{Gradient descent converges}
+\small
+\begin{mathbox}{Theorem}
+Let $J$ be $L$-smooth and let $0<\eta\le1/L$. Then
+\[
+J(w_{k+1})\le J(w_k)-\frac\eta2\,\|\nabla J(w_k)\|^2.
+\]
 \end{mathbox}
-\emph{Proof.} Every step adds a vector of $\Range\Phi^\top$, so $w_k\in\Range\Phi^\top$. The residual $r_k=\Phi w_k-y$ obeys $r_{k+1}=(I-\eta\,\Phi\Phi^\top)\,r_k\to0$. The only solution in $\Range\Phi^\top$ is $w^\dagger$; any other is $w^\dagger+n$ with $n\in\ker\Phi\perp\Range\Phi^\top$, hence longer. \hfill$\square$
+\emph{Proof.} The lemma with $u=w_k$ and $v=w_{k+1}=w_k-\eta\,\nabla J(w_k)$ gives
+\[
+\begin{aligned}
+J(w_{k+1})&\le J(w_k)-\eta\,\|\nabla J(w_k)\|^2+\frac{L\eta^2}{2}\,\|\nabla J(w_k)\|^2\\
+&\le J(w_k)-\frac\eta2\,\|\nabla J(w_k)\|^2,
+\end{aligned}
+\]
+since $L\eta^2/2\le\eta/2$. \hfill$\square$
+
+If $J$ is also bounded below by $J^\star$, sum over $k=0,\dots,K-1$: the values of $J$ telescope,
+and the minimum of $K$ numbers is at most their average, so
+\[
+\frac\eta2\sum_{k=0}^{K-1}\|\nabla J(w_k)\|^2\le J(w_0)-J^\star
+\quad\Longrightarrow\quad
+\min_{0\le k<K}\|\nabla J(w_k)\|^2\le\frac{2\big(J(w_0)-J^\star\big)}{\eta\,K}.
+\]
+
+\end{frame}
+
+
+% =========================================================================
+% Momentum.  Figure: figures/part4_optimizers.py (notebook 10, section 5).
+\begin{frame}{Momentum}
+\small
+The \alert{heavy ball} \citep{polyak1964} keeps the velocity $v_k=w_k-w_{k-1}$, with $\beta\in[0,1)$:
+\begin{align*}
+w_{k+1}&=w_k-\eta\,\nabla J(w_k) \tag{gradient descent}\\
+w_{k+1}&=w_k-\eta\,\nabla J(w_k)+\beta\,v_k \tag{heavy ball}
+\end{align*}
 
 \medskip
-\begin{mathbox}{The same formula as the minimal-norm control of lecture 01}
-\renewcommand{\arraystretch}{1.25}
-\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}X@{}}
-\textbf{Control:} \ $u=L_T^*\big(L_TL_T^*\big)^{-1}d$ & \textbf{Interpolant:} \ $w=\Phi^\top\big(\Phi\Phi^\top\big)^{-1}y$ \\
-$\Gram_T=L_TL_T^*$ invertible: controllable & $\Phi\Phi^\top$ invertible: the data can be fitted \\
-cost $\|u\|^2=d^*\Gram_T^{-1}d$ & norm $\|w\|^2=y^\top(\Phi\Phi^\top)^{-1}y$ \\
-\end{tabularx}
-\end{mathbox}
+\centering
+\includegraphics[width=0.9\textwidth]{momentum.pdf}
+
 \end{frame}
 
 
 % =========================================================================
-\begin{frame}{Surprise 1: double descent}
+% Adam.  Figure: figures/part4_optimizers.py (notebook 10, section 5.1).
+\begin{frame}{Optimization algorithms}
+\centering
+\includegraphics[width=0.97\textwidth]{optimizers.pdf}
+
+\end{frame}
+
+
+% =========================================================================
+\begin{frame}{Mini-batch SGD}
+\begin{mathbox}{Mini-batch SGD}
+Pick $B$ random samples $B_k\subset\{1,\dots,N\}$ and step
+\[
+\begin{aligned}
+w_{k+1}&=w_k-\eta\,\frac1B\sum_{i\in B_k}\nabla\ell_i(w_k)\\
+&\approx w_k-\eta\,\nabla J(w_k)+\frac{\eta}{\sqrt{B}}\mathcal N\big(0,\Sigma(w_k)\big),
+\end{aligned}
+\]
+This is the Euler--Maruyama scheme for the SDE
+\[
+dW=-\nabla J(W)\,dt+\sqrt{\frac{\eta}{B}}\,\Sigma(W)^{1/2}\,d\beta,
+\]
+where $\beta$ is a Brownian motion.
+\end{mathbox}
+\medskip
+\begin{itemize}
+\item \alert{Cheap:} $B$ gradients per step instead of $N$.
+\item \alert{Noisy:} $\Sigma(w_k)$ is the covariance of the per-sample gradients $\nabla\ell_i$.
+\end{itemize}
+\end{frame}
+
+
+
+
+
+
+% =========================================================================
+\begin{frame}{Keeping the ratio $\eta/B$ fixed}
+\begin{center}
+\includegraphics[width=1\textwidth]{mnist_batch_fixed_ratio.pdf}
+\end{center}
+\end{frame}
+
+
+
+% =========================================================================
+\begin{frame}{Growing the batch size}
+\begin{center}
+\includegraphics[width=1\textwidth]{mnist_batch_fixed_step.pdf}
+\end{center}
+\end{frame}
+
+
+% =========================================================================
+% The bound is the descent lemma for an L-smooth J with E|g_k|^2 = |grad J|^2 + tr(Sigma)/B
+% (indices drawn independently).  Minimizing it in eta gives McCandlish et al.'s optimal step
+% with Hessian L*I, for which their B_noise reduces to their B_simple = tr(Sigma)/|G|^2.
+% \begin{frame}{How large can the batch be?}
+% \small
+% The mini-batch gradient $g_k=\frac1B\sum_{i\in B_k}\nabla\ell_i(w_k)$, with indices drawn independently, has
+% $\E\,g_k=\nabla J(w_k)$ and $\E\,|g_k-\nabla J(w_k)|^2=\operatorname{tr}\Sigma(w_k)/B$.
+% \begin{mathbox}{Gradient noise scale \citep{mccandlish2018}}
+% If $\nabla J$ is $L$-Lipschitz, one step satisfies
+% \[
+% \E\,J(w_k-\eta\,g_k)\le J(w_k)-\eta\,|\nabla J|^2+\frac{L\eta^2}{2}\Big(|\nabla J|^2+\frac{\operatorname{tr}\Sigma}{B}\Big).
+% \]
+% The bound is smallest at
+% \[
+% \eta^*=\frac1L\,\frac{1}{1+B_{\text{noise}}/B},\qquad
+% B_{\text{noise}}(w)=\frac{\operatorname{tr}\Sigma(w)}{|\nabla J(w)|^2}.
+% \]
+% \end{mathbox}
+% \begin{itemize}
+% \item \alert{$B\ll B_{\text{noise}}$:} $\eta^*\approx B/(L\,B_{\text{noise}})$: $\eta/B$ fixed, twice $B$ for half the steps.
+% \item \alert{$B\gg B_{\text{noise}}$:} $\eta^*\approx 1/L$, gradient descent: a larger batch gains nothing. In the figure, $\eta=cB$ breaks when $\eta$ is too large, at a different $B$ for each $c$.
+% \item \alert{During training} $|\nabla J|$ shrinks faster than $\operatorname{tr}\Sigma$, so $B_{\text{noise}}$ grows.
+% \end{itemize}
+% \end{frame}
+
+
+% =========================================================================
+\begin{frame}{Don't decay the learning rate, increase the batch size}
+\small
+\begin{itemize}
+\item The SDE sees $\eta$ and $B$ only through the temperature $\eta/B$.
+\item Decaying $\eta$ and increasing $B$ lower the same noise, but a larger batch takes fewer steps, and its $B$ gradients are computed in parallel \citep{smith2018}.
+\end{itemize}
+\centering
+\includegraphics[width=\textwidth]{learning_rate_vs_batch.pdf}
+
+\raggedright\scriptsize  Values from \citep{brown2020,compvis2022,deepseek2024,devlin2019,dosovitskiy2021,goyal2017,grattafiori2024,he2016,krizhevsky2012,silver2017}.
+\end{frame}
+
+
+% =========================================================================
+% \begin{frame}{Inside the fourth box: training is a feedback loop}
+% \begin{columns}[c]
+% \begin{column}{0.50\textwidth}
+% \centering
+% \begin{tikzpicture}[>=Stealth, thick,
+%   block/.style={draw=boxframe, fill=boxbg, rounded corners=2pt, align=center, font=\scriptsize, inner sep=3pt, minimum height=9mm, minimum width=17mm}]
+%   \node[block] (net) {forward pass\\[1pt] loss on a mini-batch};
+%   \node[block, right=8mm of net] (back) {backward pass\\[1pt] (adjoint)};
+%   \node[block, draw=ctrl, fill=ctrl!12] (opt) at ($(net)!0.5!(back)+(0,-1.75)$) {\ctrl{optimizer}\\[1pt] $w_{k+1}=w_k-\eta_k\,d_k$};
+%   \draw[->] (net) -- (back);
+%   \draw[->] (back.south) |- node[pos=0.25, left, font=\scriptsize]{$g_k$} (opt.east);
+%   \draw[->] (opt.west) -| node[pos=0.75, right, font=\scriptsize]{$w_{k+1}$} (net.south);
+% \end{tikzpicture}
+
+% \medskip
+% \scriptsize The optimizer observes the gradient $g_k$ and decides the new weights $w_{k+1}$: it is the \ctrl{controller} of the loop.
+% \end{column}
+% \begin{column}{0.50\textwidth}
+% \footnotesize
+% Lecture 01 distinguished two kinds of control.
+
+% \smallskip
+% \alert{Open loop}, $u=u(t)$: decided in advance.
+% \begin{itemize}
+% \item a \emph{schedule} $\eta_k$: step decay, cosine, warm-up
+% \end{itemize}
+
+% \smallskip
+% \alert{Closed loop}, $u=F(x(t))$: computed from what is observed.
+% \begin{itemize}
+% \item line search: shrink $\eta$ until $J$ decreases
+% \item Adam: rescale each coordinate by a running average of $|g_k|$
+% \item early stopping: stop when the validation loss rises
+% \end{itemize}
+% \end{column}
+% \end{columns}
+
+% \medskip
+% \footnotesize
+% ``Tuning'' is the design of this controller, and not only by analogy. In the modified equation of a one-dimensional quadratic, the steps $\eta\,u_t$, $u_t\in[0,1]$, that minimize the expected loss at a time $T$ solve an optimal control problem. The solution is a \alert{feedback law}: the full step while the loss dominates the noise, then a decay like $1/t$ \citep{li2017}.
+% \end{frame}
+
+
+% =========================================================================
+% Regularization and early stopping.  Figure: figures/part4_regularization.py.
+\begin{frame}{Generalization: Regularization and early stopping}
+\small
+$N=1000$ training digits, two hidden layers of width 256, Adam.
+\[
+\min_w J(w)+\frac{\lambda}{2}\|w\|^2
+\]
+
+\centering
+\includegraphics[width=0.78\textwidth]{regularization.pdf}
+
+\raggedright\footnotesize
+\begin{itemize}
+\item \alert{No regularization:} $J\to0$, while the test loss rises after epoch 8.
+\item \alert{L2 penalty:} $J$ stays above $0$ and the test loss stays low.
+\item \alert{Early stopping:} keep the weights with the lowest validation loss.
+\item \alert{Weight decay:} with SGD the penalty scales $w$ by $1-\eta\lambda$. Adam divides $\lambda w$ by $\sqrt{s}$, so weights with large gradients barely shrink; \alert{AdamW} decays $w$ directly \citep{loshchilov2019}.
+\end{itemize}
+\end{frame}
+
+
+% =========================================================================
+% Spectral bias.  Figure: figures/part5_surprises.py.
+\begin{frame}{The smooth part is learned first}
+\begin{center}
+\includegraphics[width=\textwidth]{spectral_bias.pdf}
+\end{center}
+\footnotesize
+\begin{itemize}
+\item Networks fit low frequencies first: the \alert{spectral bias} \citep{rahaman2019}.
+\item Part 1 went around it with Fourier features, which fit faster.
+\item \alert{Stopping early} then acts as a low-pass filter: one reason why training does not immediately fit the noise.
+\end{itemize}
+\end{frame}
+
+
+% #########################################################################
+% APPENDIX
+% #########################################################################
+
+% =========================================================================
+% Appendix: the implicit bias of gradient descent, double descent and the edge of stability
+% (figures/part5_surprises.py), training as a control problem, open questions, the key
+% takeaways, and frames of the former Part II of lecture 02 that the four steps do not need,
+% kept for questions.  Its section page has neither a number nor the loop, and \appendix keeps it
+% out of the outline, so the outline shows only the four steps.
+\appendix
+\setbeamertemplate{section page}{%
+  \centering
+  {\usebeamercolor[fg]{section title}\usebeamerfont{section title}\LARGE\insertsectionhead\par}}
+\section{Appendix}
+
+
+
+% =========================================================================
+\begin{frame}{Double descent}
 \begin{center}
 \includegraphics[width=0.74\textwidth]{double_descent.pdf}
 \end{center}
@@ -1885,68 +2053,18 @@ What matters is \emph{which} interpolant is selected \citep{belkin2019}. Past $m
 \end{frame}
 
 
+
 % =========================================================================
-\begin{frame}{Scaling in miniature: more data, more parameters}
+\begin{frame}{The edge of stability}
 \begin{center}
-\includegraphics[width=0.77\textwidth]{scaling_mnist.pdf}
+\includegraphics[width=\textwidth]{edge_of_stability.pdf}
 \end{center}
 \footnotesize
-The baseline with $784\to h\to h\to10$ on the first $N$ digits; same loss, same optimizer, $4\,690$ steps, one run per point.
+%Full-batch gradient descent on $g$: a $\tanh$ network $1\to24\to24\to1$, 40 samples. 
+The \alert{sharpness} is the largest eigenvalue of $\nabla^2J(w_k)$.
 \begin{itemize}
-\item \alert{More data.} With $P=118\,282$ the test error falls from $15.2\%$ to $2.2\%$: a fitted exponent $0.42$. With $P=13\,002$, the baseline of the lecture, it flattens at $6\%$: the model is the bottleneck.
-\item \alert{More parameters.} With all the images, from $7.6\%$ to $2.0\%$: exponent $0.38$. With $2\,000$ images it flattens above $9\%$: the data are the bottleneck.
-\end{itemize}
-A toy: two decades at most, single runs. Its shape is the point: \alert{a power law, until the other quantity runs out}.
-\end{frame}
-
-
-% =========================================================================
-\begin{frame}{Scaling laws}
-\footnotesize
-\begin{mathbox}{Scaling laws for language models \citep{kaplan2020}}
-Transformers, $768$ to $1.5\cdot10^{9}$ parameters; test loss $L$ in nats per token, $N$ tokens:
-\[
-L(P)\approx\Big(\frac{P_c}{P}\Big)^{0.076},\qquad L(N)\approx\Big(\frac{N_c}{N}\Big)^{0.095},
-\]
-each when the other quantity is not the bottleneck.
-\end{mathbox}
-\begin{itemize}
-\item \alert{Small exponents, but predictable.} Ten times the parameters lower the loss by $16\%$, ten times the data by $20\%$; the law in $P$ holds over six orders of magnitude.
-\item \alert{Scale matters more than shape:} depth against width has little effect.
-\item \alert{Parameters and data grow together.} For a compute budget $C\propto PN$ the best choice is $P\propto C^{0.5}$, $N\propto C^{0.5}$ \citep{hoffmann2022}. Chinchilla ($7\cdot10^{10}$ parameters, $1.4\cdot10^{12}$ tokens) beats Gopher ($2.8\cdot10^{11}$, $3\cdot10^{11}$) for the same compute.
-\end{itemize}
-These are empirical fits, with more tokens than parameters. The runs behind \citep{hoffmann2022} see less than one pass of their data: every gradient uses fresh samples, and SGD descends the population risk itself (part 4).
-\end{frame}
-
-
-% =========================================================================
-\begin{frame}{The bitter lesson}
-\footnotesize
-\begin{mathbox}{R.~Sutton, \emph{The Bitter Lesson}, 2019 \citep{sutton2019}}
-``The biggest lesson that can be read from 70 years of AI research is that general methods that leverage computation are ultimately the most effective, and by a large margin.''
-\end{mathbox}
-In chess, Go, speech and vision, built-in knowledge helped at first, then lost to search and learning with more computation. Symmetries, he says, should not be built in.
-
-\smallskip
-\alert{A tension with parts 1 and 2,} which built knowledge into the loop: Fourier features into the representation, the translation symmetry into the convolution.
-\begin{itemize}
-\item \alert{With little data the prior wins.} On MNIST the CNN of part 2 beats the MLP.
-\item \alert{With much data it need not.} In \citep{dosovitskiy2021}, vision transformers trained on $1.3\cdot10^{6}$ images stay a few points below ResNets of comparable size; pre-trained on $3\cdot10^{8}$ images they pass them: ``large scale training trumps inductive bias''.
-\item A prior stands in for data. It is worth most where data are scarce and the knowledge is exact, as with physical laws. Sutton's own example of vision keeps ``the notions of convolution and certain kinds of invariances''.
-\end{itemize}
-\end{frame}
-
-
-% =========================================================================
-\begin{frame}{Surprise 2: the edge of stability}
-\begin{center}
-\includegraphics[width=0.84\textwidth]{edge_of_stability.pdf}
-\end{center}
-\footnotesize
-Full-batch gradient descent on $g$: a $\tanh$ network $1\to24\to24\to1$, 40 samples. The \alert{sharpness} is the largest eigenvalue of $\nabla^2F(w_k)$.
-\begin{itemize}
-\item Lecture 02: on a quadratic, gradient descent is stable if and only if $\eta<2/L$.
-\item In a network the curvature is not given. It \alert{rises during training} until it reaches $2/\eta$ and stays there: $10.1$, $20.0$ and $39.5$ for $\eta=0.2$, $0.1$, $0.05$.
+\item Gradient descent is stable if and only if $\eta<2/L$.
+\item In a network the curvature is not given. It \alert{rises during training} until it reaches $2/\eta$ and stays there.
 \item There the loss is no longer monotone, yet it decreases over long times \citep{cohen2021}.
 \end{itemize}
 \alert{The step size decides the curvature, not the other way round.} The descent lemma with $\eta\le1/L$ does not describe this regime.
@@ -1954,28 +2072,6 @@ Full-batch gradient descent on $g$: a $\tanh$ network $1\to24\to24\to1$, 40 samp
 
 
 % =========================================================================
-\begin{frame}{Surprise 3: the smooth part is learned first}
-\begin{center}
-\includegraphics[width=0.78\textwidth]{spectral_bias.pdf}
-\end{center}
-\footnotesize
-The target is now $g(x)+0.3\sin(20x)$; a $\tanh$ network $1\to64\to64\to1$ trained with Adam.
-\begin{itemize}
-\item After $1000$ steps the slow part is fitted and $90\%$ of the ripple is still missing. The ripple arrives by step $3000$.
-\item Networks fit low frequencies first: the \alert{spectral bias} \citep{rahaman2019}. For very wide networks the tangent kernel gives a linear explanation (appendix).
-\item Part 1 went around it with Fourier features, which fit faster but not better.
-\item \alert{Stopping early} then acts as a low-pass filter: one reason why training does not immediately fit the noise.
-\end{itemize}
-\end{frame}
-
-
-% #########################################################################
-% CLOSING
-% #########################################################################
-
-% =========================================================================
-\section{Training as a control problem}
-
 \begin{frame}{Training as a control problem}
 \footnotesize
 \renewcommand{\arraystretch}{1.3}
@@ -2027,23 +2123,6 @@ open loop / feedback & schedule / adaptive optimizer \\
 \item \alert{At scale.} With more parameters than data the algorithm selects the solution: double descent. Errors fall like power laws in the data and in the parameters. The sharpness settles at $2/\eta$.
 \item \alert{Control.} Backpropagation is an adjoint equation, a schedule an open-loop control, an adaptive optimizer a feedback. The Gramian returns in the minimal-norm interpolant and in the noise of SGD.
 \end{enumerate}
-\end{frame}
-
-
-% #########################################################################
-% ADDITIONAL MATERIAL
-% #########################################################################
-
-% =========================================================================
-% Additional material: frames of the former Part II of lecture 02 that the four steps do
-% not need, kept for questions.
-\appendix
-
-\begin{frame}[standout]
-Additional material
-
-\medskip
-\normalsize Symmetry, depth, initialization, approximation rates and the tangent kernel
 \end{frame}
 
 
@@ -2119,51 +2198,74 @@ A one-hidden-layer ReLU network with $m$ neurons has at most $m+1$ linear pieces
 
 
 % =========================================================================
-\begin{frame}{Initialization and depth: a stability problem}
-\begin{center}
-\includegraphics[width=0.80\textwidth]{signal_propagation.pdf}
-\end{center}
+\begin{frame}{Depth in detail: neurons and Telgarsky's theorem}
+\small
+\alert{Neurons add:} parity is a function of $s=x_1+\dots+x_n$ alone, a \alert{sawtooth}.
+
+\medskip
+\centering
+\begin{tikzpicture}[x=1cm, y=1cm, font=\scriptsize, >=Stealth,
+    bit/.style={circle, fill=black!60, inner sep=0pt, minimum size=1.2mm},
+    gate/.style={circle, draw=boxframe, fill=boxbg, inner sep=0pt, minimum size=2.8mm},
+    top/.style={draw=ctrl, fill=ctrl!15},
+    wire/.style={black!25, line width=0.15pt},
+    link/.style={black!55, line width=0.35pt}]
+  % k = 3 layers of two ReLU neurons, drawn for n = 8 bits
+  \foreach \i in {0,...,7} \node[bit] (c\i) at (0,{1.05-0.15*\i}) {};
+  \foreach \l in {1,2,3} {
+    \node[gate] (u\l) at ({1.2*\l},0.8) {};
+    \node[gate] (v\l) at ({1.2*\l},0.25) {};
+  }
+  \node[gate, top] (o) at (4.8,0.525) {};
+  \foreach \i in {0,...,7} { \draw[wire] (c\i) -- (u1); \draw[wire] (c\i) -- (v1); }
+  \foreach \l/\m in {1/2,2/3} {
+    \draw[link] (u\l) -- (u\m); \draw[link] (u\l) -- (v\m);
+    \draw[link] (v\l) -- (u\m); \draw[link] (v\l) -- (v\m);
+  }
+  \draw[link] (u3) -- (o); \draw[link] (v3) -- (o);
+  \draw[link, ->] (o) -- (5.35,0.525) node[right, text=black] {parity};
+  \node[left] at (c0.west) {$x_1$};
+  \node[left] at (c7.west) {$x_8$};
+  % what the network has computed after each layer, as a function of s = 0, ..., 8
+  \foreach \l in {1,2,3} \draw[black!35, densely dotted, line width=0.3pt] (u\l.north) -- ({1.2*\l},1.27);
+  \begin{scope}[shift={(0.72,1.33)}, x=0.12cm, y=0.32cm]
+    \draw[black!30, line width=0.2pt] (0,0) -- (8,0);
+    \draw[boxframe, line width=0.6pt] (0,0) -- (4,1) -- (8,0);
+  \end{scope}
+  \begin{scope}[shift={(1.92,1.33)}, x=0.12cm, y=0.32cm]
+    \draw[black!30, line width=0.2pt] (0,0) -- (8,0);
+    \draw[boxframe, line width=0.6pt] (0,0) -- (2,1) -- (4,0) -- (6,1) -- (8,0);
+  \end{scope}
+  \begin{scope}[shift={(3.12,1.33)}, x=0.12cm, y=0.32cm]
+    \draw[black!30, line width=0.2pt] (0,0) -- (8,0);
+    \draw[ctrl, line width=0.6pt] (0,0) -- (1,1) -- (2,0) -- (3,1) -- (4,0) -- (5,1) -- (6,0) -- (7,1) -- (8,0);
+    \foreach \s in {0,2,4,6,8} \fill[ctrl] (\s,0) circle (0.7pt);
+    \foreach \s in {1,3,5,7} \fill[ctrl] (\s,1) circle (0.7pt);
+  \end{scope}
+  \node at (1.2,1.83) {$T$};
+  \node at (2.4,1.83) {$T^{\circ2}$};
+  \node[text=ctrl] at (3.6,1.83) {$T^{\circ3}$};
+  \node[left] at (0.6,1.5) {in $s$:};
+\end{tikzpicture}
+
+\raggedright
 \footnotesize
-\alert{Forward.} ReLU layers $x_{k+1}=\sigma(W_kx_k)$ of width $n$ with $W_{ij}\sim\mathcal N(0,\sigma_w^2/n)$. The ReLU keeps half of a symmetric second moment:
-\[
-\E\,\|x_{k+1}\|^2=\tfrac12\,\sigma_w^2\,\|x_k\|^2 .
-\]
-A linear recursion (dotted): $0.8^{50}\approx10^{-5}$ and $1.2^{50}\approx10^{4}$. The choice $\sigma_w^2=2$ sits on the stability boundary \citep{he2015}. PyTorch's default is $\sigma_w^2=\tfrac13$: a factor $1/\sqrt6\approx0.4$ per layer, as for the digits with $32$ layers.
+\begin{columns}[T]
+\begin{column}{0.48\textwidth}
+\alert{One layer:} $n$ neurons $\mathbf 1[s\ge j]$, signs $+,-,+,\dots$ For $n=20$: $20$ neurons.
+\end{column}
+\begin{column}{0.52\textwidth}
+\alert{$k$ layers of two}, $2^k\ge n$: $T^{\circ k}(s/2^k)$, $T(t)=2\sigma(t)-4\sigma(t-\tfrac12)$ \citep{telgarsky2015}. For $n=20$: $10$ neurons.
+\end{column}
+\end{columns}
 
 \smallskip
-\alert{Backward.} With PyTorch's default initialization, 32 $\tanh$ layers shrink the adjoint by a factor $10^{-8}$. A \alert{residual} layer $x_{k+1}=x_k+h\,\sigma(W_kx_k+b_k)$ has a Jacobian close to the identity, and the adjoint keeps its size \citep{he2016}: the Euler step of lecture 01.
-\end{frame}
+\begin{mathbox}{Theorem of \citet{telgarsky2016}: no shallow network comes close}
+For every $k\ge1$ the sawtooth $f(x)=T^{\circ(k^3+4)}(x_1)$, a ReLU network with $2k^3+8$ layers and $3k^3+12$ nodes, satisfies $\int_{[0,1]^d}|f-g|\,dx\ge\tfrac1{64}$ for every ReLU network $g$ with at most $k$ layers and at most $2^k$ nodes.
+\end{mathbox}\end{frame}
 
 
 % =========================================================================
-\begin{frame}{How many pieces? Rates and the curse of dimensionality}
-\begin{columns}[T]
-\begin{column}{0.51\textwidth}
-\includegraphics[width=\textwidth]{rates.pdf}
-
-\scriptsize Least-squares fits of $g$ on $[-1,1]$. The flat parts at $10^{-9}$ and $10^{-14}$ are rounding errors.
-\end{column}
-\begin{column}{0.49\textwidth}
-\footnotesize
-Density gave no rate. For our analytic target in one dimension:
-\begin{itemize}
-\item hat functions converge like $m^{-2}$;
-\item polynomials converge exponentially fast.
-\end{itemize}
-
-\medskip
-\alert{In dimension $d$} a mesh of spacing $h$ has $m\approx h^{-d}$ nodes. Hat functions then need
-\[
-m\approx\varepsilon^{-d/2}\quad\text{pieces for an error }\varepsilon .
-\]
-With $d=784$ this is hopeless: the \alert{curse of dimensionality}.
-
-\medskip
-It is not a defect of hat functions. For targets with $s$ bounded derivatives, no fixed basis of $m$ functions does better than $m^{-s/d}$ in the worst case.
-\end{column}
-\end{columns}
-\end{frame}
-
 
 % =========================================================================
 \begin{frame}{Barron's theorem: why we move the pieces}
@@ -2190,12 +2292,12 @@ Let $g:\R^d\to\R$ with $C_g=\int_{\R^d}|\omega|\,|\hat g(\omega)|\,d\omega<\inft
 % =========================================================================
 \begin{frame}{A linear explanation of spectral bias: the tangent kernel}
 \small
-Let $r=f(X;w)-y$ be the residual on the training data and $J=\partial_wf(X;w)$ its Jacobian. Along the gradient flow of $\tfrac12\|r\|^2$,
+Let $r=f(X;w)-y$ be the residual on the training data and $\Phi=\partial_wf(X;w)$ its Jacobian. Along the gradient flow of $\tfrac12\|r\|^2$,
 \[
-\dot w=-J^\top r\qquad\Longrightarrow\qquad\dot r=J\,\dot w=-J\,J^\top r=-K\,r .
+\dot w=-\Phi^\top r\qquad\Longrightarrow\qquad\dot r=\Phi\,\dot w=-\Phi\,\Phi^\top r=-K\,r .
 \]
 \begin{mathbox}{The kernel regime}
-For very wide networks $K=JJ^\top$ barely moves during training \citep{jacot2018}. Then
+For very wide networks $K=\Phi\Phi^\top$ barely moves during training \citep{jacot2018}. Then
 \[
 r(t)=e^{-Kt}\,r(0)=\sum_ie^{-\lambda_it}\,\langle r(0),v_i\rangle\,v_i ,\qquad Kv_i=\lambda_iv_i .
 \]
@@ -2203,7 +2305,7 @@ r(t)=e^{-Kt}\,r(0)=\sum_ie^{-\lambda_it}\,\langle r(0),v_i\rangle\,v_i ,\qquad K
 \footnotesize
 \begin{itemize}
 \item Each eigenvector decays at its own rate, and the smooth ones have the large eigenvalues: \alert{the elongated quadratic of lecture 02, in function space}.
-\item $K=JJ^\top$ is a Gram matrix once more. $\lambda_{\min}(K)>0$ drives the training loss to zero, as $\lambda_{\min}(\Gram_T)>0$ gives controllability.
+\item $K=\Phi\Phi^\top$ is a Gram matrix once more. $\lambda_{\min}(K)>0$ drives the training loss to zero, as $\lambda_{\min}(\Gram_T)>0$ gives controllability.
 \item In this regime, training is a \emph{linear} dynamical system in the sense of lecture 01. Real networks leave it: their features move.
 \end{itemize}
 \end{frame}
