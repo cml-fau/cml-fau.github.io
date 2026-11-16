@@ -1042,6 +1042,66 @@ The input is $(x,t)$ or
 \end{frame}
 
 
+% =========================================================================
+\begin{frame}{Transformers: text for a language model}
+% The values of p_t (d = 8, t = 0..5) are computed below with the formula on the right;
+% figures/part1_representations.py prints them.  The entries of e_{i_t} are learned: drawn
+% here as random numbers in [-1, 1], from a fixed seed.  Both use one colour scale.
+\definecolor{posneg}{HTML}{2A78D6}
+\begin{columns}[c]
+\begin{column}{0.57\textwidth}
+\centering
+\begin{tikzpicture}[x=0.95cm, y=1cm, >=Stealth, font=\footnotesize,
+    tok/.style={draw=boxframe, fill=boxbg, rounded corners=1pt, minimum height=4.6mm, minimum width=8.2mm,
+                inner sep=1pt, font=\ttfamily\footnotesize},
+    cell/.style={minimum width=3.4mm, minimum height=2.4mm, inner sep=0pt, line width=0.3pt},
+    lab/.style={anchor=east, inner sep=1pt}]
+  \node[font=\ttfamily\small] (text) at (2.5,0) {The dog bites the man.};
+  \pgfmathsetseed{2026}
+  \foreach \t/\w in {0/The, 1/dog, 2/bites, 3/the, 4/man, 5/.} {
+    \node[tok] (t\t) at (\t,-0.85) {\strut\w};
+    \draw[->, black!45] (text.south) -- (t\t.north);
+    \draw[->, black!45] (t\t.south) -- (\t,-1.32);
+    \foreach \k in {0,...,7} {
+      % e_{i_t}: a random entry in [-1, 1]
+      \pgfmathsetmacro\v{rand}
+      \pgfmathtruncatemacro\pct{round(100*abs(\v))}
+      \pgfmathtruncatemacro\isneg{\v<0}
+      \ifnum\isneg=1 \def\pc{posneg}\else\def\pc{ctrl}\fi
+      \node[cell, draw=black!30, fill=\pc!\pct!white] at (\t,-1.5-0.24*\k) {};
+      % p_t: sin and cos of omega_j t, omega_j = 10000^(-2j/d), in neighbouring coordinates
+      \pgfmathsetmacro\angle{10000^(-2*floor(\k/2)/8)*\t}
+      \pgfmathsetmacro\v{mod(\k,2)==0 ? sin(\angle r) : cos(\angle r)}
+      \pgfmathtruncatemacro\pct{round(100*abs(\v))}
+      \pgfmathtruncatemacro\isneg{\v<0}
+      \ifnum\isneg=1 \def\pc{posneg}\else\def\pc{ctrl}\fi
+      \node[cell, draw=black!30, fill=\pc!\pct!white] at (\t,-3.82-0.24*\k) {};
+    }
+    \node at (\t,-3.47) {$+$};
+  }
+  \node[lab] at (-0.55,-0.85) {$i_t$};
+  \node[lab] at (-0.55,-2.34) {$e_{i_t}$};
+  \node[lab] at (-0.55,-4.66) {$\ctrl{p_t}$};
+\end{tikzpicture}
+\end{column}
+\begin{column}{0.41\textwidth}
+\small
+\begin{align*}
+x_t&=e_{i_t}+\ctrl{p_t}\\
+\ctrl{p_t}&=\big(\sin\omega_jt,\ \cos\omega_jt\big)_{j<d/2}\\
+\omega_j&=10000^{-2j/d}
+\end{align*}
+
+\scriptsize
+Drawn: $d=8$. One learned vector $e_i\in\R^d$ per token of the vocabulary.\footnotemark
+
+% \medskip
+% Without \ctrl{$p_t$}, \texttt{The man bites the dog.} gives the same vectors: the model would not see the \alert{order} \citep{vaswani2017}.
+\end{column}
+\end{columns}
+\footnotetext{GPT-3: $V=50\,257$ tokens, $d=12\,288$ \citep{brown2020}.}
+\end{frame}
+
 
 
 
@@ -1339,69 +1399,13 @@ torch.allclose(f(x[p]), f(x)[p], atol=1e-6)
 \end{frame}
 
 
+
 % =========================================================================
-\begin{frame}{Transformers: text for a language model}
-% The values of p_t (d = 8, t = 0..5) are computed below with the formula on the right;
-% figures/part1_representations.py prints them.  The entries of e_{i_t} are learned: drawn
-% here as random numbers in [-1, 1], from a fixed seed.  Both use one colour scale.
-\definecolor{posneg}{HTML}{2A78D6}
-\begin{columns}[c]
-\begin{column}{0.57\textwidth}
+
+\begin{frame}
 \centering
-\begin{tikzpicture}[x=0.95cm, y=1cm, >=Stealth, font=\footnotesize,
-    tok/.style={draw=boxframe, fill=boxbg, rounded corners=1pt, minimum height=4.6mm, minimum width=8.2mm,
-                inner sep=1pt, font=\ttfamily\footnotesize},
-    cell/.style={minimum width=3.4mm, minimum height=2.4mm, inner sep=0pt, line width=0.3pt},
-    lab/.style={anchor=east, inner sep=1pt}]
-  \node[font=\ttfamily\small] (text) at (2.5,0) {The dog bites the man.};
-  \pgfmathsetseed{2026}
-  \foreach \t/\w in {0/The, 1/dog, 2/bites, 3/the, 4/man, 5/.} {
-    \node[tok] (t\t) at (\t,-0.85) {\strut\w};
-    \draw[->, black!45] (text.south) -- (t\t.north);
-    \draw[->, black!45] (t\t.south) -- (\t,-1.32);
-    \foreach \k in {0,...,7} {
-      % e_{i_t}: a random entry in [-1, 1]
-      \pgfmathsetmacro\v{rand}
-      \pgfmathtruncatemacro\pct{round(100*abs(\v))}
-      \pgfmathtruncatemacro\isneg{\v<0}
-      \ifnum\isneg=1 \def\pc{posneg}\else\def\pc{ctrl}\fi
-      \node[cell, draw=black!30, fill=\pc!\pct!white] at (\t,-1.5-0.24*\k) {};
-      % p_t: sin and cos of omega_j t, omega_j = 10000^(-2j/d), in neighbouring coordinates
-      \pgfmathsetmacro\angle{10000^(-2*floor(\k/2)/8)*\t}
-      \pgfmathsetmacro\v{mod(\k,2)==0 ? sin(\angle r) : cos(\angle r)}
-      \pgfmathtruncatemacro\pct{round(100*abs(\v))}
-      \pgfmathtruncatemacro\isneg{\v<0}
-      \ifnum\isneg=1 \def\pc{posneg}\else\def\pc{ctrl}\fi
-      \node[cell, draw=black!30, fill=\pc!\pct!white] at (\t,-3.82-0.24*\k) {};
-    }
-    \node at (\t,-3.47) {$+$};
-  }
-  \node[lab] at (-0.55,-0.85) {$i_t$};
-  \node[lab] at (-0.55,-2.34) {$e_{i_t}$};
-  \node[lab] at (-0.55,-4.66) {$\ctrl{p_t}$};
-\end{tikzpicture}
-\end{column}
-\begin{column}{0.41\textwidth}
-\small
-\begin{align*}
-x_t&=e_{i_t}+\ctrl{p_t}\\
-\ctrl{p_t}&=\big(\sin\omega_jt,\ \cos\omega_jt\big)_{j<d/2}\\
-\omega_j&=10000^{-2j/d}
-\end{align*}
-
-\scriptsize
-Drawn: $d=8$. One learned vector $e_i\in\R^d$ per token of the vocabulary.\footnotemark
-
-% \medskip
-% Without \ctrl{$p_t$}, \texttt{The man bites the dog.} gives the same vectors: the model would not see the \alert{order} \citep{vaswani2017}.
-\end{column}
-\end{columns}
-\footnotetext{GPT-3: $V=50\,257$ tokens, $d=12\,288$ \citep{brown2020}.}
+{\Large\alert{From one layer to many}}
 \end{frame}
-
-
-% =========================================================================
-
 
 % =========================================================================
 \begin{frame}{What depth buys: 1 and 2 layers}
@@ -1435,9 +1439,11 @@ No single-layer perceptron $f(x)=\mathbf 1[w_1x_1+w_2x_2\ge b]$ computes XOR.
 Two layers $\sum_j c_j\,\sigma(a_j\cdot x+b_j)$ approximate any continuous $f$.
 \end{mathbox}
 
+
 \medskip
 \alert{Why do we need more layers?}
 \end{frame}
+
 
 
 % =========================================================================
@@ -1561,12 +1567,12 @@ where $\sigma'\le\tfrac14$, ReLU: $\sigma'\in\{0,1\}$.
 
 
 % =========================================================================
-\begin{frame}{Scaling in miniature: more data, more parameters}
-\centering
-\includegraphics[width=\textwidth]{scaling_mnist.pdf}
+% \begin{frame}{Scaling in miniature: more data, more parameters}
+% \centering
+% \includegraphics[width=\textwidth]{scaling_mnist.pdf}
 
-\raggedright\small $784\to h\to h\to10$ on the first $N$ digits. \alert{A power law, until the other quantity runs out.}
-\end{frame}
+% \raggedright\small $784\to h\to h\to10$ on the first $N$ digits. \alert{A power law, until the other quantity runs out.}
+% \end{frame}
 
 
 
@@ -1576,13 +1582,13 @@ where $\sigma'\le\tfrac14$, ReLU: $\sigma'\in\{0,1\}$.
 \renewcommand{\arraystretch}{1.05}
 \begin{tabular}{@{}l r r@{}}
 \toprule
- & \textbf{CPU}: Ryzen 9 7950X & \textbf{GPU}: H100\footnotemark \\
+ & \textbf{CPU}: Ryzen 9 7950X & \textbf{GPU}: H100\footnote{OpenAI: ``well over 1 million GPUs'' by the end of 2025 \citep{altman2025}.} \\
 \midrule
 units & 16 & 132 \\
 clock & $\approx 5$ GHz & 1.83 GHz \\
 \midrule
-\textbf{TFLOP/s} \citep{fog2025,nvidiacuda,nvidiah100} &  &  \\
-FMA ($a\cdot b+c$) & \alert{2.6} & \alert{989} \\
+\multicolumn{3}{@{}l}{\textbf{TFLOP/s}: trillions ($10^{12}$) of floating-point operations per second.\footnote{CPU: \citep{fog2025}; GPU: \citep{nvidiacuda,nvidiah100}.}} \\
+multiply+add ($a\cdot b+c$) & \alert{2.6} & \alert{989} \\
 add, multiply & 1.3 & 67 \\
 $\max$ (ReLU) & 1.3 & 33 \\
 divide & 0.2 & 4 \\
@@ -1592,10 +1598,6 @@ $\exp$, $\log$, $\sin$, $\cos$ & 0.05 & 4 \\
 read from memory ($10^{12}$ numbers/s) & 0.02 & 1.7 \\
 \bottomrule
 \end{tabular}\par}
-\footnotetext{OpenAI: ``well over 1 million GPUs'' by the end of 2025 \citep{altman2025}.}
-
-\medskip
-\alert{TFLOP/s}: trillions ($10^{12}$) of floating-point operations per second.
 
 \end{frame}
 
@@ -1705,25 +1707,6 @@ The classifier that always predicts $y=0$:
 \]
 \end{frame}
 
-
-% =========================================================================
-% The threshold and the weighted loss.  Figure and numbers: figures/part3_loss.py (10^6 test
-% points; the threshold of best F_1 is chosen on 20 000 validation points).  The network is
-% 2 -> 16 -> 16 -> 1, trained with Adam as the digits.
-\begin{frame}{A weight in the loss is a threshold}
-\small
-The cross-entropy gives $p(x;w)\approx\Prob(y=1\mid x)$. Predict a fault when $p(x;w)>t$.
-
-\centering
-\includegraphics[width=0.9\textwidth]{rare_event_metrics.pdf}
-
-\raggedright\footnotesize
-\begin{itemize}
-\item \alert{The accuracy barely moves:} at least $99\%$ for every $t\ge0.22$. A lower $t$ trades precision for recall; $F_1$ is best at $t=0.42$, chosen on validation data.
-\item \alert{Weighting the faults by $c$} in the cross-entropy moves the threshold. The weighted risk is minimal for $q=\frac{c\,p}{c\,p+1-p}$, and $q>\tfrac12\iff p>\tfrac1{1+c}$ \citep{elkan2001}. With $c=99$ (triangle), the decisions agree with $t=0.01$ on $98.9\%$ of the test points.
-\item \alert{The metric is not the loss.} Accuracy and $F_1$ are piecewise constant in $w$, with zero gradient almost everywhere. Train on the cross-entropy, then choose $t$.
-\end{itemize}
-\end{frame}
 
 
 
