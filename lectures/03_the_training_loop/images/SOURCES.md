@@ -493,9 +493,9 @@ the minimizer is `Sigma = (4 / N) sum_i r_i^2 phi_i phi_i^T` with the residuals 
 Part 5: the loop at scale
 -------------------------
 
-Every figure of this part but one is an original plot in the course palette
-(`notebooks/plotting.py`); the exception is `kaplan2020_scaling_laws.pdf`, taken from the paper
-(see "External figure" below). `../figures/part5_surprises.py` writes the four figures that use the
+Every figure of this part but two is an original plot in the course palette
+(`notebooks/plotting.py`); the exceptions are `kaplan2020_scaling_laws.pdf` and
+`kimi_linear.png`, taken from the papers (see "External figures" below). `../figures/part5_surprises.py` writes the four figures that use the
 target `g(x) = sin(3x) + 0.3x` of lecture 02; `../figures/part5_scale.py` writes the two figures
 about scale. Both print every number that the slides quote.
 
@@ -589,7 +589,7 @@ about scale. Both print every number that the slides quote.
   accuracy). The MNIST files (LeCun, Bottou, Bengio and Haffner, 1998) are downloaded once to
   `notebooks/data/` and are not part of the repository.
 
-### External figure
+### External figures
 
 - `kaplan2020_scaling_laws.pdf`: Figure 1 of J. Kaplan et al., *Scaling Laws for Neural
   Language Models*, arXiv:2001.08361 (2020), on the first of the two "Scaling laws" frames: test
@@ -611,6 +611,13 @@ about scale. Both print every number that the slides quote.
      "Incorrect number of arguments in 'sc' command").
   3. Recompressed with `mutool clean -gz` and cropped with `pdfcrop --margins 1` to
      899 x 271 pt.
+
+- `kimi_linear.png`: Table 6 of Kimi Team, *Kimi Linear: An Expressive, Efficient Attention
+  Architecture*, arXiv:2510.26692 (2025), on the frame "Attention: recurrent and parallel forms"
+  after "The cost of one operation": the recurrent and parallel forms of softmax attention and
+  of its linear variants (LA, Mamba2, GLA, DeltaNet, ..., KDA). A screenshot of the PDF
+  (1355 x 893 px, white background, the table's own caption included), added on 2026-11-16;
+  not ours, and its licence is not established.
 
 ### Quotations and published numbers on the slides
 
