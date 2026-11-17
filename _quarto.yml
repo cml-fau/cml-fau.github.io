@@ -87,5 +87,15 @@ format:
     code-tools: true
     code-copy: true
     html-math-method: mathjax
+    # Google Tag Manager container GTM-KW97DGFF (Google's standard loader), loaded on every page. Analytics itself (e.g. a GA4 Google tag) is configured inside the
+    # GTM container, not here.
     include-in-header:
-      text: '<link rel="apple-touch-icon" href="/apple-touch-icon.png">'
+      text: |
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+        <script>
+        (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+        new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+        j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+        'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+        })(window,document,'script','dataLayer','GTM-KW97DGFF');
+        </script>
