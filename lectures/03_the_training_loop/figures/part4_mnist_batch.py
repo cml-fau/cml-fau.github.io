@@ -1,5 +1,5 @@
-"""Figures of part 4 (optimization) on the digit classifier: mnist_batch_fixed_step,
-mnist_batch_fixed_ratio and, for the appendix, mnist_batch_test_error.
+"""Figures of part 4 (optimization) on the digit classifier: mnist_batch_fixed_step and
+mnist_batch_fixed_ratio.
 
 Run from the repository root:
 
@@ -8,10 +8,9 @@ Run from the repository root:
 The data, the network 784 -> 16 -> 16 -> 10, the cross-entropy and the five epochs of the
 baseline of lecture 02 are kept; only the optimizer changes: its batch size B, its step
 eta, and Adam or plain SGD.  mnist_batch_fixed_step: a fixed step.  mnist_batch_fixed_ratio:
-SGD with eta = c B, which keeps the ratio eta / B = c.  Each shows, full width, the training loss
-J(w) along the runs that start from SGD with eta = 0.05 at B = 64 and change B.
-mnist_batch_test_error: the test error after five epochs against B, a fixed step on the left and
-eta = c B on the right.  Every run prints
+SGD with eta = c B, which keeps the ratio eta / B = c.  Left in each: the training loss J(w) along
+the runs that start from SGD with eta = 0.05 at B = 64 and change B.  Right: the test error
+after five epochs against B.  Every run prints
 its numbers.  The runs go to a pool of one-thread processes: about seven minutes on 16 cores.
 """
 import os
@@ -26,7 +25,7 @@ from common import P, np, plt, torch, nn
 train, test = C.load_mnist("train"), C.load_mnist("test")
 N = len(train[0])
 EPOCHS = 5
-PER_EPOCH = 50                     # evaluations of J per epoch, for the loss curves
+PER_EPOCH = 50                     # evaluations of J per epoch, for the curves of the bottom row
 cross_entropy = nn.CrossEntropyLoss()
 
 
@@ -63,9 +62,9 @@ def run(key):
 
 
 # ---------------------------------------------------------------------------------------
-# The runs.  Test error, left: a fixed step, Adam with the baseline eta = 1e-3 and SGD with
-# two steps.  Right: SGD with eta = c B, for c = eta_64 / 64 (the step eta_64 at B = 64).
-# Training loss: SGD with eta = 0.05 and eta = (0.05 / 64) B.
+# The runs.  Top left: a fixed step, Adam with the baseline eta = 1e-3 and SGD with two
+# steps.  Top right: SGD with eta = c B, for c = eta_64 / 64 (the step eta_64 at B = 64).
+# Bottom: SGD with eta = 0.05 (left) and eta = (0.05 / 64) B (right).
 # ---------------------------------------------------------------------------------------
 batches = [2 ** k for k in range(13)]                               # 1, 2, 4, ..., 4096
 with_full_batch = batches + [N]
@@ -77,7 +76,7 @@ curve_batches = [1, 4, 16, 64, 256, 1024]
 
 
 def key(method, batch, eta):
-    """A run is (method, B, eta, whether J is recorded, seed); J is recorded for the loss curves."""
+    """A run is (method, B, eta, whether J is recorded, seed); J is recorded for the bottom row."""
     return method, batch, eta, method == "SGD" and batch in curve_batches and eta in (0.05, 0.05 * batch / 64), 0
 
 
@@ -135,33 +134,31 @@ def figures(results):
             ax.semilogy(epochs, results[key("SGD", batch, step(batch))][1], color=shades(i / (len(curve_batches) - 1)),
                         lw=0.9, label=f"$B={batch}$")
         P.label(ax, "epoch", "training loss $J(w)$", title=title,
-                legend=dict(fontsize=7, loc="upper right", ncol=3, columnspacing=1.0, handlelength=1.4))
+                legend=dict(fontsize=6.3, loc="upper right", ncol=3, columnspacing=1.0, handlelength=1.4))
         ax.minorticks_off()
         ax.set_yticks([0.2, 0.5, 1, 2])
         ax.set_yticklabels(["0.2", "0.5", "1", "2"])
         ax.set_ylim(0.12, 7)
         ax.set_xlim(0, EPOCHS)
 
-    # The training loss, one full-width panel per slide: growing B at a fixed step, and keeping eta / B fixed
-    for name, step, title in (("mnist_batch_fixed_step", lambda batch: 0.05, r"SGD, $\eta=0.05$"),
-                              ("mnist_batch_fixed_ratio", lambda batch: 0.05 * batch / 64,
-                               r"SGD, $\eta=(0.05/64)\,B$")):
-        fig, ax = P.panels(1, size=(4.27, 2.9))   # the text width and height of a slide, at scale 1
-        loss_axes(ax, step, title)
-        C.save(fig, name)
-
-    # The test error, for the appendix: a fixed step (left), eta = c B (right)
-    fig, (ax_step, ax_ratio) = P.panels(2, size=(3.1, 3.4))
+    # Growing B at a fixed step
+    fig, (ax_loss, ax_error) = P.panels(2, size=(3.1, 3.4))
     for name, (method, eta, color, marker) in fixed.items():
-        ax_step.loglog(with_full_batch, [100 - accuracy(method, batch, eta) for batch in with_full_batch],
-                       "-" + marker, color=color, ms=3, lw=1.1, label=name)
-    error_axes(ax_step, with_full_batch, r"A fixed step $\eta$",
+        ax_error.loglog(with_full_batch, [100 - accuracy(method, batch, eta) for batch in with_full_batch],
+                        "-" + marker, color=color, ms=3, lw=1.1, label=name)
+    error_axes(ax_error, with_full_batch, r"A fixed step $\eta$",
                legend=dict(fontsize=6.3, loc="upper center", bbox_to_anchor=(0.42, 1)))
+    loss_axes(ax_loss, lambda batch: 0.05, r"SGD, $\eta=0.05$")
+    C.save(fig, "mnist_batch_fixed_step")
+
+    # Keeping the ratio eta / B fixed
+    fig, (ax_loss, ax_error) = P.panels(2, size=(3.1, 3.4))
     for eta_64, color in scaled.items():
-        ax_ratio.loglog(batches, [100 - accuracy("SGD", batch, eta_64 * batch / 64) for batch in batches],
+        ax_error.loglog(batches, [100 - accuracy("SGD", batch, eta_64 * batch / 64) for batch in batches],
                         "-o", color=color, ms=3, lw=1.1, label=rf"$c={eta_64}/64$")
-    error_axes(ax_ratio, batches, r"SGD with $\eta=c\,B$", legend=dict(fontsize=6.3, loc="upper left"))
-    C.save(fig, "mnist_batch_test_error")
+    error_axes(ax_error, batches, r"SGD with $\eta=c\,B$", legend=dict(fontsize=6.3, loc="upper left"))
+    loss_axes(ax_loss, lambda batch: 0.05 * batch / 64, r"SGD, $\eta=(0.05/64)\,B$")
+    C.save(fig, "mnist_batch_fixed_ratio")
 
 
 if __name__ == "__main__":

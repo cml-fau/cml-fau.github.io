@@ -495,12 +495,11 @@ Part 5: the loop at scale
 
 Every figure of this part but two is an original plot in the course palette
 (`notebooks/plotting.py`); the exceptions are `kaplan2020_scaling_laws.pdf` and
-`kimi_linear.png`, taken from the papers (see "External figures" below). `../figures/part5_surprises.py` writes the three figures that use the
-target `g(x) = sin(3x) + 0.3x` of lecture 02 and the spectral-bias figure of the hybrid-modeling
-slides; `../figures/part5_scale.py` writes the two figures
+`kimi_linear.png`, taken from the papers (see "External figures" below). `../figures/part5_surprises.py` writes the four figures that use the
+target `g(x) = sin(3x) + 0.3x` of lecture 02; `../figures/part5_scale.py` writes the two figures
 about scale. Both print every number that the slides quote.
 
-### `../figures/part5_surprises.py` (about ten minutes: four for the exact Hessians of the edge-of-stability figure, six for the two networks of the spectral-bias figure)
+### `../figures/part5_surprises.py` (about four minutes, nearly all of it the exact Hessians of the edge-of-stability figure)
 
 - `overfitting_classical.pdf`: the double-descent experiment below, restricted to
   `m = 1, ..., 16` features, that is to the classical regime `m < N = 20`. The blue curve is
@@ -526,17 +525,11 @@ about scale. Both print every number that the slides quote.
   `eta = 0.2, 0.1, 0.05`. The sharpness is the largest eigenvalue of the exact Hessian of the
   training loss, computed every 50 steps. The experiment follows Cohen, Kaur, Li, Kolter and
   Talwalkar (2021).
-- `spectral_bias_gray_scott.pdf` (copied from the hybrid-modeling slides, same code and seeds):
-  the target is `v` at `t = 2000` of the Gray-Scott model (labyrinth regime, `F = 0.037`,
-  `k = 0.060`, `Du = 0.2`, `Dv = 0.1`) on a periodic 128 x 128 grid, integrated with explicit
-  Euler (`dt = dx = 1`, 5-point Laplacian) from a seeded initial condition (NumPy seed 1). Two
-  ReLU networks with 3 hidden layers of width 128 (PyTorch seed 0) regress the value of `v` on
-  the pixel position with Adam, learning rate `1e-3`, full batch, 3,000 steps. Top row: the input
-  is `(x, y)` scaled to `[-1, 1]^2`. Bottom row: the input is `M = 128` Fourier features
-  `(cos 2 pi B p, sin 2 pi B p)` with the rows of `B` drawn from `N(0, 6^2 I)` and rounded to
-  integers, so the features are periodic on the grid like the pattern (Tancik et al., 2020).
-  The columns are the fits after 30, 100, 300, 1,000 and 3,000 steps; the target is on the
-  right. Drawn in matplotlib's default style with the colour map of the hybrid slides.
+- `spectral_bias.pdf` (from lecture 02; same run, redrawn): a `1 -> 64 -> 64 -> 1` tanh network
+  (PyTorch seed 0) fitted to `sin(3x) + 0.3x + 0.3 sin(20x)` on 160 equispaced points with Adam,
+  learning rate `1e-3`, full batch, 10,000 steps. The target is dashed on top of the fits. The
+  right panel is the projection of the residual on `sin(3x) + 0.3x` and on `0.3 sin(20x)`, each
+  divided by the squared norm of that component (lecture 02 projected on `sin(3x)` alone).
 
 ### `../figures/part5_scale.py` (about five minutes: 24 training runs of 4,690 steps)
 

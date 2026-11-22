@@ -1,5 +1,4 @@
-"""Figures of part 5 of the_training_loop.tex: three that use the target g of lecture 02, and
-the spectral bias.
+"""Figures of part 5 of the_training_loop.tex that use the target g of lecture 02.
 
 Run from the repository root:
 
@@ -10,14 +9,12 @@ Run from the repository root:
 2. double_descent: the same experiment continued past m = N with the minimal-norm interpolant.
 3. edge_of_stability: full-batch gradient descent on a small tanh network; the sharpness
    rises to 2 / eta.
-4. spectral_bias_gray_scott: a network fed the pixel position (x, y) fits the coarse shape of
-   a Gray-Scott pattern first; with Fourier features it fits the whole pattern.  Copied from
-   the hybrid-modeling slides.
+4. spectral_bias: the smooth part of a target is learned before its ripple.
 
-Figures 2 and 3 were made for the second part of lecture 02 and moved here with their seeds
-unchanged.  Every number quoted on the slides is printed below.  The run takes about ten
-minutes: four for the exact Hessians of figure 3 and six for the two networks of figure 4
-(on 8 threads).
+Figures 2 to 4 were made for the second part of lecture 02 and moved here with their seeds
+unchanged; figure 4 now measures the error on all of sin(3x) + 0.3x.  Every number quoted on
+the slides is printed below.  The run takes about four minutes; nearly all of it is the exact
+Hessians of figure 3.
 """
 import common as C
 from common import P, np, plt, torch, nn
@@ -184,157 +181,41 @@ C.save(fig, "edge_of_stability")
 
 
 # ---------------------------------------------------------------------------------------
-# 4. Spectral bias: a network fits the coarse shape of a Gray-Scott pattern first
+# 4. Spectral bias: the smooth part of the target is learned first
 # ---------------------------------------------------------------------------------------
-# Copied from the hybrid-modeling slides: experiments/spectral_bias_gray_scott.py there, with
-# the part of experiments/neural_pde_gray_scott.py it imports (the Gray-Scott simulator) pasted
-# in.  Same seeds and settings; only the cache (--replot) and the params .tex file are left out.
-#
-# Target: v(., t = 2000) of the Gray-Scott model (Gray & Scott 1984, Pearson 1993), y = (u, v)
-# on a periodic 128 x 128 grid, labyrinth regime, from initial condition B of the hybrid slides:
-#     d_t u - Du Lap u = -u v^2 + F (1 - u),    d_t v - Dv Lap v = u v^2 - (F + k) v,
-# integrated with explicit Euler (dt = dx = 1, 5-point Laplacian).  Plain supervised
-# regression, pixel position -> value of v.
-#
-# Two networks with the same body (ReLU MLP, 3 hidden layers of width 128), the same loss
-# (mean squared error over all 128^2 pixels, full batch) and the same optimizer (Adam):
-#   top:    input p = (x, y), scaled to [-1, 1]^2;
-#   bottom: input phi(p) = (cos 2 pi B p, sin 2 pi B p), Fourier features (Tancik et al. 2020)
-#           with B in Z^(M x 2) drawn from N(0, SIGMA^2) and rounded, so phi is periodic on
-#           the grid like the pattern.
-# The figure shows both fits at a few training steps next to the target.
-from matplotlib.colors import LinearSegmentedColormap
+frequency, amplitude = 20.0, 0.3
+low_part = torch.sin(3 * inputs) + 0.3 * inputs
+high_part = amplitude * torch.sin(frequency * inputs)
+wiggly = low_part + high_part
+missing = lambda residual, part: ((residual * part).sum() / (part * part).sum()).item()
 
-REGIMES = {"labyrinth": (0.037, 0.060), "spots": (0.030, 0.062)}
-N, DU, DV = 128, 0.2, 0.1            # grid, diffusion (grid units; dt = dx = 1)
-D = torch.tensor([DU, DV]).view(2, 1, 1)
+torch.manual_seed(0)
+net_sb = nn.Sequential(nn.Linear(1, 64), nn.Tanh(), nn.Linear(64, 64), nn.Tanh(), nn.Linear(64, 1))
+optimizer = torch.optim.Adam(net_sb.parameters(), lr=1e-3)
+snapshots, record = {}, {}
+record_at = set(np.round(np.geomspace(1, 10_000, 120)).astype(int).tolist()) | {100, 1000, 3000, 10_000}
+for k in range(10_001):
+    prediction = net_sb(inputs)
+    loss = ((prediction - wiggly) ** 2).mean()
+    if k in (100, 1000, 3000):
+        snapshots[k] = prediction.detach().numpy().ravel()
+    if k in record_at:
+        residual = (wiggly - prediction).detach()
+        record[k] = (missing(residual, low_part), missing(residual, high_part))
+    optimizer.zero_grad()
+    loss.backward()
+    optimizer.step()
+for k in (100, 1000, 3000, 10_000):
+    print(f"spectral bias, step {k}: missing fraction of sin(3x) + 0.3x = {record[k][0]:+.3f}, of sin(20x) = {record[k][1]:+.3f}")
 
-T = 2000                         # time of the Gray-Scott snapshot that is fitted
-WIDTH, DEPTH, LR = 128, 3, 1e-3  # same body and optimizer for both inputs
-M, SIGMA = 128, 6                # number of frequencies, their scale (cycles per domain)
-SHOW = (30, 100, 300, 1000, 3000)  # training steps in the figure
-
-
-def lap(y):  # periodic 5-point Laplacian
-    return y.roll(1, -1) + y.roll(-1, -1) + y.roll(1, -2) + y.roll(-1, -2) - 4 * y
-
-
-def make_reaction(F, k):
-    def f_true(y):
-        u, v = y[..., 0, :, :], y[..., 1, :, :]
-        uvv = u * v * v
-        return torch.stack([-uvv + F * (1 - u), uvv - (F + k) * v], dim=-3)
-    return f_true
-
-
-def step(y, f):
-    return y + D * lap(y) + f(y)
-
-
-def initial_condition(seed, n_seeds=6):
-    """u = 1, v = 0 with a few perturbed squares and a little noise."""
-    rng = np.random.default_rng(seed)
-    u, v = np.ones((N, N)), np.zeros((N, N))
-    for _ in range(n_seeds):
-        i, j = rng.integers(10, N - 10, 2)
-        s = rng.integers(4, 9)
-        u[i - s:i + s, j - s:j + s], v[i - s:i + s, j - s:j + s] = 0.5, 0.25
-    u += 0.02 * rng.standard_normal((N, N))
-    v += 0.02 * rng.standard_normal((N, N))
-    return torch.tensor(np.stack([u, v]), dtype=torch.float32)
-
-
-@torch.no_grad()
-def simulate(y, f, T, every):
-    out = [y]
-    for n in range(1, T + 1):
-        y = step(y, f)
-        if n % every == 0:
-            out.append(y)
-    return torch.stack(out)
-
-
-def mlp(d_in):
-    layers, d = [], d_in
-    for _ in range(DEPTH):
-        layers += [nn.Linear(d, WIDTH), nn.ReLU()]
-        d = WIDTH
-    return nn.Sequential(*layers, nn.Linear(d, 1))
-
-
-def fourier_features(p, B):
-    angle = 2 * np.pi * p @ B.T
-    return torch.cat([torch.cos(angle), torch.sin(angle)], dim=1)
-
-
-def fit(inputs, target, seed=0):
-    """Adam on the full batch; returns {step: fit on the grid} and {step: relative L2 error}."""
-    torch.manual_seed(seed)
-    net = mlp(inputs.shape[1])
-    opt = torch.optim.Adam(net.parameters(), lr=LR)
-    shots, errors = {}, {}
-    for n in range(max(SHOW) + 1):
-        out = net(inputs)
-        loss = ((out - target) ** 2).mean()
-        if n in SHOW:
-            shots[n] = out.detach()
-            errors[n] = (loss / (target ** 2).mean()).sqrt().item()
-            print(f"  step {n:5d}  relative error {errors[n]:.3f}", flush=True)
-        if n == max(SHOW):
-            break
-        opt.zero_grad()
-        loss.backward()
-        opt.step()
-    return shots, errors
-
-
-def spectral_bias_gray_scott():
-    torch.set_num_threads(8)  # as in the hybrid slides: the matmuls here are large enough to profit
-    F, k = REGIMES["labyrinth"]
-    v = simulate(initial_condition(1), make_reaction(F, k), T, T)[-1, 1]   # (N, N)
-    N = v.shape[0]
-    mean, std = v.mean(), v.std()
-    target = ((v - mean) / std).reshape(-1, 1)                          # normalized for training
-
-    i, j = torch.meshgrid(torch.arange(N), torch.arange(N), indexing="ij")
-    p = torch.stack([i, j], dim=-1).reshape(-1, 2).float() / N            # pixel positions in [0, 1)^2
-    B = (SIGMA * torch.randn(M, 2, generator=torch.Generator().manual_seed(0))).round()
-    inputs = {"xy": 2 * p - 1, "ff": fourier_features(p, B)}
-
-    runs = {}
-    for name, x in inputs.items():
-        print(f"spectral bias, input {name}: {x.shape[1]} features", flush=True)
-        shots, errors = fit(x, target)
-        runs[name] = ({n: (s.reshape(N, N) * std + mean).numpy() for n, s in shots.items()}, errors)
-
-    # --- figure: two rows of snapshots, the target on the right ------------------------
-    # Drawn in matplotlib's default style, as in the hybrid slides, not in the house style.
-    with plt.style.context("default"):
-        cmap = LinearSegmentedColormap.from_list("v", ["#ffffff", "#7f9ad1", "#1f3a93", "#EB811B"])
-        plt.rcParams.update({"font.size": 7})
-        n_col = len(SHOW)
-        fig = plt.figure(figsize=(4.4, 1.47))
-        grid = fig.add_gridspec(2, n_col + 2, width_ratios=[1] * n_col + [0.1, 2.2], wspace=0.06, hspace=0.06,
-                                left=0.06, right=0.995, top=0.9, bottom=0.01)
-
-        def show(ax, img):
-            ax.imshow(img, cmap=cmap, vmin=0, vmax=0.45, interpolation="bilinear")
-            ax.set_xticks([]), ax.set_yticks([])
-            for s in ax.spines.values():
-                s.set_linewidth(0.4), s.set_color("0.6")
-
-        for r, name in enumerate(("xy", "ff")):
-            for c, n in enumerate(SHOW):
-                ax = fig.add_subplot(grid[r, c])
-                show(ax, runs[name][0][n])
-                if r == 0:
-                    ax.set_title(f"step {n}", fontsize=7, pad=2)
-                if c == 0:
-                    ax.set_ylabel(("$(x,y)$", r"$\varphi(x,y)$")[r], fontsize=7, color=("0.2", "#EB811B")[r])
-        ax = fig.add_subplot(grid[:, -1])
-        show(ax, v.numpy())
-        ax.set_title("target", fontsize=7, pad=2)
-        C.save(fig, "spectral_bias_gray_scott")
-
-
-spectral_bias_gray_scott()
+fig, (ax_fit, ax_modes) = P.panels(2, size=(3.1, 3.0), ratios=[1.25, 1])
+ax_fit.plot(x, wiggly.numpy().ravel(), "--", color=P.INK, lw=1, zorder=3, label="target")   # on top of the fits
+for (k, values), color in zip(snapshots.items(), [P.AQUA, P.ORANGE, P.BLUE]):
+    ax_fit.plot(x, values, color=color, lw=1.1, label=f"step {k}")
+P.label(ax_fit, "$x$", title=r"Target $\sin(3x)+0.3x+0.3\sin(20x)$", legend=dict(fontsize=7, loc="upper left"))
+record_steps = np.array(sorted(record))
+ax_modes.semilogx(record_steps, [record[k][0] for k in record_steps], color=P.MAGENTA, label=r"$\sin(3x)+0.3x$")
+ax_modes.semilogx(record_steps, [record[k][1] for k in record_steps], color=P.YELLOW, label=r"$0.3\sin(20x)$")
+P.label(ax_modes, "step $k$", "fraction still missing", zero="h", title="Each component of the error",
+        ylim=(-0.08, 1.7), yticks=[0, 0.5, 1], legend=dict(fontsize=7, loc="upper center", ncols=2))
+C.save(fig, "spectral_bias")

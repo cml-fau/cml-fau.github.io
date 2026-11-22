@@ -124,7 +124,8 @@ text and the code is the smallest runnable confirmation of it.
 
 Lecture slides go in [`lectures/`](lectures/), one folder per lecture
 (`00_introduction_control_and_machine_learning/`, `01_introduction_control_theory/`,
-`02_universal_approximation_and_optimization/`, `03_the_training_loop/`); each holds
+`02_universal_approximation_and_optimization/`, `03_the_training_loop/`,
+`04_the_training_loop_ii/`); each holds
 the `.tex`, the compiled `.pdf` and its `images/`, and the first one a small `videos/` folder with
 the clips of the lecture that have no public source. Presentations from previous years are in
 [`presentations/`](presentations/).

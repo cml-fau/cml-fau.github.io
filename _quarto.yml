@@ -70,6 +70,8 @@ website:
             href: lectures/02_universal_approximation_and_optimization/universal_approximation_and_optimization.pdf
           - text: "03 · The Training Loop"
             href: lectures/03_the_training_loop/the_training_loop.pdf
+          - text: "04 · The Training Loop II"
+            href: lectures/04_the_training_loop_ii/the_training_loop_ii.pdf
       - section: Notebooks
         contents: notebooks/*.ipynb
   page-footer:
