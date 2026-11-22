@@ -1219,190 +1219,190 @@ x = torch.relu(layer(x))
   cdcorner/.style={inner sep=0pt},
   cdlabel/.style={font=\footnotesize, inner sep=1.5pt, text height=1.7ex, text depth=0.5ex},  % one height: the rows line up
 }
-\begin{frame}{Invariance and equivariance}
-\begin{columns}[t]
-\begin{column}{0.5\textwidth}
-\begin{mathbox}[halign=center, equal height group=symmetry]{Equivariance}
-$f\colon\R^n\to\R^n$\\
-$f(Tx)=T\,f(x)$ for every shift $T$
-\end{mathbox}
-\centering
-\begin{tikzpicture}[cdsquare]
-  \node[cdcorner] (x)   at (0,0)    {\includegraphics{symmetry_x.pdf}};
-  \node[cdcorner] (kx)  at (30,0)   {\includegraphics{symmetry_kx.pdf}};
-  \node[cdcorner] (Tx)  at (0,-23)  {\includegraphics{symmetry_Tx.pdf}};
-  \node[cdcorner] (kTx) at (30,-23) {\includegraphics{symmetry_kTx.pdf}};
-  \draw[->] ([xshift=1mm]x.east)  -- node[above] {$k\star$} ([xshift=-1mm]kx.west);
-  \draw[->] ([xshift=1mm]Tx.east) -- node[below] {$k\star$} ([xshift=-1mm]kTx.west);
-  \draw[->] ([yshift=-1mm]x.south)  -- node[left]  {$T$} ([yshift=1mm]Tx.north);
-  \draw[->] ([yshift=-1mm]kx.south) -- node[right] {$T$} ([yshift=1mm]kTx.north);
-  \node[cdlabel, above] at (x.north)   {$x$};
-  \node[cdlabel, above] at (kx.north)  {$k\star x$};
-  \node[cdlabel, below] at (Tx.south)  {$Tx$};
-  \node[cdlabel, below] at (kTx.south) {$k\star Tx=T(k\star x)$};
-\end{tikzpicture}
-\end{column}
-\begin{column}{0.5\textwidth}
-\begin{mathbox}[halign=center, equal height group=symmetry]{Invariance}
-$f\colon\R^n\to\{0,\dots,9\}$\\
-$f(Tx)=f(x)$ for every shift $T$
-\end{mathbox}
-\centering
-\begin{tikzpicture}[cdsquare]
-  \node[cdcorner] (x)   at (0,0)    {\includegraphics{symmetry_x.pdf}};
-  \node[cdcorner] (Tx)  at (0,-23)  {\includegraphics{symmetry_Tx.pdf}};
-  \path (30,0) node[cdcorner, minimum size=14mm] (fx) {}  (30,-23) node[cdcorner, minimum size=14mm] (fTx) {};
-  \node[draw=boxframe, fill=boxbg, rounded corners=1pt, minimum size=8mm, font=\Large] (two)  at (fx)  {$2$};
-  \node[draw=boxframe, fill=boxbg, rounded corners=1pt, minimum size=8mm, font=\Large] (two') at (fTx) {$2$};
-  \draw[->] ([xshift=1mm]x.east)  -- node[above] {$f$} ([xshift=-1mm]two.west);
-  \draw[->] ([xshift=1mm]Tx.east) -- node[below] {$f$} ([xshift=-1mm]two'.west);
-  \draw[->] ([yshift=-1mm]x.south)  -- node[left]  {$T$} ([yshift=1mm]Tx.north);
-  \draw[double equal sign distance] ([yshift=-1mm]fx.south) -- ([yshift=1mm]fTx.north);
-  \node[cdlabel, above] at (x.north)   {$x$};
-  \node[cdlabel, above] at (fx.north)  {$f(x)$};
-  \node[cdlabel, below] at (Tx.south)  {$Tx$};
-  \node[cdlabel, below] at (fTx.south) {$f(Tx)=f(x)$};
-\end{tikzpicture}
-\end{column}
-\end{columns}
-\end{frame}
+% \begin{frame}{Invariance and equivariance}
+% \begin{columns}[t]
+% \begin{column}{0.5\textwidth}
+% \begin{mathbox}[halign=center, equal height group=symmetry]{Equivariance}
+% $f\colon\R^n\to\R^n$\\
+% $f(Tx)=T\,f(x)$ for every shift $T$
+% \end{mathbox}
+% \centering
+% \begin{tikzpicture}[cdsquare]
+%   \node[cdcorner] (x)   at (0,0)    {\includegraphics{symmetry_x.pdf}};
+%   \node[cdcorner] (kx)  at (30,0)   {\includegraphics{symmetry_kx.pdf}};
+%   \node[cdcorner] (Tx)  at (0,-23)  {\includegraphics{symmetry_Tx.pdf}};
+%   \node[cdcorner] (kTx) at (30,-23) {\includegraphics{symmetry_kTx.pdf}};
+%   \draw[->] ([xshift=1mm]x.east)  -- node[above] {$k\star$} ([xshift=-1mm]kx.west);
+%   \draw[->] ([xshift=1mm]Tx.east) -- node[below] {$k\star$} ([xshift=-1mm]kTx.west);
+%   \draw[->] ([yshift=-1mm]x.south)  -- node[left]  {$T$} ([yshift=1mm]Tx.north);
+%   \draw[->] ([yshift=-1mm]kx.south) -- node[right] {$T$} ([yshift=1mm]kTx.north);
+%   \node[cdlabel, above] at (x.north)   {$x$};
+%   \node[cdlabel, above] at (kx.north)  {$k\star x$};
+%   \node[cdlabel, below] at (Tx.south)  {$Tx$};
+%   \node[cdlabel, below] at (kTx.south) {$k\star Tx=T(k\star x)$};
+% \end{tikzpicture}
+% \end{column}
+% \begin{column}{0.5\textwidth}
+% \begin{mathbox}[halign=center, equal height group=symmetry]{Invariance}
+% $f\colon\R^n\to\{0,\dots,9\}$\\
+% $f(Tx)=f(x)$ for every shift $T$
+% \end{mathbox}
+% \centering
+% \begin{tikzpicture}[cdsquare]
+%   \node[cdcorner] (x)   at (0,0)    {\includegraphics{symmetry_x.pdf}};
+%   \node[cdcorner] (Tx)  at (0,-23)  {\includegraphics{symmetry_Tx.pdf}};
+%   \path (30,0) node[cdcorner, minimum size=14mm] (fx) {}  (30,-23) node[cdcorner, minimum size=14mm] (fTx) {};
+%   \node[draw=boxframe, fill=boxbg, rounded corners=1pt, minimum size=8mm, font=\Large] (two)  at (fx)  {$2$};
+%   \node[draw=boxframe, fill=boxbg, rounded corners=1pt, minimum size=8mm, font=\Large] (two') at (fTx) {$2$};
+%   \draw[->] ([xshift=1mm]x.east)  -- node[above] {$f$} ([xshift=-1mm]two.west);
+%   \draw[->] ([xshift=1mm]Tx.east) -- node[below] {$f$} ([xshift=-1mm]two'.west);
+%   \draw[->] ([yshift=-1mm]x.south)  -- node[left]  {$T$} ([yshift=1mm]Tx.north);
+%   \draw[double equal sign distance] ([yshift=-1mm]fx.south) -- ([yshift=1mm]fTx.north);
+%   \node[cdlabel, above] at (x.north)   {$x$};
+%   \node[cdlabel, above] at (fx.north)  {$f(x)$};
+%   \node[cdlabel, below] at (Tx.south)  {$Tx$};
+%   \node[cdlabel, below] at (fTx.south) {$f(Tx)=f(x)$};
+% \end{tikzpicture}
+% \end{column}
+% \end{columns}
+% \end{frame}
 
 
 % =========================================================================
 % The two pictures are not ours: see images/SOURCES.md, part 2.  Waibel's time-delay network
 % (1987, a convolution in time) and Zhang et al. (1988) were trained by backpropagation
 % before 1989, hence no "first" on the slide.
-\begin{frame}{Convolutional networks: where they come from}
-\footnotesize
-\begin{columns}[T]
-\begin{column}{0.58\textwidth}
-\centering
-\includegraphics[height=3cm]{hubel_wiesel_cat.png}
+% \begin{frame}{Convolutional networks: where they come from}
+% \footnotesize
+% \begin{columns}[T]
+% \begin{column}{0.58\textwidth}
+% \centering
+% \includegraphics[height=3cm]{hubel_wiesel_cat.png}
 
-\smallskip
-\raggedright
-\alert{The visual cortex}. Hubel and Wiesel, 1962 \citep{hubel1962}: a neuron in the visual cortex of a cat fires for a bar of light at one orientation even if it is moved. Nobel prize, 1981.
+% \smallskip
+% \raggedright
+% \alert{The visual cortex}. Hubel and Wiesel, 1962 \citep{hubel1962}: a neuron in the visual cortex of a cat fires for a bar of light at one orientation even if it is moved. Nobel prize, 1981.
 
-\medskip
-\begin{mathbox}[notitle]{}
-Every linear and translation-equivariant map $F:\mathbb{R}^n\to\mathbb{R}^n$ is a convolution.
-\[
-F(x):=(K\ast x)(t)=\int K(s-t)x(t)\,dt,
-\]
-we need to learn $K$.
-\end{mathbox}
+% \medskip
+% \begin{mathbox}[notitle]{}
+% Every linear and translation-equivariant map $F:\mathbb{R}^n\to\mathbb{R}^n$ is a convolution.
+% \[
+% F(x):=(K\ast x)(t)=\int K(s-t)x(t)\,dt,
+% \]
+% we need to learn $K$.
+% \end{mathbox}
 
-\end{column}
-\begin{column}{0.4\textwidth}
-\centering
-\href{https://www.youtube.com/watch?v=FwFduRA_L6Q}{\includegraphics[height=5cm]{lecun_1993.jpg}}\par
-{\scriptsize\href{https://www.youtube.com/watch?v=FwFduRA_L6Q}{$\blacktriangleright$\ Demo, 1993}\par}
+% \end{column}
+% \begin{column}{0.4\textwidth}
+% \centering
+% \href{https://www.youtube.com/watch?v=FwFduRA_L6Q}{\includegraphics[height=5cm]{lecun_1993.jpg}}\par
+% {\scriptsize\href{https://www.youtube.com/watch?v=FwFduRA_L6Q}{$\blacktriangleright$\ Demo, 1993}\par}
 
-\smallskip
-\raggedright
-\alert{Backpropagation}. LeCun et~al., 1989 \citep{lecun1989}: a convolutional network trained on handwritten zip-code digits. Turing award to LeCun, 2018.
-\end{column}
-\end{columns}
-
-
-\end{frame}
+% \smallskip
+% \raggedright
+% \alert{Backpropagation}. LeCun et~al., 1989 \citep{lecun1989}: a convolutional network trained on handwritten zip-code digits. Turing award to LeCun, 2018.
+% \end{column}
+% \end{columns}
 
 
-% =========================================================================
-% The same frame, steps 2 to 6, after the history of the CNN: <2-> keeps the slide numbers, so
-% \sliderow still matches.  Step 2 repeats the CNN row, now with its code.
-\begin{frame}<2->[fragile,t]{Six layers, and what they assume}
-\footnotesize
-\renewcommand{\arraystretch}{1.0}
-\lstset{aboveskip=3pt, belowskip=3pt}  % three listings per step
-\begin{tabularx}{\textwidth}{@{}l l >{\raggedright\arraybackslash}X@{}}
-\toprule
- & \textbf{One layer} & \textbf{Symmetry} \\
-\midrule
-\sliderow{1}\alert{MLP} & $x\leftarrow\sigma(Wx+b)$ & — \\
-\sliderow{2}\alert{CNN} & $x\leftarrow\sigma(K\star x+b)$ & translations of a grid \\
-\sliderow{3}\alert{RNN} & $h_{t}=\sigma(W_hh_{t-1}+\ctrl{W_x}x_t+\ctrl{b})$ & translations in time \\
-\sliderow{4}\alert{ResNet} & $x_{t+1}=x_t+h\,\sigma(\ctrl{W_t}x_t+\ctrl{b_t})$ & — \\
-\sliderow{5}\alert{GNN} & $x_i\leftarrow\sigma\big(Ux_i+\sum_{j\sim i}Vx_j\big)$ & permutations of the nodes \\
-\sliderow{6}\alert{Transformer} & $x_i\leftarrow x_i+\sum_ja_{ij}(x)\,Vx_j$ & permutations of the tokens \\
-\sliderow{6} & $a_{ij}(x)=\softmax_j\big(\langle Qx_i,Kx_j\rangle/\sqrt d\big)$ & \\
-\bottomrule
-\end{tabularx}
+% \end{frame}
 
-\smallskip
-\begin{onlyenv}<2>
-\begin{lstlisting}
-x = torch.randn(1, 28, 28)  # 1 channel
-conv = nn.Conv2d(1, 8, 5, padding=2, padding_mode="circular")
-\end{lstlisting}
-\alert{Translation equivariance:} $K\star(Tx)=T(K\star x)$ for a shift $T$ of a periodic grid.
-\begin{lstlisting}[belowskip=2pt]
-T = lambda x: x.roll((3, 5), (1, 2))  # shift
-torch.allclose(conv(T(x)), T(conv(x)))
-\end{lstlisting}
-\begin{lstlisting}[style=output]
-> True
-\end{lstlisting}
-\end{onlyenv}
 
-\begin{onlyenv}<3>
-\begin{lstlisting}
-x = torch.randn(20, 3)  # 20 steps in R^3
-rnn = nn.RNN(3, 8)      # 104 parameters
-h, _ = rnn(x)           # shape (20, 8)
-\end{lstlisting}
-\alert{Time invariance:} the same weights at every step, for any length. Restarting from $h_s$ reproduces $h_{s+1},h_{s+2},\dots$
-\begin{lstlisting}[belowskip=2pt]
-tail, _ = rnn(x[5:], h[4:5])  # restart at h_5
-torch.allclose(tail, h[5:])
-\end{lstlisting}
-\begin{lstlisting}[style=output]
-> True
-\end{lstlisting}
-\end{onlyenv}
+% % =========================================================================
+% % The same frame, steps 2 to 6, after the history of the CNN: <2-> keeps the slide numbers, so
+% % \sliderow still matches.  Step 2 repeats the CNN row, now with its code.
+% \begin{frame}<2->[fragile,t]{Six layers, and what they assume}
+% \footnotesize
+% \renewcommand{\arraystretch}{1.0}
+% \lstset{aboveskip=3pt, belowskip=3pt}  % three listings per step
+% \begin{tabularx}{\textwidth}{@{}l l >{\raggedright\arraybackslash}X@{}}
+% \toprule
+%  & \textbf{One layer} & \textbf{Symmetry} \\
+% \midrule
+% \sliderow{1}\alert{MLP} & $x\leftarrow\sigma(Wx+b)$ & — \\
+% \sliderow{2}\alert{CNN} & $x\leftarrow\sigma(K\star x+b)$ & translations of a grid \\
+% \sliderow{3}\alert{RNN} & $h_{t}=\sigma(W_hh_{t-1}+\ctrl{W_x}x_t+\ctrl{b})$ & translations in time \\
+% \sliderow{4}\alert{ResNet} & $x_{t+1}=x_t+h\,\sigma(\ctrl{W_t}x_t+\ctrl{b_t})$ & — \\
+% \sliderow{5}\alert{GNN} & $x_i\leftarrow\sigma\big(Ux_i+\sum_{j\sim i}Vx_j\big)$ & permutations of the nodes \\
+% \sliderow{6}\alert{Transformer} & $x_i\leftarrow x_i+\sum_ja_{ij}(x)\,Vx_j$ & permutations of the tokens \\
+% \sliderow{6} & $a_{ij}(x)=\softmax_j\big(\langle Qx_i,Kx_j\rangle/\sqrt d\big)$ & \\
+% \bottomrule
+% \end{tabularx}
 
-\begin{onlyenv}<4>
-\begin{lstlisting}
-x_t, h = torch.randn(16), 0.1
-layer = nn.Linear(16, 16)
-x_t1 = x_t + h * torch.tanh(layer(x_t))  # one step
-\end{lstlisting}
-An Euler step of $\dot x=\sigma(Wx+b)$.
-\end{onlyenv}
+% \smallskip
+% \begin{onlyenv}<2>
+% \begin{lstlisting}
+% x = torch.randn(1, 28, 28)  # 1 channel
+% conv = nn.Conv2d(1, 8, 5, padding=2, padding_mode="circular")
+% \end{lstlisting}
+% \alert{Translation equivariance:} $K\star(Tx)=T(K\star x)$ for a shift $T$ of a periodic grid.
+% \begin{lstlisting}[belowskip=2pt]
+% T = lambda x: x.roll((3, 5), (1, 2))  # shift
+% torch.allclose(conv(T(x)), T(conv(x)))
+% \end{lstlisting}
+% \begin{lstlisting}[style=output]
+% > True
+% \end{lstlisting}
+% \end{onlyenv}
 
-\begin{onlyenv}<5>
-\begin{lstlisting}
-x = torch.randn(6, 4)         # 6 nodes in R^4
-A = torch.rand(6, 6).round()  # edges: A_ij = 1 if j ~ i
-U, V = torch.randn(2, 4, 8)   # 64 parameters
-f = lambda x, A: (x @ U + A @ x @ V).relu()
-\end{lstlisting}
-\alert{Permutation equivariance:} relabelling the nodes, $(x,A)\mapsto(\Pi x,\Pi A\Pi^\top)$, relabels the output.
-\begin{lstlisting}[belowskip=2pt]
-P = torch.eye(6)[torch.randperm(6)]  # relabel the nodes
-torch.allclose(f(P @ x, P @ A @ P.T), P @ f(x, A), atol=1e-6)
-\end{lstlisting}
-\begin{lstlisting}[style=output]
-> True
-\end{lstlisting}
-\end{onlyenv}
+% \begin{onlyenv}<3>
+% \begin{lstlisting}
+% x = torch.randn(20, 3)  # 20 steps in R^3
+% rnn = nn.RNN(3, 8)      # 104 parameters
+% h, _ = rnn(x)           # shape (20, 8)
+% \end{lstlisting}
+% \alert{Time invariance:} the same weights at every step, for any length. Restarting from $h_s$ reproduces $h_{s+1},h_{s+2},\dots$
+% \begin{lstlisting}[belowskip=2pt]
+% tail, _ = rnn(x[5:], h[4:5])  # restart at h_5
+% torch.allclose(tail, h[5:])
+% \end{lstlisting}
+% \begin{lstlisting}[style=output]
+% > True
+% \end{lstlisting}
+% \end{onlyenv}
 
-\begin{onlyenv}<6>
-\begin{lstlisting}
-x = torch.randn(10, 32)              # 10 tokens in R^32
-attn = nn.MultiheadAttention(32, 4)  # 4 heads
-f = lambda x: x + attn(x, x, x)[0]
-\end{lstlisting}
-\alert{Permutation equivariance:} a GNN on the complete graph, with weights $a_{ij}(x)$. Order enters only through the \alert{positional encoding} of the next slide.
-\begin{lstlisting}[belowskip=2pt]
-p = torch.randperm(10)  # a permutation
-torch.allclose(f(x[p]), f(x)[p], atol=1e-6)
-\end{lstlisting}
-\begin{lstlisting}[style=output]
-> True
-\end{lstlisting}
-\end{onlyenv}
-\end{frame}
+% \begin{onlyenv}<4>
+% \begin{lstlisting}
+% x_t, h = torch.randn(16), 0.1
+% layer = nn.Linear(16, 16)
+% x_t1 = x_t + h * torch.tanh(layer(x_t))  # one step
+% \end{lstlisting}
+% An Euler step of $\dot x=\sigma(Wx+b)$.
+% \end{onlyenv}
+
+% \begin{onlyenv}<5>
+% \begin{lstlisting}
+% x = torch.randn(6, 4)         # 6 nodes in R^4
+% A = torch.rand(6, 6).round()  # edges: A_ij = 1 if j ~ i
+% U, V = torch.randn(2, 4, 8)   # 64 parameters
+% f = lambda x, A: (x @ U + A @ x @ V).relu()
+% \end{lstlisting}
+% \alert{Permutation equivariance:} relabelling the nodes, $(x,A)\mapsto(\Pi x,\Pi A\Pi^\top)$, relabels the output.
+% \begin{lstlisting}[belowskip=2pt]
+% P = torch.eye(6)[torch.randperm(6)]  # relabel the nodes
+% torch.allclose(f(P @ x, P @ A @ P.T), P @ f(x, A), atol=1e-6)
+% \end{lstlisting}
+% \begin{lstlisting}[style=output]
+% > True
+% \end{lstlisting}
+% \end{onlyenv}
+
+% \begin{onlyenv}<6>
+% \begin{lstlisting}
+% x = torch.randn(10, 32)              # 10 tokens in R^32
+% attn = nn.MultiheadAttention(32, 4)  # 4 heads
+% f = lambda x: x + attn(x, x, x)[0]
+% \end{lstlisting}
+% \alert{Permutation equivariance:} a GNN on the complete graph, with weights $a_{ij}(x)$. Order enters only through the \alert{positional encoding} of the next slide.
+% \begin{lstlisting}[belowskip=2pt]
+% p = torch.randperm(10)  # a permutation
+% torch.allclose(f(x[p]), f(x)[p], atol=1e-6)
+% \end{lstlisting}
+% \begin{lstlisting}[style=output]
+% > True
+% \end{lstlisting}
+% \end{onlyenv}
+% \end{frame}
 
 
 
@@ -1513,7 +1513,7 @@ We want to learn $(x_1,\dots,x_n)\xmapsto{f}x_1\oplus\dots\oplus x_n$ with gates
 \end{tikzpicture}
 \end{column}
 \end{columns}
-\footnotetext{XOR $=(x\vee y)\wedge\neg(x\wedge y)$: $4(n-1)$ gates.}
+\footnotetext{$x\oplus y=(x\vee y)\wedge\neg(x\wedge y)$: $4(n-1)$ gates.}
 \end{frame}
 
 
@@ -1553,7 +1553,7 @@ where $\sigma'\le\tfrac14$, ReLU: $\sigma'\in\{0,1\}$.
 \centering
 \includegraphics[width=\textwidth]{parameters_vs_data.pdf}
 
-\raggedright\scriptsize $N$: images or tokens. Counts from \citep{brown2020,deepseek2026,devlin2019,dosovitskiy2021,he2016,hoffmann2022,kimi2025,krizhevsky2012,lecun1998,peebles2023,rombach2022,zhang2017}.
+\raggedright\scriptsize $N$: images or tokens. %Counts from \citep{brown2020,deepseek2026,devlin2019,dosovitskiy2021,he2016,hoffmann2022,kimi2025,krizhevsky2012,lecun1998,peebles2023,rombach2022,zhang2017}.
 \end{frame}
 
 
@@ -1563,7 +1563,7 @@ where $\sigma'\le\tfrac14$, ReLU: $\sigma'\in\{0,1\}$.
 {\centering\scriptsize Figure~1 of \citet{kaplan2020}. $N$: parameters, $D$: tokens, PF-day: $8.64\cdot10^{19}$ operations.\par}
 
 
-\begin{mathbox}{R.~Sutton, \emph{The Bitter Lesson}, 2019 \citep{sutton2019}}
+\begin{mathbox}{R.~Sutton, \emph{The Bitter Lesson}, 2019}
 ``The biggest lesson that can be read from 70 years of AI research is that general methods that leverage computation are ultimately the most effective, and by a large margin.''
 \end{mathbox}
 
@@ -1584,12 +1584,12 @@ where $\sigma'\le\tfrac14$, ReLU: $\sigma'\in\{0,1\}$.
 
 
 % Table 6 of the Kimi Linear report, a screenshot: see images/SOURCES.md, part 5.
-\begin{frame}{Attention: recurrent and parallel forms}
-\centering
-\includegraphics[width=\textwidth,height=0.8\textheight,keepaspectratio]{kimi_linear.png}
+% \begin{frame}{Attention: recurrent and parallel forms}
+% \centering
+% \includegraphics[width=\textwidth,height=0.8\textheight,keepaspectratio]{kimi_linear.png}
 
-{\scriptsize Table~6 of \citet{kimilinear2025}.\par}
-\end{frame}
+% {\scriptsize Table~6 of \citet{kimilinear2025}.\par}
+% \end{frame}
 
 
 
@@ -1624,7 +1624,8 @@ read from memory ($10^{12}$ numbers/s) & 0.02 & 1.7 \\
 % PART 3: LOSS
 % #########################################################################
 
-% Part 3: Loss.  Figures and numbers: figures/part3_loss.py (see images/SOURCES_part3.md).
+% Part 3: Loss.  Figures and numbers: figures/part3_loss.py (see images/SOURCES_part3.md) and
+% figures/part4_regularization.py.
 
 % =========================================================================
 \section{Loss}
@@ -1725,20 +1726,9 @@ The classifier that always predicts $y=0$:
 \end{frame}
 
 
-
-
-
-% #########################################################################
-% PART 4: OPTIMIZATION
-% #########################################################################
-
-% Part 4: optimization.  Figures: figures/part4_sgd.py, figures/part4_mnist_batch.py and
-% figures/part4_regularization.py.
-
 % =========================================================================
-\section{Optimization}
-
-\begin{frame}{Optimization: which function do we minimize?}
+% From the loss of one sample to the risk: what training minimizes.
+\begin{frame}{Which function do we minimize?}
 
 The samples $(x_i,y_i)_{i=1}^N$ are independent draws from an unknown law $\rho$. 
 \begin{columns}[T, onlytextwidth]
@@ -1771,6 +1761,39 @@ We want $\Risk$ small, and split it as
 \]
 A trained $\hat w$ \alert{generalizes} when the gap is small.
 \end{frame}
+
+
+% =========================================================================
+% Regularization and early stopping.  Figure: figures/part4_regularization.py.
+\begin{frame}{Generalization: Regularization and early stopping}
+\small
+%$N=1000$ training digits, two hidden layers of width 256, Adam.
+\[
+\min_w J(w)+\frac{\lambda}{2}\|w\|^2
+\]
+
+\centering
+\includegraphics[width=\textwidth]{regularization.pdf}
+
+\raggedright\footnotesize
+\begin{itemize}
+\item \alert{No regularization:} $J\to0$, while the test loss rises after epoch 8.
+\item \alert{Early stopping:} keep the weights with the lowest validation loss.
+%\item \alert{Weight decay:} with SGD the penalty scales $w$ by $1-\eta\lambda$. Adam divides $\lambda w$ by $\sqrt{s}$, so weights with large gradients barely shrink; \alert{AdamW} decays $w$ directly \citep{loshchilov2019}.
+\end{itemize}
+\end{frame}
+
+
+
+
+% #########################################################################
+% PART 4: OPTIMIZATION
+% #########################################################################
+
+% Part 4: optimization.  Figures: figures/part4_sgd.py and figures/part4_mnist_batch.py.
+
+% =========================================================================
+\section{Optimization}
 
 
 % =========================================================================
@@ -1862,7 +1885,7 @@ w_{k+1}&=w_k-\eta\,\frac1B\sum_{i\in B_k}\nabla\ell_i(w_k)\\
 &\approx w_k-\eta\,\nabla J(w_k)+\frac{\eta}{\sqrt{B}}\mathcal N\big(0,\Sigma(w_k)\big),
 \end{aligned}
 \]
-This is the Euler--Maruyama scheme for the SDE
+This is the Euler--Maruyama scheme with step size $\eta$ for the SDE
 \[
 dW=-\nabla J(W)\,dt+\sqrt{\frac{\eta}{B}}\,\Sigma(W)^{1/2}\,d\beta,
 \]
@@ -1925,7 +1948,7 @@ where $\beta$ is a Brownian motion.
 
 
 % =========================================================================
-\begin{frame}{Don't decay the learning rate, increase the batch size}
+\begin{frame}{Don't decay the learning rate, increase the batch size (2017)}
 \small
 \begin{itemize}
 \item The SDE sees $\eta$ and $B$ only through the temperature $\eta/B$.
@@ -1934,7 +1957,7 @@ where $\beta$ is a Brownian motion.
 \centering
 \includegraphics[width=\textwidth]{learning_rate_vs_batch.pdf}
 
-\raggedright\scriptsize  Values from \citep{brown2020,compvis2022,deepseek2024,devlin2019,dosovitskiy2021,goyal2017,grattafiori2024,he2016,krizhevsky2012,silver2017}.
+%\raggedright\scriptsize  Values from \citep{brown2020,compvis2022,deepseek2024,devlin2019,dosovitskiy2021,goyal2017,grattafiori2024,he2016,krizhevsky2012,silver2017}.
 \end{frame}
 
 
@@ -1983,39 +2006,26 @@ where $\beta$ is a Brownian motion.
 
 
 % =========================================================================
-% Regularization and early stopping.  Figure: figures/part4_regularization.py.
-\begin{frame}{Generalization: Regularization and early stopping}
+% Spectral bias.  Figure: figures/part5_surprises.py (copied from the hybrid-modeling slides).
+\begin{frame}{Neural networks learn low frequencies first (2019)}
 \small
-$N=1000$ training digits, two hidden layers of width 256, Adam.
-\[
-\min_w J(w)+\frac{\lambda}{2}\|w\|^2
-\]
+Our goal is to learn $f(x,y)$, which is a wave-like function.
 
+\medskip
+\centerline{\includegraphics[width=\textwidth]{spectral_bias_gray_scott.pdf}}
+
+\medskip
+
+If we directly feed $(x,y)$ to the network, it learns the low frequencies first and learning is slow.
+
+Instead we can use \emph{Fourier features}:
+
+\medskip
 \centering
-\includegraphics[width=0.78\textwidth]{regularization.pdf}
+$\varphi(x,y)=\big(\cos 2\pi\langle b_j,(x,y)\rangle,\ \sin 2\pi\langle b_j,(x,y)\rangle\big)_{j\le m}$, \quad random $b_j\in\mathbb Z^2$
 
-\raggedright\footnotesize
-\begin{itemize}
-\item \alert{No regularization:} $J\to0$, while the test loss rises after epoch 8.
-\item \alert{L2 penalty:} $J$ stays above $0$ and the test loss stays low.
-\item \alert{Early stopping:} keep the weights with the lowest validation loss.
-\item \alert{Weight decay:} with SGD the penalty scales $w$ by $1-\eta\lambda$. Adam divides $\lambda w$ by $\sqrt{s}$, so weights with large gradients barely shrink; \alert{AdamW} decays $w$ directly \citep{loshchilov2019}.
-\end{itemize}
-\end{frame}
-
-
-% =========================================================================
-% Spectral bias.  Figure: figures/part5_surprises.py.
-\begin{frame}{The smooth part is learned first}
-\begin{center}
-\includegraphics[width=\textwidth]{spectral_bias.pdf}
-\end{center}
-\footnotesize
-\begin{itemize}
-\item Networks fit low frequencies first: the \alert{spectral bias} \citep{rahaman2019}.
-\item Part 1 went around it with Fourier features, which fit faster.
-\item \alert{Stopping early} then acts as a low-pass filter: one reason why training does not immediately fit the noise.
-\end{itemize}
+% \vfill
+% \raggedright\scriptsize Spectral bias \citep{rahaman2019}; Fourier features \citep{tancik2020}.
 \end{frame}
 
 
@@ -2308,6 +2318,16 @@ r(t)=e^{-Kt}\,r(0)=\sum_ie^{-\lambda_it}\,\langle r(0),v_i\rangle\,v_i ,\qquad K
 \item $K=\Phi\Phi^\top$ is a Gram matrix once more. $\lambda_{\min}(K)>0$ drives the training loss to zero, as $\lambda_{\min}(\Gram_T)>0$ gives controllability.
 \item In this regime, training is a \emph{linear} dynamical system in the sense of lecture 01. Real networks leave it: their features move.
 \end{itemize}
+\end{frame}
+
+
+% =========================================================================
+% The test error of the runs of the frames "Keeping the ratio eta/B fixed" and "Growing the
+% batch size" (figures/part4_mnist_batch.py).
+\begin{frame}{Batch size in detail: the test error}
+\begin{center}
+\includegraphics[width=1\textwidth]{mnist_batch_test_error.pdf}
+\end{center}
 \end{frame}
 
 
