@@ -1165,49 +1165,49 @@ Drawn: $d=8$. One learned vector $e_i\in\R^d$ per token of the vocabulary.\footn
 
 
 % =========================================================================
-\begin{frame}[fragile,t]{Six layers, and what they assume}
-\footnotesize
-\renewcommand{\arraystretch}{1.0}
-\lstset{aboveskip=3pt, belowskip=3pt}  % three listings per step
-\begin{tabularx}{\textwidth}{@{}l l >{\raggedright\arraybackslash}X@{}}
-\toprule
- & \textbf{One layer} & \textbf{Symmetry} \\
-\midrule
-\sliderow{1}\alert{MLP} & $x\leftarrow\sigma(Wx+b)$ & — \\
-\sliderow{2}\alert{CNN} & $x\leftarrow\sigma(K\star x+b)$ & translations of a grid \\
-\sliderow{3}\alert{RNN} & $h_{t}=\sigma(W_hh_{t-1}+\ctrl{W_x}x_t+\ctrl{b})$ & translations in time \\
-\sliderow{4}\alert{ResNet} & $x_{t+1}=x_t+h\,\sigma(\ctrl{W_t}x_t+\ctrl{b_t})$ & — \\
-\sliderow{5}\alert{GNN} & $x_i\leftarrow\sigma\big(Ux_i+\sum_{j\sim i}Vx_j\big)$ & permutations of the nodes \\
-\sliderow{6}\alert{Transformer} & $x_i\leftarrow x_i+\sum_ja_{ij}(x)\,Vx_j$ & permutations of the tokens \\
-\sliderow{6} & $a_{ij}(x)=\softmax_j\big(\langle Qx_i,Kx_j\rangle/\sqrt d\big)$ & \\
-\bottomrule
-\end{tabularx}
+% \begin{frame}[fragile,t]{Six layers, and what they assume}
+% \footnotesize
+% \renewcommand{\arraystretch}{1.0}
+% \lstset{aboveskip=3pt, belowskip=3pt}  % three listings per step
+% \begin{tabularx}{\textwidth}{@{}l l >{\raggedright\arraybackslash}X@{}}
+% \toprule
+%  & \textbf{One layer} & \textbf{Symmetry} \\
+% \midrule
+% \sliderow{1}\alert{MLP} & $x\leftarrow\sigma(Wx+b)$ & — \\
+% \sliderow{2}\alert{CNN} & $x\leftarrow\sigma(K\star x+b)$ & translations of a grid \\
+% \sliderow{3}\alert{RNN} & $h_{t}=\sigma(W_hh_{t-1}+\ctrl{W_x}x_t+\ctrl{b})$ & translations in time \\
+% \sliderow{4}\alert{ResNet} & $x_{t+1}=x_t+h\,\sigma(\ctrl{W_t}x_t+\ctrl{b_t})$ & — \\
+% \sliderow{5}\alert{GNN} & $x_i\leftarrow\sigma\big(Ux_i+\sum_{j\sim i}Vx_j\big)$ & permutations of the nodes \\
+% \sliderow{6}\alert{Transformer} & $x_i\leftarrow x_i+\sum_ja_{ij}(x)\,Vx_j$ & permutations of the tokens \\
+% \sliderow{6} & $a_{ij}(x)=\softmax_j\big(\langle Qx_i,Kx_j\rangle/\sqrt d\big)$ & \\
+% \bottomrule
+% \end{tabularx}
 
-\smallskip
-% onlyenv is the environment form of \only: lstlisting cannot sit in a macro argument.
-\begin{onlyenv}<1>
-\begin{lstlisting}
-x = torch.randn(784)
-layer = nn.Linear(784, 16)  # 12560 parameters
-x = torch.relu(layer(x))
-\end{lstlisting}
-\end{onlyenv}
+% \smallskip
+% % onlyenv is the environment form of \only: lstlisting cannot sit in a macro argument.
+% \begin{onlyenv}<1>
+% \begin{lstlisting}
+% x = torch.randn(784)
+% layer = nn.Linear(784, 16)  # 12560 parameters
+% x = torch.relu(layer(x))
+% \end{lstlisting}
+% \end{onlyenv}
 
-% Step 2 shows the payoff; the code of the CNN comes in the second copy of this frame, after the
-% history slide.  The CNN is the c = 8 network of figures/part2_mnist.py.
-\begin{onlyenv}<2>
-\begin{columns}[c]
-\begin{column}{0.48\textwidth}
-\centering
-\includegraphics[height=4.5cm]{mnist_cnn.pdf}
-\end{column}
-\begin{column}{0.5\textwidth}
-\raggedright
-\alert{On MNIST:} a convolutional network with $5\,994$ parameters reaches $1.3\%$ test error; a fully connected one with $118\,282$ parameters, $2.2\%$.
-\end{column}
-\end{columns}
-\end{onlyenv}
-\end{frame}
+% % Step 2 shows the payoff; the code of the CNN comes in the second copy of this frame, after the
+% % history slide.  The CNN is the c = 8 network of figures/part2_mnist.py.
+% \begin{onlyenv}<2>
+% \begin{columns}[c]
+% \begin{column}{0.48\textwidth}
+% \centering
+% \includegraphics[height=4.5cm]{mnist_cnn.pdf}
+% \end{column}
+% \begin{column}{0.5\textwidth}
+% \raggedright
+% \alert{On MNIST:} a convolutional network with $5\,994$ parameters reaches $1.3\%$ test error; a fully connected one with $118\,282$ parameters, $2.2\%$.
+% \end{column}
+% \end{columns}
+% \end{onlyenv}
+% \end{frame}
 
 
 % =========================================================================
