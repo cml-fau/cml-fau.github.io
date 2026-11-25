@@ -72,6 +72,8 @@ website:
             href: lectures/03_the_training_loop/the_training_loop.pdf
           - text: "04 · The Training Loop II"
             href: lectures/04_the_training_loop_ii/the_training_loop_ii.pdf
+          - text: "05 · Self-Attention and Transformers"
+            href: lectures/05_self_attention_and_transformers/self_attention_and_transformers.pdf
       - section: Notebooks
         contents: notebooks/*.ipynb
   page-footer:
