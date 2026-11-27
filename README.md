@@ -7,7 +7,7 @@ Master's level course, Winter semester 2026.
 |---|---|
 | **Lecturer** | Prof. Dr. Enrique Zuazua |
 | **Teaching Assistant** | Daniel López Montero |
-| **Evaluation** | Oral presentation (100%); attendance is taken into account |
+| **Evaluation** | Oral examination (100%): examiner-led questions or project presentation |
 | **Contact** | [cml.fau@gmail.com](mailto:cml.fau@gmail.com) | 
 | **Website** | [cml-fau.github.io](https://cml-fau.github.io/) |
 | **StudOn** | [studon.fau.de/campo/course/579004](https://www.studon.fau.de/campo/course/579004) |
@@ -46,7 +46,17 @@ dynamical foundations underlying control and learning systems. They will be able
 
 ## Evaluation
 
-Assessment takes into account attendance and active participation and a group presentation in the final sessions of the course.
+Evaluation is by oral examination (100%). Students may choose between two formats:
+
+1. **Examiner-led questions** on the course material (15 minutes), intended for students who have
+   not attended the course regularly.
+2. **Project presentation and questions** on a course-related topic agreed in advance with the
+   examiner. The student gives a short presentation (15 minutes), provides a PDF handout of the
+   presentation, and answers questions on the project and its connection to the course. Projects
+   may be prepared in groups. This format is available to students who have attended the course
+   regularly.
+
+For the project presentation this semester:
 
 - **Groups** of at least three students choose any topic related to the course, provided it has
   substantial mathematical content.

@@ -10,7 +10,7 @@ toc: true
 | **Lecturer** | Prof. Dr. Enrique Zuazua |
 | **Teaching Assistant** | Daniel López Montero |
 | **Location** | 12 October: C3 – Chemikum ([Nikolaus-Fiebiger-Straße 10, 91058 Erlangen](https://www.google.com/maps/search/?api=1&query=Nikolaus-Fiebiger-Stra%C3%9Fe+10%2C+91058+Erlangen))<br>All other sessions: H21 ([Cauerstraße 5b, 91058 Erlangen](https://www.google.com/maps/search/?api=1&query=Cauerstra%C3%9Fe+5b%2C+91058+Erlangen)) |
-| **Evaluation** | Oral presentation (100%) · [presentation schedule](presentations/schedule.qmd) |
+| **Evaluation** | Oral examination (100%): examiner-led questions or project presentation · [presentation schedule](presentations/schedule.qmd) |
 | **Contact** | [cml.fau@gmail.com](mailto:cml.fau@gmail.com) |
 | **StudOn** | [studon.fau.de/campo/course/579004](https://www.studon.fau.de/campo/course/579004) |
 
@@ -34,8 +34,17 @@ dynamical foundations underlying control and learning systems. They will be able
 
 ## Evaluation
 
-Assessment takes into account attendance and active participation and a group presentation in the final sessions of the course.
-Attendance at the lectures is strongly recommended.
+Evaluation is by oral examination (100%). Students may choose between two formats:
+
+1. **Examiner-led questions** on the course material (15 minutes), intended for students who have
+   not attended the course regularly.
+2. **Project presentation and questions** on a course-related topic agreed in advance with the
+   examiner. The student gives a short presentation (15 minutes), provides a PDF handout of the
+   presentation, and answers questions on the project and its connection to the course. Projects
+   may be prepared in groups. This format is available to students who have attended the course
+   regularly.
+
+For the project presentation this semester:
 
 - **Groups** of at least three students.
 - **Content:** any topic related to the course, provided it has substantial mathematical content.
