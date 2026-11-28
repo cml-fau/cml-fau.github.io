@@ -1106,7 +1106,7 @@ GPT-2, one head \citep{wang2023}: the weights $\ctrl{a_{ns}}$ of the last token.
 % =========================================================================
 % Figure and numbers: figures/part2_attention.py, section 2.  n = 64 queries and keys with
 % independent N(0, 1) entries, 200 draws for each d (the set-up of notebooks/15_transformers.ipynb,
-% section 2).  Left: the largest weight of a row, mean over 12 800 rows: 0.947 without the factor
+% section 3).  Left: the largest weight of a row, mean over 12 800 rows: 0.947 without the factor
 % at d = 1024, 0.107 with it (1/n = 0.016).  Right: the median Frobenius norm of the Jacobian of the
 % softmax: 2.8e-4 without, 0.18 with the factor at d = 1024; 55% of the rows are below 1e-3
 % without it, none with it.  The empirical Var <q,k> is 1022.9 at d = 1024.

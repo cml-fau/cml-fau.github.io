@@ -11,7 +11,7 @@ Every figure is drawn at its size on the slide and included unscaled.
   50 degrees); on the left the vectors, on the right the weights softmax_s(beta <q, k_s>) for
   beta = 1, 4, 16 and the hard limit beta -> infinity (all the weight on k_2, the key closest to q).
 - scaling_softmax.pdf ("Why the 1/sqrt(d)"): n = 64 keys and 64 queries with independent
-  N(0, 1) entries in R^d, d = 4, ..., 1024, 200 draws for each d (the set-up of section 2 of
+  N(0, 1) entries in R^d, d = 4, ..., 1024, 200 draws for each d (the set-up of section 3 of
   notebooks/15_transformers.ipynb); with the scores <q, k> and with <q, k>/sqrt(d): the largest
   weight of a row of the softmax (mean over all rows), and the size (Frobenius norm) of the
   Jacobian of the softmax, diag(a) - a a^T, through which every gradient to Q and K passes
